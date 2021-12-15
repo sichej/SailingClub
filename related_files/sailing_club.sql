@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 -- Database: `sailig_club`
 --
 CREATE DATABASE IF NOT EXISTS `sailig_club` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `sailig_club`;
+USE `sailing_club`;
 
 -- --------------------------------------------------------
 
