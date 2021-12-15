@@ -14,17 +14,23 @@ public class Main {
 	
 		 try {
 	            Class.forName("com.mysql.cj.jdbc.Driver");
-	       	 Connection conn = null;
+	       	 	Connection conn = null;
 	            conn = DriverManager.getConnection("jdbc:mysql://localhost/sailig_club","root", "");
 	            System.out.print("Database is connected !");
 	            
-	   		 Statement selectStmt = conn.createStatement();
-			 ResultSet rs = selectStmt.executeQuery("SELECT * FROM user;");
+		   		Statement selectStmt = conn.createStatement();
+		   		String query = "SELECT * FROM user;";
+				ResultSet rs = selectStmt.executeQuery(query);
+				
+				while (rs.next()) {
+				System.out.print(rs.getString(1));
+				}
 			 
+			 /*
 			 ArrayList allRows = new ArrayList();
 			 int numberColumns = 7;
-			 System.out.print(rs.getString(0));
-	            conn.close();
+			 System.out.print(rs.getString(0));*/
+				conn.close();
 	        }
 	        catch(Exception e) {
 	            System.out.print("Do not connect to DB - Error:"+e);
