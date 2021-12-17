@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 16, 2021 alle 16:37
+-- Creato il: Dic 17, 2021 alle 15:36
 -- Versione del server: 10.4.21-MariaDB
 -- Versione PHP: 8.0.11
 
@@ -429,14 +429,6 @@ CREATE TABLE `race_participation` (
   `id_race` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dump dei dati per la tabella `race_participation`
---
-
-INSERT INTO `race_participation` (`id_member`, `id_race`) VALUES
-('Alexander', 1),
-('Alexander', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -463,23 +455,34 @@ INSERT INTO `user` (`username`, `name`, `surname`, `address`, `fiscal_code`, `us
 ('Allison', 'Eric', 'HERNANDEZ', 'via Toscana 28', '468BQA3SIGVHXNSG', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Andrea', 'Amanda', 'WILSON', 'via Garibaldi 7', '2GY6LG6B41LOC5XD', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Angela', 'Matthew', 'JONES', 'via Garibaldi 3', '3UDPJCFTSGTU6WJT', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Anna', 'Amber', 'ROBERTS', 'via Garibaldi 42', 'XKRQ0APUVMZVA2D3', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Bradley', 'Elizabeth', 'KING', 'via Garibaldi 29', '9VOTJ6FXF1FRV2CN', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Bryan', 'Andrew', 'HARRIS', 'via Toscana 14', '0FERJWAZZU3URHE6', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Chad', 'Timothy', 'BAKER', 'via Garibaldi 36', '5WH5LS6QPD4F7XMV', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Christine', 'Nicholas', 'HALL', 'via Garibaldi 25', '8G0FHPACOY03C5ME', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Cody', 'Heather', 'YOUNG', 'via Garibaldi 27', 'YSFC0Z5POURXT2JT', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Courtney', 'Nicole', 'WALKER', 'via Toscana 24', '7O1KPL7MWKA38XYH', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Derek', 'Kevin', 'SCOTT', 'via Toscana 33', '5ESW7DD9ZKYW9EL6', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Dustin', 'Christopher', 'JOHNSON', 'via Garibaldi 1', 'HRLHEPA5BJMB873Z', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Edward', 'Brittany', 'TURNER', 'via Toscana 43', 'NHC4QGMGXF6RBEUG', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Erica', 'David', 'TAYLOR', 'via Garibaldi 9', 'MENMVHNENEMN81F2', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Gregory', 'Daniel', 'MOORE', 'via Toscana 8', 'D2UFPF7DD52XYZAC', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Jared', 'Lauren', 'PEREZ', 'via Toscana 41', 'GE9CNGWU2A4EJRK5', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
+('Jenna', 'Christina', 'GONZALEZ', 'via Toscana 37', 'NID8YTIC0PQVLF6V', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Jesse', 'Sarah', 'ROBINSON', 'via Garibaldi 19', 'WN38E11EF5YLCYAJ', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Jose', 'Jason', 'GARCIA', 'via Garibaldi 17', 'IX3W8EH9BAA3JQT3', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Julie', 'Danielle', 'PHILLIPS', 'via Garibaldi 44', 'BZGHAG2Q1YETCIU7', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Katherine', 'Joshua', 'MILLER', 'via Toscana 6', 'YWP4LYDBL80MQZ4W', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Kathryn', 'Steven', 'GREEN', 'via Garibaldi 34', 'LZKTKND3ZCWIJ77G', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Katie', 'William', 'CLARK', 'via Toscana 20', 'E3SPDF83NRCY2QWF', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Kenneth', 'Joseph', 'WHITE', 'via Garibaldi 13', '6EOVJJ1AJ6RB4HV0', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Kristen', 'Brandon', 'THOMPSON', 'via Toscana 16', 'N932C7M6UEHT657R', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Kristin', 'Thomas', 'ADAMS', 'via Toscana 35', 'E6OKE6XMXXBBIA18', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
+('Krystal', 'Laura', 'MITCHELL', 'via Garibaldi 40', 'KA6U0UXSTG6NBFX2', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Lindsay', 'Jonathan', 'RODRIGUEZ', 'via Garibaldi 21', 'TVCPN3MN1KZP1ZGU', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Lindsey', 'Ryan', 'MARTIN', 'via Garibaldi 15', '4VGOAB9SKWVGCXGF', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Lisa', 'John', 'JACKSON', 'via Toscana 12', 'UQLOGB7P3EBGLRF1', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Maria', 'Rachel', 'CARTER', 'via Toscana 39', '2CVES0OGLLJRIMQ1', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Mary', 'James', 'ANDERSON', 'via Toscana 10', 'X7YB3S3WH64PWFH5', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Paul', 'Jessica', 'WILLIAMS', 'via Toscana 2', '1KR7QZI82RJS1KLE', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Samuel', 'Adam', 'WRIGHT', 'via Toscana 30', 'LTNNY5UL2X53TB5Z', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
@@ -487,6 +490,7 @@ INSERT INTO `user` (`username`, `name`, `surname`, `address`, `fiscal_code`, `us
 ('Scott', 'Jennifer', 'DAVIS', 'via Garibaldi 5', 'HX9RJUYSOLKVCA71', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Shannon', 'Stephanie', 'LEWIS', 'via Toscana 22', 'SO6MV2FL7HIWLIA0', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Shawn', 'Megan', 'LOPEZ', 'via Garibaldi 31', '4A2KKKWFEFBB4VRG', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
+('Tara', 'Kyle', 'NELSON', 'via Garibaldi 38', 'PPDCTDBLRT6I967X', 'employee', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Travis', 'Robert', 'THOMAS', 'via Garibaldi 11', 'FUGC25YLR61WY8FD', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Tyler', 'Ashley', 'BROWN', 'via Toscana 4', 'WMD9SMJTPIAFOY1Q', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('Vanessa', 'Brian', 'LEE', 'via Garibaldi 23', 'RGCVCSFLZ50UO331', 'member', '9dd4e461268c8034f5c8564e155c67a6');
