@@ -5,10 +5,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import server.api.Actions;
+import server.api.ClientRequestTranslator;
+import server.api.Request;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
@@ -39,7 +43,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		try {
+		ClientRequestTranslator translator = new ClientRequestTranslator();
+		Request req = new Request(Actions.DELETE, new BoatSQLModel(1,"pippo",10.0,"pluto"));
+		translator.translate(req);
+		/*try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = null;
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
@@ -54,6 +61,6 @@ public class Main {
 			conn.close();
 		} catch (Exception e) {
 			System.out.print("Do not connect to DB - Error:" + e);
-		}
+		}*/
 	}
 }
