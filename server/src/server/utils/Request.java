@@ -1,6 +1,9 @@
-package server.api;
+package server.utils;
 
-public class Request {
+import java.io.Serializable;
+
+public class Request implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int action;
 	private Class<?> payloadType;
 	private Object payload;

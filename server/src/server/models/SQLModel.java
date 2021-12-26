@@ -1,6 +1,6 @@
-package server;
+package server.models;
 
-public interface SQLModel {
+public interface SQLModel{
 	public String[] getSQLAttributes();
 	public String getSQLTableName();
 	public String[] getSQLValues();

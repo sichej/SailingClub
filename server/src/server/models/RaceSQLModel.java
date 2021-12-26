@@ -1,4 +1,4 @@
-package server;
+package server.models;
 import java.time.LocalDate;
 
 public class RaceSQLModel implements SQLModel{

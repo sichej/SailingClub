@@ -1,6 +1,6 @@
-package server.api;
+package server.utils;
 
-import server.SQLModel;
+import server.models.SQLModel;
 
 public class ClientRequestTranslator {
 
@@ -21,6 +21,8 @@ public class ClientRequestTranslator {
 				query += "DELETE FROM " + model.getSQLTableName() + " WHERE "
 				      + model.getSQLPrimaryKeyName() + " = " + model.getSQLPrimaryKeyValue() + ";";
 			break;
+			case Actions.SELECT:
+				break;
 		}	
 		
 		System.out.println(query);

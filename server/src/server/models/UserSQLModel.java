@@ -1,4 +1,4 @@
-package server;
+package server.models;
 
 public class UserSQLModel implements SQLModel{
 	private String username;
