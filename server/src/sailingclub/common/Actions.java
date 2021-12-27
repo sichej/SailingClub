@@ -1,4 +1,4 @@
-package server.utils;
+package sailingclub.common;
 
 public class Actions {
 	public static final int INSERT = 0; 

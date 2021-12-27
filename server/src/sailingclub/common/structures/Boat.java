@@ -1,22 +1,24 @@
-package server.models;
+package sailingclub.common.structures;
 
 import java.io.Serializable;
 
-public class BoatSQLModel implements SQLModel, Serializable{
+import sailingclub.common.Translatable;
+
+public class Boat implements Translatable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
 	private Double length;
 	private String id_member;
 	
-	public BoatSQLModel(int id) {
+	public Boat(int id) {
 		this.id = id;
 		this.name = null;
 		this.length = null;
 		this.id_member = null;
 	}
 	
-	public BoatSQLModel(String name, Double length, String id_member) {
+	public Boat(String name, Double length, String id_member) {
 		this.id = null;
 		this.name = name;
 		this.length = length;

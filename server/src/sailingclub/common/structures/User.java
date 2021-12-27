@@ -1,6 +1,8 @@
-package server.models;
+package sailingclub.common.structures;
 
-public class UserSQLModel implements SQLModel{
+import sailingclub.common.Translatable;
+
+public class User implements Translatable{
 	private String username;
 	private String name;
 	private String surname;
@@ -9,7 +11,7 @@ public class UserSQLModel implements SQLModel{
 	private String user_type;
 	private String password;
 	
-	public UserSQLModel(String username, String name, String surname, String address, String fiscal_code, String user_type, String password) {
+	public User(String username, String name, String surname, String address, String fiscal_code, String user_type, String password) {
 		this.username = username;
 		this.name = name;
 		this.surname = surname;

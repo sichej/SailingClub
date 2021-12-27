@@ -1,12 +1,14 @@
-package server.models;
+package sailingclub.common.structures;
 import java.time.LocalDate;
 
-public class RaceSQLModel implements SQLModel{
+import sailingclub.common.Translatable;
+
+public class Race implements Translatable{
 	private Integer id;
 	private LocalDate data;
 	private Double price;
 	
-	public RaceSQLModel(int id, LocalDate data, Double price) {
+	public Race(int id, LocalDate data, Double price) {
 		this.id = id;
 		this.data = data;
 		this.price = price;

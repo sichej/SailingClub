@@ -1,4 +1,4 @@
-package server.utils;
+package sailingclub.common;
 
 import java.io.Serializable;
 

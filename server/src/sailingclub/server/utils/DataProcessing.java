@@ -1,4 +1,4 @@
-package server.utils;
+package sailingclub.server.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import server.models.BoatSQLModel;
+import sailingclub.common.structures.Boat;
 
 public class DataProcessing {
 	private static void printTable(List<Map<String, String>> table) {

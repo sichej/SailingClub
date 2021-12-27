@@ -1,6 +1,6 @@
-package server.models;
+package sailingclub.common;
 
-public interface SQLModel{
+public interface Translatable{
 	public String[] getSQLAttributes();
 	public String getSQLTableName();
 	public String[] getSQLValues();

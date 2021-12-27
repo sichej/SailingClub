@@ -1,6 +1,8 @@
-package server.utils;
+package sailingclub.server.utils;
 
-import server.models.SQLModel;
+import sailingclub.common.Actions;
+import sailingclub.common.Request;
+import sailingclub.common.Translatable;
 
 public class ClientRequestTranslator {
 
@@ -8,7 +10,7 @@ public class ClientRequestTranslator {
 	
 	public String translate(Request request) {
 		String query = "";
-		SQLModel model = (SQLModel)request.getPayload();
+		Translatable model = (Translatable)request.getPayload();
 		
 		switch(request.getAction()) {
 			case Actions.INSERT: 

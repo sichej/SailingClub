@@ -1,17 +1,14 @@
-package server;
+package sailingclub.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-import server.utils.Actions;
-import server.utils.ClientRequestTranslator;
-import server.utils.Request;
+import sailingclub.common.Actions;
+import sailingclub.common.Request;
+import sailingclub.server.utils.ClientRequestTranslator;
 
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -21,39 +18,33 @@ public class ClientHandler implements Runnable {
     }
 
     public void run(){
+    	System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " " + clientSocket.getPort() + " connected!");
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         
         try {
             out = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
             in = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+            
             ClientRequestTranslator t = new ClientRequestTranslator();
             Request rq = null;
+            
             do {
             	Object msg = in.readObject();
-            	System.out.print("RECEIVED SMTH:\n");
             	if(msg instanceof Request) {
             		rq = (Request)msg;
             		System.out.print(t.translate(rq));
+            		out.writeBytes("SRV: REQUEST RECEIVED!\n");
+            		out.flush();
                 }
             }while(rq.getAction() != Actions.CLOSE_CONNECTION);
+            out.close();
+            in.close();
+            clientSocket.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (in != null) {
-                    in.close();
-                    clientSocket.close();
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " " + clientSocket.getPort() + " disconnected!");
     }
 }
