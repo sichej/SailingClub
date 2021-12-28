@@ -3,6 +3,7 @@ package sailingclub.server.utils;
 import sailingclub.common.Actions;
 import sailingclub.common.Request;
 import sailingclub.common.Translatable;
+import sailingclub.common.structures.EmptyPayload;
 
 public class ClientRequestTranslator {
 
@@ -11,8 +12,9 @@ public class ClientRequestTranslator {
 	public String translate(Request request) {
 		String query = "";
 		Translatable model = (Translatable)request.getPayload();
+		if(model instanceof EmptyPayload) return "";
 		
-		switch(request.getAction()) {
+		switch(request.getHeader()) {
 			case Actions.INSERT: 
 				query += "INSERT INTO " + model.getSQLTableName() + "(" 
 					  + String.join(",", model.getSQLAttributes()) + ") VALUES ("		
@@ -26,9 +28,6 @@ public class ClientRequestTranslator {
 			case Actions.SELECT:
 				break;
 		}	
-		
-		System.out.println(query);
-		
 		return query;
 	}
 }

@@ -1,27 +1,29 @@
 package sailingclub.client;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import sailingclub.common.*;
+import sailingclub.common.Actions;
+import sailingclub.common.Response;
+import sailingclub.common.Request;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.EmptyPayload;
 
 public class Client {
 	public static void main(String[] args) {
 		System.out.println("CLIENT");
         try {
-        	Socket socket = new Socket("localhost", 1234);
+        	Socket socket = new Socket("localhost", 12345);
+        	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        	ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         	
-        	ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            //ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            
-            out.writeObject(new Request(1,new Boat(105)));
-            out.flush();
-            //System.out.print(in.readAllBytes());
-            out.writeObject(new Request(3,new Boat(105)));
-            out.flush();
+        	for(int i = 0; i < 3; i++) {
+				out.writeObject(new Request(Actions.INSERT, new Boat("pippo",2.2,"Alice")));
+				Response rs = (Response)in.readObject();
+				System.out.println("SRV> " + rs.getStatusCode());
+        	}
+        	
+        	out.writeObject(new Request(Actions.CLOSE_CONNECTION, new EmptyPayload()));
             socket.close();
         }
         catch (Exception e) {

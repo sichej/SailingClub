@@ -1,0 +1,5 @@
+{
+  "serverPort": 12345,
+  "dbUser": "root",
+  "dbPassword": ""
+}

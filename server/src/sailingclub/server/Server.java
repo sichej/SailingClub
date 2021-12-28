@@ -4,17 +4,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import sailingclub.server.utils.Functionalities;
+import sailingclub.server.utils.ServerConfiguration;
+
 public class Server {
 	public static void main(String[] args){
+		ServerConfiguration conf = Functionalities.loadServerConfigurations();
 		ServerSocket server = null;
+		
+		System.out.println(conf.toString() + "\n");
+		
         try {
-            server = new ServerSocket(1234);
+            server = new ServerSocket(conf.getServerPort());
             server.setReuseAddress(true);
-   		 	System.out.println("SERVER LISTENING ON PORT: 1234\n");
+            System.out.println("SERVER LISTENING ON PORT: " + conf.getServerPort());
             while (true) {
                 Socket client = server.accept();
-                ClientHandler clientSock = new ClientHandler(client);
-                new Thread(clientSock).start();
+                new Thread(new ClientHandler(client)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
