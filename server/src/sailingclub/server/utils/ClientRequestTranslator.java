@@ -27,6 +27,9 @@ public class ClientRequestTranslator {
 			break;
 			case Actions.SELECT:
 				break;
+			case Actions.LOGIN:
+				query += "SELECT * FROM user WHERE username = " + model.getSQLPrimaryKeyValue() + " and password = " + model.getSQLValues()[6] + ";";
+				break;
 		}	
 		return query;
 	}

@@ -1,8 +1,14 @@
 package sailingclub.common.structures;
 
+import java.io.Serializable;
+
 import sailingclub.common.Translatable;
 
-public class User implements Translatable{
+public class User implements Translatable, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String username;
 	private String name;
 	private String surname;
@@ -18,6 +24,11 @@ public class User implements Translatable{
 		this.address = address;
 		this.fiscal_code = fiscal_code;
 		this.user_type = user_type;
+		this.password = password;
+	}
+	
+	public User(String username, String password) {
+		this.username = username;
 		this.password = password;
 	}
 	
