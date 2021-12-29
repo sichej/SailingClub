@@ -1,19 +1,18 @@
-package sailingclub.server.utils;
+package sailingclub.server.sqlmanagment;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.*;
-
-public class Functionalities {
-	private static void printTable(List<Map<String, String>> table) {
+public class DatabaseManager {
+	public static void printQueryResult(List<Map<String, String>> table) {
 		table.get(0).forEach((key, value) -> System.out.print(key + "\t"));
 		System.out.println("\n");
 		for(Map<String, String> row: table) {
@@ -37,14 +36,22 @@ public class Functionalities {
 		return table;
 	}
 	
-	public static ServerConfiguration loadServerConfigurations() {
-		Gson gson = new Gson();
-		ServerConfiguration conf = null;
+	public void executeSQLStatement(String query) {
 		try {
-			conf = gson.fromJson(new FileReader("config/srv_conf.json"), ServerConfiguration.class);
-		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
-			e.printStackTrace();
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = null;
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
+			System.out.println("Database is connected !\n");
+
+			conn.createStatement().execute(query);
+			Statement selectStmt = conn.createStatement();
+			ResultSet rs = selectStmt.executeQuery(query);
+			List<Map<String, String>> queryResult = wrapQueryResult(rs);
+			printQueryResult(queryResult);
+
+			conn.close();
+		} catch (Exception e) {
+			System.out.print("Do not connect to DB - Error:" + e);
 		}
-		return conf;
 	}
 }

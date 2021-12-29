@@ -2,56 +2,39 @@ package sailingclub.common.structures;
 
 import java.io.Serializable;
 
-import sailingclub.common.Translatable;
+import sailingclub.common.Insertable;
 
-public class Boat implements Translatable, Serializable{
+public class Boat implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
-	private Integer id;
+	private int id;
 	private String name;
-	private Double length;
-	private String id_member;
+	private double length;
+	private String idMember;
 	
-	public Boat(int id) {
+	public Boat(int id, String name, double length, String idMember) {
 		this.id = id;
-		this.name = null;
-		this.length = null;
-		this.id_member = null;
-	}
-	
-	public Boat(String name, Double length, String id_member) {
-		this.id = null;
 		this.name = name;
 		this.length = length;
-		this.id_member = id_member;
+		this.idMember = idMember;
 	}
 	
+	public int getId() { return id; }
+	public String getName() { return name; }
+	public double getLength() { return length; }
+	public String getIdMember() { return idMember; }
+
 	@Override
-	public String[] getSQLAttributes() {
+	public String[] getAttributes() {
 		return new String[]{"name", "length", "id_member"};
 	}
 
 	@Override
-	public String getSQLTableName() {
+	public String getInstanceName() {
 		return "boat";
 	}
 
 	@Override
-	public String[] getSQLValues() {
-		return new String[]{"'" + this.name + "'", this.length.toString(), "'" + this.id_member + "'"};
-	}
-
-	@Override
-	public Class<?>[] getSQLTypes() {
-		return new Class[]{this.name.getClass(), this.length.getClass(), this.id_member.getClass()};
-	}
-
-	@Override
-	public Object getSQLPrimaryKeyValue() {
-		return this.id;
-	}
-
-	@Override
-	public String getSQLPrimaryKeyName() {
-		return "id";
+	public String[] getValues() {
+		return new String[]{"'" + this.name + "'", Double.toString(this.length), "'" + this.idMember + "'"};
 	}
 }

@@ -1,6 +1,6 @@
 package sailingclub.common;
 
-public class Actions {
+public class Constants {
 	public static final int INSERT = 0; 
 	public static final int DELETE = 1;
 	public static final int SELECT = 2;

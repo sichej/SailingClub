@@ -1,29 +1,25 @@
 package sailingclub.common.structures;
 
 import java.io.Serializable;
+import sailingclub.common.Insertable;
 
-import sailingclub.common.Translatable;
-
-public class User implements Translatable, Serializable{
-	/**
-	 * 
-	 */
+public class User implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String name;
 	private String surname;
 	private String address;
-	private String fiscal_code;
-	private String user_type;
+	private String fiscalCode;
+	private String userType;
 	private String password;
 	
-	public User(String username, String name, String surname, String address, String fiscal_code, String user_type, String password) {
+	public User(String username, String name, String surname, String address, String fiscalCode, String userType, String password) {
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
 		this.address = address;
-		this.fiscal_code = fiscal_code;
-		this.user_type = user_type;
+		this.fiscalCode = fiscalCode;
+		this.userType = userType;
 		this.password = password;
 	}
 	
@@ -32,33 +28,26 @@ public class User implements Translatable, Serializable{
 		this.password = password;
 	}
 	
+	public String getUsername() { return username; }
+	public String getName() { return name; }
+	public String getSurname() { return surname; }
+	public String getAddress() { return address; }
+	public String getFiscalCode() { return fiscalCode; }
+	public String getUserType() { return userType; }
+	public String getPassword() { return password; }
+
 	@Override
-	public String[] getSQLAttributes() {
+	public String[] getAttributes() {
 		return new String[]{"username", "name", "surname", "address", "fiscal_code", "user_type", "password"};
 	}
 
 	@Override
-	public String getSQLTableName() {
+	public String getInstanceName() {
 		return "user";
 	}
 
 	@Override
-	public String[] getSQLValues() {
-		return new String[]{this.username, "'" + this.name + "'", this.surname, "'" + this.address + "'", "'" + this.fiscal_code + "'", "'" + this.user_type + "'", "'" + this.password + "'"};
-	}
-
-	@Override
-	public Class<?>[] getSQLTypes() {
-		return new Class[]{this.username.getClass(), this.name.getClass(), this.surname.getClass(), this.address.getClass(), this.fiscal_code.getClass(), this.user_type.getClass(), this.password.getClass()};
-	}
-
-	@Override
-	public Object getSQLPrimaryKeyValue() {
-		return this.username;
-	}
-
-	@Override
-	public String getSQLPrimaryKeyName() {
-		return "username";
+	public String[] getValues() {
+		return new String[]{this.username, "'" + this.name + "'", this.surname, "'" + this.address + "'", "'" + this.fiscalCode + "'", "'" + this.userType + "'", "'" + this.password + "'"};
 	}
 }

@@ -4,14 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import sailingclub.server.utils.Functionalities;
-import sailingclub.server.utils.ServerConfiguration;
-
 public class Server {
 	public static void main(String[] args){
-		ServerConfiguration conf = Functionalities.loadServerConfigurations();
+		ServerConfiguration conf = new ServerConfiguration("config/srv_conf.json");
 		ServerSocket server = null;
-		
 		System.out.println(conf.toString() + "\n");
 		
         try {

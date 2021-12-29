@@ -5,61 +5,61 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import sailingclub.common.Actions;
+import sailingclub.common.Constants;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.server.sqlmanagment.SQLTranslator;
+import sailingclub.server.sqlmanagment.DatabaseManager;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
-import sailingclub.server.utils.ClientRequestTranslator;
 
 public class ClientHandler implements Runnable {
-    private Socket socket;
-    private ClientRequestTranslator translator;
+	private Socket socket;
+	private SQLTranslator translator;
+	private DatabaseManager dbManager;
 
-    public ClientHandler(Socket socket){
-        this.socket = socket;
-        this.translator = new ClientRequestTranslator();
-    }
+	public ClientHandler(Socket socket) {
+		this.socket = socket;
+		this.translator = new SQLTranslator();
+		this.dbManager = new DatabaseManager();
+	}
 
-    public void run() {
-    	System.out.println("Client " + this.socket.getInetAddress().getHostAddress() + " " + this.socket.getPort() + " connected!");
-    	
-    	try {
-			ObjectInputStream in = new ObjectInputStream(this.socket.getInputStream());
-			ObjectOutputStream out = new ObjectOutputStream(this.socket.getOutputStream());
-			Request rq;
-			
-			do {
-				rq = (Request)in.readObject();
-				System.out.println(translator.translate(rq)); //TODO ELEAB QUERY
-				out.writeObject(new Response(200, new EmptyPayload()));
-			}while(rq.getHeader() != Actions.CLOSE_CONNECTION);
-			
-			socket.close();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+	public void run() {
+		ObjectInputStream in;
+		ObjectOutputStream out;
+
+		try {
+			in = new ObjectInputStream(this.socket.getInputStream());
+			out = new ObjectOutputStream(this.socket.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("An error occurred while opening the strem!");
+			try { this.socket.close(); } catch (IOException ie) {}
+			return;
 		}
-    	
-        System.out.println("Client " + socket.getInetAddress().getHostAddress() + " " + socket.getPort() + " disconnected!");
-    }
+
+		System.out.println("Client " + this.socket.getInetAddress().getHostAddress() + " " + this.socket.getPort() + " connected!");
+
+		while(true){
+			try {
+				Request rq = (Request)in.readObject();
+				if(rq.getHeader() == Constants.CLOSE_CONNECTION) break;
+				
+				String query  = translator.RequestToSQL(rq);
+				System.out.println("TRYING TO EXECUTE:\n" + query);
+				this.dbManager.executeSQLStatement(query);
+				
+				out.writeObject(new Response(Constants.SUCCESS, new EmptyPayload()));
+			} catch (IOException e) {
+				System.out.println("An erro occurred in the socket stream!");
+				break;
+			}catch(ClassNotFoundException ce) {
+				try {
+					out.writeObject(new Response(Constants.BAD_REQUEST, new EmptyPayload()));
+					break;
+				}catch(IOException ie) {}
+			}
+		}
+
+		try { socket.close();} catch (IOException ie) {}
+		System.out.println("Client " + socket.getInetAddress().getHostAddress() + " " + socket.getPort() + " disconnected!");
+	}
 }
-
-/*ClientRequestTranslator translator = new ClientRequestTranslator();
-Request req = new Request(Actions.INSERT, new BoatSQLModel("nubarca",11.11,"Cody"));
-String query = translator.translate(req);
-
-try {
-	Class.forName("com.mysql.cj.jdbc.Driver");
-	Connection conn = null;
-	conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
-	System.out.println("Database is connected !\n");
-
-	conn.createStatement().execute(query);
-	Statement selectStmt = conn.createStatement();
-	ResultSet rs = selectStmt.executeQuery(query);
-	List<Map<String, String>> queryResult = wrapQueryResult(rs);
-	printTable(queryResult);
-
-	conn.close();
-} catch (Exception e) {
-	System.out.print("Do not connect to DB - Error:" + e);
-}*/
