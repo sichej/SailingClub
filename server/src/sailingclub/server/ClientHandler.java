@@ -56,6 +56,11 @@ public class ClientHandler implements Runnable {
 					out.writeObject(new Response(Constants.BAD_REQUEST, new EmptyPayload()));
 					break;
 				}catch(IOException ie) {}
+			}catch(Exception ex) {
+				try {
+					out.writeObject(new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload()));
+					break;
+				}catch(IOException ie) {}
 			}
 		}
 
