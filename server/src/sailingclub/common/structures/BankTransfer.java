@@ -31,6 +31,6 @@ public class BankTransfer implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{"'" + this.iban + "'", this.bank, "'" + this.idMember + "'"};
+		return new String[]{"'" + this.iban + "'", "'" + this.bank + "'", "'" + this.idMember + "'"};
 	}
 }

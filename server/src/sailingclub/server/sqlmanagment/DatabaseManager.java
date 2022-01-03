@@ -36,22 +36,15 @@ public class DatabaseManager {
 		return table;
 	}
 	
-	public void executeSQLStatement(String query) {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = null;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
-			System.out.println("Database is connected !\n");
-
-			conn.createStatement().execute(query);
-			Statement selectStmt = conn.createStatement();
-			ResultSet rs = selectStmt.executeQuery(query);
-			List<Map<String, String>> queryResult = wrapQueryResult(rs);
-			printQueryResult(queryResult);
-
-			conn.close();
-		} catch (Exception e) {
-			System.out.print("Do not connect to DB - Error:" + e);
-		}
+	public ResultSet executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = null;
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
+		System.out.println("Database is connected !\n");
+		conn.createStatement().execute(query);
+		Statement selectStmt = conn.createStatement();
+		ResultSet rs = selectStmt.executeQuery(query);
+		conn.close();
+		return rs;
 	}
 }

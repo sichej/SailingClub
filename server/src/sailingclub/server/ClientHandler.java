@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import sailingclub.common.Constants;
 import sailingclub.common.structures.EmptyPayload;
@@ -40,27 +42,29 @@ public class ClientHandler implements Runnable {
 
 		while(true){
 			try {
-				Request rq = (Request)in.readObject();
-				if(rq.getHeader() == Constants.CLOSE_CONNECTION) break;
+				Response response = null;
+				try {
+					Request request = (Request)in.readObject();  //read the incoming request
+					if(request.getHeader() == Constants.CLOSE_CONNECTION) break;  //if it's a close connection request
+					
+					String query  = this.translator.RequestToSQL(request); //convert the request into a db request
+					
+					System.out.println("TRYING TO EXECUTE:\n" + query);
+					
+					ResultSet queryResult = this.dbManager.executeSQLStatement(query);  //execute the query
+					response = this.translator.SQLToResponse(queryResult); //translate the query result into a java response object
+				}catch(ClassNotFoundException cnfe) {  //in case of bad request
+					response = new Response(Constants.BAD_REQUEST, new EmptyPayload());
+				}catch(SQLException sqle) {
+					sqle.printStackTrace();
+					response = new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload());
+				}
+			
+				out.writeObject(response);
 				
-				String query  = translator.RequestToSQL(rq);
-				System.out.println("TRYING TO EXECUTE:\n" + query);
-				this.dbManager.executeSQLStatement(query);
-				
-				out.writeObject(new Response(Constants.SUCCESS, new EmptyPayload()));
 			} catch (IOException e) {
 				System.out.println("An erro occurred in the socket stream!");
 				break;
-			}catch(ClassNotFoundException ce) {
-				try {
-					out.writeObject(new Response(Constants.BAD_REQUEST, new EmptyPayload()));
-					break;
-				}catch(IOException ie) {}
-			}catch(Exception ex) {
-				try {
-					out.writeObject(new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload()));
-					break;
-				}catch(IOException ie) {}
 			}
 		}
 

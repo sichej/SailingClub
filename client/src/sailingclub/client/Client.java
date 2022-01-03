@@ -6,6 +6,7 @@ import java.net.Socket;
 import sailingclub.common.Constants;
 import sailingclub.common.Response;
 import sailingclub.common.Request;
+import sailingclub.common.structures.BankTransfer;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.User;
 
@@ -17,9 +18,9 @@ public class Client {
         	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         	ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         	
-			out.writeObject(new Request(Constants.LOGIN, new User("Alicia", "9dd4e461268c8034f5c8564e155c67a6")));
+			out.writeObject(new Request(Constants.INSERT, new BankTransfer("IT91C1234567890123456789012", "Credit Agricole", "Alicia")));
         	Response rs = (Response)in.readObject();
-			System.out.println("SRV> " + rs.getStatusCode());
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
         	
         	out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
             socket.close();
