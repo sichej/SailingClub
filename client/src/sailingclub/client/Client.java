@@ -3,6 +3,8 @@ package sailingclub.client;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
+
 import sailingclub.common.Constants;
 import sailingclub.common.Response;
 import sailingclub.common.Request;
@@ -20,8 +22,10 @@ public class Client {
         	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         	ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         	
-        	out.writeObject(new Request(Constants.GET_BOAT_BY_ID, new Boat(101)));
+        	out.writeObject(new Request(Constants.GET_BOAT_BY_ID, new Boat(105)));
         	Response rs = (Response)in.readObject();
+        	System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + (Boat)rs.getPayload());
+        	
         	out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, (Boat)(rs.getPayload())));
         	rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());

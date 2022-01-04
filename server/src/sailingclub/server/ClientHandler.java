@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import sailingclub.common.Constants;
 import sailingclub.common.structures.EmptyPayload;
@@ -51,11 +53,11 @@ public class ClientHandler implements Runnable {
 					
 					System.out.println("TRYING TO EXECUTE:\n" + query);
 					
-					ResultSet queryResult = this.dbManager.executeSQLStatement(query);  //execute the query
+					List<Map<String, String>> queryResult = this.dbManager.executeSQLStatement(query);  //execute the query
 					response = this.translator.SQLToResponse(queryResult); //translate the query result into a java response object
 				}catch(ClassNotFoundException cnfe) {  //in case of bad request
 					response = new Response(Constants.BAD_REQUEST, new EmptyPayload());
-				}catch(SQLException sqle) {
+				}catch(Exception sqle) {
 					sqle.printStackTrace();
 					response = new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload());
 				}

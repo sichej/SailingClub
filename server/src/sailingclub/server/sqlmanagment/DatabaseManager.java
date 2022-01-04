@@ -12,16 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseManager {
-	public static void printQueryResult(List<Map<String, String>> table) {
-		table.get(0).forEach((key, value) -> System.out.print(key + "\t"));
-		System.out.println("\n");
-		for(Map<String, String> row: table) {
-			row.forEach((key, value) -> System.out.print(value + "\t"));
-			System.out.println();
-		} 
-	}
 	
-	public static List<Map<String, String>> wrapQueryResult(ResultSet rs) throws SQLException {
+	private List<Map<String, String>> wrapQueryResult(ResultSet rs) throws SQLException {
 		List<Map<String, String>> table = new ArrayList<Map<String, String>>();
 		ResultSetMetaData meta = rs.getMetaData();
 		while (rs.next()) {
@@ -36,7 +28,7 @@ public class DatabaseManager {
 		return table;
 	}
 	
-	public ResultSet executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
+	public List<Map<String, String>> executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
 		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
@@ -44,7 +36,10 @@ public class DatabaseManager {
 		conn.createStatement().execute(query);
 		Statement selectStmt = conn.createStatement();
 		ResultSet rs = selectStmt.executeQuery(query);
+		List<Map<String, String>> wr = wrapQueryResult(rs);
+		rs.close();
 		conn.close();
-		return rs;
+		
+		return wr;
 	}
 }
