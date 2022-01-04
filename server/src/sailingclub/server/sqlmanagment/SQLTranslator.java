@@ -2,12 +2,15 @@ package sailingclub.server.sqlmanagment;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Insertable;
 import sailingclub.common.structures.User;
+import sailingclub.common.structures.BoatStorageFee;
+import sailingclub.common.structures.Boat;
 
 public class SQLTranslator {
 	private int lastRequest;
@@ -38,6 +41,14 @@ public class SQLTranslator {
 				query += "SELECT * FROM user WHERE username = '" + user.getUsername() + "' and password = '" + user.getPassword()+ "';";
 				break;
 			case Constants.CLOSE_CONNECTION: break;
+			case Constants.GET_BOAT_BY_ID:
+				Boat boat = (Boat)model;
+				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " + boat.getId() + " ;";
+				break;
+			case Constants.PAY_BOAT_STORAGE_FEE:
+				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
+				query += "UPDATE boat_storage_fee SET payment_date = " + LocalDate.now() + " , expiration_date = " + bsf.getExpirationDate().plusYears(1) + " WHERE id_boat = " + bsf.getId() + " ;";
+				break;
 			default: throw new ClassNotFoundException();
 		}	
 		return query;
@@ -47,6 +58,9 @@ public class SQLTranslator {
 		Response response = null;
 		switch(this.lastRequest) {
 		case Constants.INSERT:
+			response = new Response(Constants.SUCCESS,queryResult.getInt(1));
+			break;
+		case Constants.GET_BOAT_BY_ID:
 			response = new Response(Constants.SUCCESS,queryResult.getInt(1));
 			break;
 		}

@@ -10,18 +10,29 @@ public class Boat implements Insertable, Serializable{
 	private String name;
 	private double length;
 	private String idMember;
+	private BoatStorageFee boatStorageFee;
 	
-	public Boat(int id, String name, double length, String idMember) {
+	public Boat(int id, String name, double length, String idMember, BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;
 		this.length = length;
 		this.idMember = idMember;
+		this.boatStorageFee = boatStorageFee;
+	}
+	
+	public Boat(int id) {
+		this.id = id;
 	}
 	
 	public int getId() { return id; }
 	public String getName() { return name; }
 	public double getLength() { return length; }
 	public String getIdMember() { return idMember; }
+	
+
+	public BoatStorageFee getBoatStorageFee() { return boatStorageFee; }
+
+	public void setBoatStorageFee(BoatStorageFee boatStorageFee) { this.boatStorageFee = boatStorageFee; }
 
 	@Override
 	public String[] getAttributes() {
