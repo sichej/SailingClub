@@ -20,6 +20,13 @@ public class Boat implements Insertable, Serializable{
 		this.boatStorageFee = boatStorageFee;
 	}
 	
+	public Boat(String name, double length, String idMember, BoatStorageFee boatStorageFee) {
+		this.name = name;
+		this.length = length;
+		this.idMember = idMember;
+		this.boatStorageFee = boatStorageFee;
+	}
+	
 	public Boat(int id) {
 		this.id = id;
 	}
@@ -47,5 +54,10 @@ public class Boat implements Insertable, Serializable{
 	@Override
 	public String[] getValues() {
 		return new String[]{"'" + this.name + "'", Double.toString(this.length), "'" + this.idMember + "'"};
+	}
+	
+	@Override
+	public String getPk() {
+		return "id";
 	}
 }

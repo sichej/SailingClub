@@ -34,4 +34,9 @@ public class Race implements Insertable, Serializable{
 	public String[] getValues() {
 		return new String[]{this.id.toString(), this.data.toString(), Double.toString(this.price)};
 	}
+	
+	@Override
+	public String getPk() {
+		return "id";
+	}
 }

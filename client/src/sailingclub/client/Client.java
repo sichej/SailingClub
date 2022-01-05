@@ -3,6 +3,7 @@ package sailingclub.client;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import sailingclub.common.Constants;
@@ -22,17 +23,31 @@ public class Client {
         	ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         	ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         	
-        	out.writeObject(new Request(Constants.GET_BOAT_BY_ID, new Boat(105)));
+        	/*out.writeObject(new Request(Constants.GET_BOAT_BY_ID, new Boat(105)));
         	Response rs = (Response)in.readObject();
-        	System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + (Boat)rs.getPayload());
+        	System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + ((Boat)rs.getPayload()).getBoatStorageFee().getExpirationDate()
+        			+ ((Boat)rs.getPayload()).getBoatStorageFee().getPaymentDate());
         	
         	out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, (Boat)(rs.getPayload())));
         	rs = (Response)in.readObject();
-			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + ((Boat)rs.getPayload()).getBoatStorageFee().getExpirationDate()
+					+ ((Boat)rs.getPayload()).getBoatStorageFee().getPaymentDate());*/
         	
-			/*out.writeObject(new Request(Constants.INSERT, new BankTransfer("IT91C1234567890123456789012", "Credit Agricole", "Alicia")));
+			/*out.writeObject(new Request(Constants.INSERT, new BankTransfer("IT88C1234567890123456789012", "Credit Agricole", "Alicia")));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
+        	
+        	Boat bt = new Boat("NUOVAAAAA", 9999.9, "Alicia", null);
+        	out.writeObject(new Request(Constants.INSERT, bt));
+        	Response rs = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
+			
+			int newid = Integer.parseInt((String)rs.getPayload());
+			
+			BoatStorageFee bs = new BoatStorageFee(LocalDate.now(), LocalDate.now().plusYears(1), 100, newid);
+        	out.writeObject(new Request(Constants.INSERT, bs));
+        	Response rs1 = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs1.getPayload());
         	
         	out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
             socket.close();

@@ -11,10 +11,17 @@ public class BoatStorageFee implements Insertable, Serializable{
 	private LocalDate paymentDate;
 	private LocalDate expirationDate;
 	private double amount;
-	private String idBoat;
+	private int idBoat;
 	
-	public BoatStorageFee(int id, LocalDate paymentDate, LocalDate expirationDate, double amount, String idBoat) {
+	public BoatStorageFee(int id, LocalDate paymentDate, LocalDate expirationDate, double amount, int idBoat) {
 		this.id = id;
+		this.paymentDate = paymentDate;
+		this.expirationDate = expirationDate;
+		this.amount = amount;
+		this.idBoat = idBoat;
+	}
+	
+	public BoatStorageFee(LocalDate paymentDate, LocalDate expirationDate, double amount, int idBoat) {
 		this.paymentDate = paymentDate;
 		this.expirationDate = expirationDate;
 		this.amount = amount;
@@ -25,11 +32,11 @@ public class BoatStorageFee implements Insertable, Serializable{
 	public LocalDate getPaymentDate() { return paymentDate; }
 	public LocalDate getExpirationDate() { return expirationDate; }
 	public double getAmount() { return amount; }
-	public String getIdBoat() { return idBoat; }
+	public int getIdBoat() { return idBoat; }
 
 	@Override
 	public String[] getAttributes() {
-		return new String[]{"id", "payment_date", "expiration_date", "amount","id_boat"};
+		return new String[]{"payment_date", "expiration_date", "amount","id_boat"};
 	}
 
 	@Override
@@ -39,6 +46,11 @@ public class BoatStorageFee implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{"'" + this.id + "'", "'"+this.paymentDate+"'", "'"+this.expirationDate+"'", Double.toString(this.amount), "'" + this.idBoat + "'"};
+		return new String[]{"'"+this.paymentDate+"'", "'"+this.expirationDate+"'", Double.toString(this.amount), "'" + this.idBoat + "'"};
+	}
+	
+	@Override
+	public String getPk() {
+		return "id";
 	}
 }

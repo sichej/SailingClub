@@ -31,13 +31,23 @@ public class DatabaseManager {
 	public List<Map<String, String>> executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club", "root", "");
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club?allowMultiQueries=true", "root", "");
 		System.out.println("Database is connected !\n");
-		conn.createStatement().execute(query);
-		Statement selectStmt = conn.createStatement();
-		ResultSet rs = selectStmt.executeQuery(query);
-		List<Map<String, String>> wr = wrapQueryResult(rs);
-		rs.close();
+		Statement stmt = conn.createStatement();
+		boolean hasMoreResultSets = stmt.execute(query);
+		boolean hasToBeWrapped = true;
+		
+		if(!hasMoreResultSets) 
+			hasToBeWrapped = stmt.getMoreResults();  //se ha più risultati prende il secondo
+		
+		ResultSet rs = stmt.getResultSet();
+		
+		List<Map<String, String>> wr = null;
+		if(hasToBeWrapped) {
+			wr = wrapQueryResult(rs);
+			rs.close();
+		}
+		
 		conn.close();
 		
 		return wr;

@@ -4,4 +4,5 @@ public interface Insertable{
 	public String[] getAttributes();
 	public String getInstanceName();
 	public String[] getValues();
+	public String getPk();
 }
