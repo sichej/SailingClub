@@ -2,12 +2,16 @@ package sailingclub.client;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
 import sailingclub.common.Constants;
 import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.Request;
 import sailingclub.common.structures.BankTransfer;
 import sailingclub.common.structures.Boat;
@@ -16,6 +20,7 @@ import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.User;
 
 public class Client {
+
 	public static void main(String[] args) {
 		System.out.println("CLIENT");
         try {
@@ -25,10 +30,9 @@ public class Client {
         	
         	/*out.writeObject(new Request(Constants.GET_BOAT_BY_ID, new Boat(105)));
         	Response rs = (Response)in.readObject();
-        	System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + ((Boat)rs.getPayload()).getBoatStorageFee().getExpirationDate()
-        			+ ((Boat)rs.getPayload()).getBoatStorageFee().getPaymentDate());
+        	System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
         	
-        	out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, (Boat)(rs.getPayload())));
+        	/*out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, (Boat)(rs.getPayload())));
         	rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + ((Boat)rs.getPayload()).getBoatStorageFee().getExpirationDate()
 					+ ((Boat)rs.getPayload()).getBoatStorageFee().getPaymentDate());*/
@@ -37,7 +41,7 @@ public class Client {
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
         	
-        	/*Boat bt = new Boat("NUOVAAAAA", 9999.9, "Alicia", null);
+        	/*Boat bt = new Boat("Titanic", 166.78, "Berto");
         	out.writeObject(new Request(Constants.INSERT, bt));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
@@ -47,10 +51,12 @@ public class Client {
 			BoatStorageFee bs = new BoatStorageFee(LocalDate.now(), LocalDate.now().plusYears(1), 100, newid);
         	out.writeObject(new Request(Constants.INSERT, bs));
         	Response rs1 = (Response)in.readObject();
-			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs1.getPayload());
-        	*/
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs1.getPayload());*/
         	
         	
+        	out.writeObject(new Request(Constants.LOGIN, new User("Berto", Utils.stringToDigest("x"))));
+        	Response rs = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
         	
         	out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
             socket.close();

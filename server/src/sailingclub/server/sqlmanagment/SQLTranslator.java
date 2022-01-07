@@ -29,7 +29,7 @@ public class SQLTranslator {
 		this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	};
 	
-	public String RequestToSQL(Request request) throws ClassNotFoundException {
+	public String RequestToSQL(Request request) throws RequestToSQLException {
 		String query = "";
 		Object model = request.getPayload();
 		
@@ -67,38 +67,47 @@ public class SQLTranslator {
 					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " 
 					  + ((Boat)model).getId() + ";";
 				break;
-			default: throw new ClassNotFoundException();
+			default: throw new RequestToSQLException();
 		}	
 		return query;
 	}
 	
-	public Response SQLToResponse(List<Map<String, String>> queryResult) throws Exception {
+	public Response SQLToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException {
 		Response response = null;
 		switch(this.lastRequest) {
 		case Constants.INSERT:
 			if(queryResult != null)
 				response = new Response(Constants.SUCCESS, queryResult.get(0).get("last_id"));
 			else 
-				response = new Response(Constants.SUCCESS, new EmptyPayload());
+				response = new Response(Constants.SUCCESS, new EmptyPayload("No id to be returned!"));
 			break;
 		case Constants.PAY_BOAT_STORAGE_FEE:
 		case Constants.GET_BOAT_BY_ID:
-			Map<String, String> wr = queryResult.get(0);
-			for (Map.Entry<String, String> entry : wr.entrySet()) {
-			    System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
+				break;
 			}
-			LocalDate pDate = LocalDate.parse(wr.get("payment_date"), dateFormatter);
-			LocalDate eDate = LocalDate.parse(wr.get("expiration_date"), dateFormatter);
-			BoatStorageFee fee = new BoatStorageFee(Integer.parseInt(wr.get("id")),pDate,eDate,Double.parseDouble(wr.get("amount")),Integer.parseInt(wr.get("id_boat")));
-			Boat boat = new Boat(Integer.parseInt(wr.get("id_boat")),wr.get("name"),Double.parseDouble(wr.get("length")),wr.get("id_member"),fee);
+			
+			Map<String, String> fRes = queryResult.get(0);
+			LocalDate pDate = LocalDate.parse(fRes.get("payment_date"), dateFormatter);
+			LocalDate eDate = LocalDate.parse(fRes.get("expiration_date"), dateFormatter);
+			BoatStorageFee fee = new BoatStorageFee(Integer.parseInt(fRes.get("id")),pDate,eDate,Double.parseDouble(fRes.get("amount")),Integer.parseInt(fRes.get("id_boat")));
+			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
 		case Constants.LOGIN:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong login!"));
+				break;
+			}
 			
+			Map<String, String> uRes = queryResult.get(0);
+			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"));
+			response = new Response(Constants.SUCCESS, user);
 			break;
 		}
 		
-		if(response == null) throw new SQLException();
+		if(response == null) throw new SQLToResponseException();
 		
 		return response;
 	}

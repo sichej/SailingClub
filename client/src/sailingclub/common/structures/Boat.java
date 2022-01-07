@@ -12,6 +12,13 @@ public class Boat implements Insertable, Serializable{
 	private String idMember;
 	private BoatStorageFee boatStorageFee;
 	
+	public Boat(String name, double length, String idMember) {
+		this.name = name;
+		this.length = length;
+		this.idMember = idMember;
+		this.boatStorageFee = null;
+	}
+	
 	public Boat(int id, String name, double length, String idMember, BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;

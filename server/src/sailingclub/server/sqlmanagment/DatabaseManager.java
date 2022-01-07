@@ -34,12 +34,13 @@ public class DatabaseManager {
 		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club?allowMultiQueries=true", "root", "");
 		System.out.println("Database is connected !\n");
 		Statement stmt = conn.createStatement();
-		boolean hasMoreResultSets = stmt.execute(query);
+		boolean isResultSet = stmt.execute(query);
 		boolean hasToBeWrapped = true;
 		
-		if(!hasMoreResultSets) 
+		if(!isResultSet) 
 			hasToBeWrapped = stmt.getMoreResults();  //se ha più risultati prende il secondo
 		
+		System.out.println(isResultSet + " " + hasToBeWrapped);
 		ResultSet rs = stmt.getResultSet();
 		
 		List<Map<String, String>> wr = null;

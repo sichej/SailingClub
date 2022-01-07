@@ -13,6 +13,8 @@ import sailingclub.common.Constants;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.server.sqlmanagment.SQLTranslator;
 import sailingclub.server.sqlmanagment.DatabaseManager;
+import sailingclub.server.sqlmanagment.RequestToSQLException;
+import sailingclub.server.sqlmanagment.SQLToResponseException;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 
@@ -55,16 +57,16 @@ public class ClientHandler implements Runnable {
 					
 					List<Map<String, String>> queryResult = this.dbManager.executeSQLStatement(query);  //execute the query
 					response = this.translator.SQLToResponse(queryResult); //translate the query result into a java response object
-				}catch(ClassNotFoundException cnfe) {  //in case of bad request
-					response = new Response(Constants.BAD_REQUEST, new EmptyPayload());
-				}catch(Exception sqle) {
-					sqle.printStackTrace();
-					response = new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload());
+				}catch(RequestToSQLException rtse) {  //in case of bad request
+					rtse.printStackTrace();
+					response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Bad request"));
+				}catch(SQLToResponseException stre) {  //in case of server error
+					stre.printStackTrace();
+					response = new Response(Constants.INTERNAL_SERVER_ERROR, new EmptyPayload("Internal server error"));
 				}
-			
 				out.writeObject(response);
 				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println("An erro occurred in the socket stream!");
 				break;
 			}
