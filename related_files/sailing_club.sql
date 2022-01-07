@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 14, 2021 alle 17:13
--- Versione del server: 10.4.11-MariaDB
--- Versione PHP: 7.4.3
+-- Creato il: Gen 07, 2022 alle 17:41
+-- Versione del server: 10.4.22-MariaDB
+-- Versione PHP: 8.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,10 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sailig_club`
+-- Database: `sailing_club`
 --
-CREATE DATABASE IF NOT EXISTS `sailig_club` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `sailing_club`;
 
 -- --------------------------------------------------------
 
@@ -186,7 +183,7 @@ ALTER TABLE `race_participation`
 -- Indici per le tabelle `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`,`user_type`);
+  ADD PRIMARY KEY (`username`) USING BTREE;
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate

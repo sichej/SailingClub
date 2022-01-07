@@ -37,7 +37,7 @@ public class Client {
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
         	
-        	Boat bt = new Boat("NUOVAAAAA", 9999.9, "Alicia", null);
+        	/*Boat bt = new Boat("NUOVAAAAA", 9999.9, "Alicia", null);
         	out.writeObject(new Request(Constants.INSERT, bt));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
@@ -48,6 +48,9 @@ public class Client {
         	out.writeObject(new Request(Constants.INSERT, bs));
         	Response rs1 = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs1.getPayload());
+        	*/
+        	
+        	
         	
         	out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
             socket.close();

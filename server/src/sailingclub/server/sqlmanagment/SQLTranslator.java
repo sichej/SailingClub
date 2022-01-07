@@ -93,6 +93,9 @@ public class SQLTranslator {
 			Boat boat = new Boat(Integer.parseInt(wr.get("id_boat")),wr.get("name"),Double.parseDouble(wr.get("length")),wr.get("id_member"),fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
+		case Constants.LOGIN:
+			
+			break;
 		}
 		
 		if(response == null) throw new SQLException();
