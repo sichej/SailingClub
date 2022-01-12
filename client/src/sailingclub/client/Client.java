@@ -63,7 +63,11 @@ public class Client {
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
 
-			out.writeObject(new Request(Constants.CREATE_RACE, new Race(0, LocalDate.parse("2024-10-24"), 200)));
+			/*out.writeObject(new Request(Constants.CREATE_RACE, new Race(0, LocalDate.parse("2024-10-24"), 200)));
+        	Response rs = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
+
+			out.writeObject(new Request(Constants.ADD_MEMBER, new User("edo", "edoardo", "sichelli", "via gentileschi", "QWERTYUIOPLKJHGF", "member", "9dd4e461268c8034f5c8564e155c67a6")));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
         	

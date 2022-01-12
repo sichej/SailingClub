@@ -48,7 +48,7 @@ public class User implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{this.username, "'" + this.name + "'", this.surname, "'" + this.address + "'", "'" + this.fiscalCode + "'", "'" + this.userType + "'", "'" + this.password + "'"};
+		return new String[]{"'"+this.username+"'", "'" + this.name + "'", "'"+this.surname+"'", "'" + this.address + "'", "'" + this.fiscalCode + "'", "'" + this.userType + "'", "'" + this.password + "'"};
 	}
 	
 	@Override

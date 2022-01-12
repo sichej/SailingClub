@@ -76,6 +76,12 @@ public class SQLTranslator {
 				Race race = (Race)model;
 				query += "INSERT INTO race (date, price) VALUES ('" + race.getData() + "', '" + race.getPrice() + "');";
 				break;
+			case Constants.ADD_MEMBER:
+				insertableModel = (Insertable)model;
+				query += "INSERT INTO " + insertableModel.getInstanceName() + "(" 
+					  + String.join(",", insertableModel.getAttributes()) + ") VALUES ("		
+					  + String.join(",", insertableModel.getValues()) + ");";
+				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
