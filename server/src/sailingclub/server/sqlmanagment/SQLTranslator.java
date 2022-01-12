@@ -18,6 +18,7 @@ import sailingclub.common.Insertable;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.Race;
 import sailingclub.common.structures.Boat;
 
 public class SQLTranslator {
@@ -42,7 +43,7 @@ public class SQLTranslator {
 					  + String.join(",", insertableModel.getAttributes()) + ") VALUES ("		
 					  + String.join(",", insertableModel.getValues()) + ");";
 				
-				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non è in AI
+				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non ï¿½ in AI
 					query += "SELECT LAST_INSERT_ID() AS last_id;";
 				break;
 			/*case Actions.DELETE:  //bisogna decidere se serviranno solo delete by id faremo un interfaccia deletable dove ci saranno i metodi geit ecc..
@@ -66,6 +67,14 @@ public class SQLTranslator {
 					  + bsf.getExpirationDate().plusYears(1) + "' WHERE id_boat = " + ((Boat)model).getId() + "; " 
 					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " 
 					  + ((Boat)model).getId() + ";";
+				break;
+			case Constants.REMOVE_BOAT:
+				boat = (Boat)model;
+				query += "DELETE FROM boat WHERE id = '" + boat.getId() + "';";		
+				break;
+			case Constants.CREATE_RACE:
+				Race race = (Race)model;
+				query += "INSERT INTO race (date, price) VALUES ('" + race.getData() + "', '" + race.getPrice() + "');";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -104,6 +113,17 @@ public class SQLTranslator {
 			Map<String, String> uRes = queryResult.get(0);
 			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"));
 			response = new Response(Constants.SUCCESS, user);
+			break;
+			
+		case Constants.REMOVE_BOAT:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Boat"));
+				break;
+			}
+			
+			Map<String, String> bRes = queryResult.get(0);
+			boat = new Boat(Integer.parseInt(bRes.get("id")));
+			response = new Response(Constants.SUCCESS, boat);
 			break;
 		}
 		
