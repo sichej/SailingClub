@@ -125,7 +125,19 @@ public class SQLTranslator {
 			boat = new Boat(Integer.parseInt(bRes.get("id")));
 			response = new Response(Constants.SUCCESS, boat);
 			break;
+		
+	case Constants.CREATE_RACE:
+		if(queryResult.isEmpty()) {
+			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Boat"));
+			break;
 		}
+		
+		Map<String, String> rRes = queryResult.get(0);
+		Race race = new Race(Integer.parseInt(rRes.get("id")), LocalDate.parse(rRes.get("date")), Integer.parseInt(rRes.get("price")));
+		response = new Response(Constants.SUCCESS, race);
+		break;
+		
+	}
 		
 		if(response == null) throw new SQLToResponseException();
 		
