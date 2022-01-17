@@ -18,6 +18,7 @@ import sailingclub.common.Insertable;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.MembershipFee;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.Boat;
 
@@ -67,6 +68,11 @@ public class SQLTranslator {
 					  + bsf.getExpirationDate().plusYears(1) + "' WHERE id_boat = " + ((Boat)model).getId() + "; " 
 					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " 
 					  + ((Boat)model).getId() + ";";
+				break;
+			case Constants.PAY_ANNUAL_FEE:
+			MembershipFee msf = (MembershipFee)model;
+				query += "UPDATE membership_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
+					  + msf.getExpirationDate().plusYears(1) + "' WHERE id_member = '" + msf.getIdMember() + "';";
 				break;
 			case Constants.REMOVE_BOAT:
 				boat = (Boat)model;

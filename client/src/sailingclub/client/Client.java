@@ -17,6 +17,7 @@ import sailingclub.common.structures.BankTransfer;
 import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.MembershipFee;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
@@ -67,7 +68,11 @@ public class Client {
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
 
-			out.writeObject(new Request(Constants.ADD_MEMBER, new User("edo", "edoardo", "sichelli", "via gentileschi", "QWERTYUIOPLKJHGF", "member", "9dd4e461268c8034f5c8564e155c67a6")));
+			/*out.writeObject(new Request(Constants.ADD_MEMBER, new User("edo", "edoardo", "sichelli", "via gentileschi", "QWERTYUIOPLKJHGF", "member", "9dd4e461268c8034f5c8564e155c67a6")));
+        	Response rs = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
+			
+			out.writeObject(new Request(Constants.PAY_ANNUAL_FEE, new MembershipFee(LocalDate.parse("2020-03-26"), LocalDate.parse("2021-03-26"), 500, "Alexander")));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
         	
