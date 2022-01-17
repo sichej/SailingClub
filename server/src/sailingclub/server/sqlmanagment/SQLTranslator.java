@@ -69,24 +69,16 @@ public class SQLTranslator {
 					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " 
 					  + ((Boat)model).getId() + ";";
 				break;
-			case Constants.PAY_ANNUAL_FEE:
-			MembershipFee msf = (MembershipFee)model;
-				query += "UPDATE membership_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
-					  + msf.getExpirationDate().plusYears(1) + "' WHERE id_member = '" + msf.getIdMember() + "';";
+			case Constants.PAY_MEMBERSHIP_FEE:
+				User msfu = (User)model;
+				//UPDATE table SET date = DATE_ADD(date, INTERVAL 1 YEAR) 
+				query += "UPDATE membership_fee SET payment_date = DATE_ADD(payment_date, INTERVAL 1 YEAR)"
+				       + "expiration_date = DATE_ADD(expiration_date, INTERVAL 1 YEAR)"
+					   + "WHERE id_member = " + msfu.getUsername();
 				break;
 			case Constants.REMOVE_BOAT:
 				boat = (Boat)model;
 				query += "DELETE FROM boat WHERE id = '" + boat.getId() + "';";		
-				break;
-			case Constants.CREATE_RACE:
-				Race race = (Race)model;
-				query += "INSERT INTO race (date, price) VALUES ('" + race.getData() + "', '" + race.getPrice() + "');";
-				break;
-			case Constants.ADD_MEMBER:
-				insertableModel = (Insertable)model;
-				query += "INSERT INTO " + insertableModel.getInstanceName() + "(" 
-					  + String.join(",", insertableModel.getAttributes()) + ") VALUES ("		
-					  + String.join(",", insertableModel.getValues()) + ");";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -137,19 +129,7 @@ public class SQLTranslator {
 			boat = new Boat(Integer.parseInt(bRes.get("id")));
 			response = new Response(Constants.SUCCESS, boat);
 			break;
-		
-	case Constants.CREATE_RACE:
-		if(queryResult.isEmpty()) {
-			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Boat"));
-			break;
-		}
-		
-		Map<String, String> rRes = queryResult.get(0);
-		Race race = new Race(Integer.parseInt(rRes.get("id")), LocalDate.parse(rRes.get("date")), Integer.parseInt(rRes.get("price")));
-		response = new Response(Constants.SUCCESS, race);
-		break;
-
-	case Constants.PAY_ANNUAL_FEE:
+	case Constants.PAY_MEMBERSHIP_FEE:
 		if(queryResult.isEmpty()) {
 			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Membership Fee"));
 			break;

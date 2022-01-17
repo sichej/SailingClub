@@ -7,22 +7,21 @@ import sailingclub.common.Insertable;
 public class Race implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private LocalDate data;
+	private LocalDate date;
 	private double price;
 	
-	public Race(int id, LocalDate data, double price) {
-		this.id = id;
-		this.data = data;
+	public Race(LocalDate date, double price) {
+		this.date = date;
 		this.price = price;
 	}
 
 	public Integer getId() { return id; }
-	public LocalDate getData() { return data; }
+	public LocalDate getDate() { return date; }
 	public double getPrice() { return price; }
 
 	@Override
 	public String[] getAttributes() {
-		return new String[]{"id", "data", "price"};
+		return new String[]{"date", "price"};
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class Race implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{this.id.toString(), this.data.toString(), Double.toString(this.price)};
+		return new String[]{ "'" + this.date.toString() + "'", Double.toString(this.price)};
 	}
 	
 	@Override

@@ -64,15 +64,19 @@ public class Client {
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
 
-			/*out.writeObject(new Request(Constants.CREATE_RACE, new Race(0, LocalDate.parse("2024-10-24"), 200)));
+			/**out.writeObject(new Request(Constants.INSERT, new Race(LocalDate.parse("2024-10-24"), 200)));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
 
-			/*out.writeObject(new Request(Constants.ADD_MEMBER, new User("edo", "edoardo", "sichelli", "via gentileschi", "QWERTYUIOPLKJHGF", "member", "9dd4e461268c8034f5c8564e155c67a6")));
+			/*out.writeObject(new Request(Constants.INSERT, new User("edo", "edoardo", "sichelli", "via gentileschi", "QWERTYUIOPLKJHGF", "member", "9dd4e461268c8034f5c8564e155c67a6")));
+        	Response rs = (Response)in.readObject();
+			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
+        	
+        	/**out.writeObject(new Request(Constants.INSERT, new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), 150, "edo")));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());*/
 			
-			out.writeObject(new Request(Constants.PAY_ANNUAL_FEE, new MembershipFee(LocalDate.parse("2020-03-26"), LocalDate.parse("2021-03-26"), 500, "Alexander")));
+			out.writeObject(new Request(Constants.PAY_MEMBERSHIP_FEE, new User("Alexander")));
         	Response rs = (Response)in.readObject();
 			System.out.println("SRV SAYS: \nSTATUS:  " + rs.getStatusCode() + "\nPAYLOAD:  " + rs.getPayload());
         	

@@ -10,33 +10,33 @@ public class MembershipFee implements Insertable, Serializable{
 	private int id;
 	private LocalDate paymentDate;
 	private LocalDate expirationDate;
-	private double amount;
+	private double price;
 	private String idMember;
 	
-	public MembershipFee(int id, LocalDate paymentDate, LocalDate expirationDate, double amount, String idMember) {
+	public MembershipFee(int id, LocalDate paymentDate, LocalDate expirationDate, double price, String idMember) {
 		this.id = id;
 		this.paymentDate = paymentDate;
 		this.expirationDate = expirationDate;
-		this.amount = amount;
+		this.price = price;
 		this.idMember = idMember;
 	}
 	
 	public MembershipFee(LocalDate paymentDate, LocalDate expirationDate, double amount, String idMember) {
 		this.paymentDate = paymentDate;
 		this.expirationDate = expirationDate;
-		this.amount = amount;
+		this.price = amount;
 		this.idMember = idMember;
 	}
 	
 	public int getId() { return id; }
 	public LocalDate getPaymentDate() { return paymentDate; }
 	public LocalDate getExpirationDate() { return expirationDate; }
-	public double getAmount() { return amount; }
+	public double getPrice() { return price; }
 	public String getIdMember() { return idMember; }
 
 	@Override
 	public String[] getAttributes() {
-		return new String[]{"payment_date", "expiration_date", "amount","id_member"};
+		return new String[]{"payment_date", "expiration_date", "price","id_member"};
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class MembershipFee implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{"'"+this.paymentDate+"'", "'"+this.expirationDate+"'", Double.toString(this.amount), "'" + this.idMember + "'"};
+		return new String[]{"'"+this.paymentDate+"'", "'"+this.expirationDate+"'", Double.toString(this.price), "'" + this.idMember + "'"};
 	}
 	
 	@Override

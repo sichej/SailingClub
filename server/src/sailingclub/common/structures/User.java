@@ -28,6 +28,10 @@ public class User implements Insertable, Serializable{
 		this.password = password;
 	}
 	
+	public User(String username) {
+		this.username = username;
+	}
+	
 	public String getUsername() { return username; }
 	public String getName() { return name; }
 	public String getSurname() { return surname; }

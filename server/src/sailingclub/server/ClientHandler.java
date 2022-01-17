@@ -67,7 +67,8 @@ public class ClientHandler implements Runnable {
 				out.writeObject(response);
 				
 			} catch (Exception e) {
-				System.out.println("An erro occurred in the socket stream!");
+				e.printStackTrace();
+				System.out.println("An error occurred in the socket stream!");
 				break;
 			}
 		}
