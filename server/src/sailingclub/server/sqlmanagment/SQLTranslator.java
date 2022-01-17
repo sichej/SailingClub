@@ -148,6 +148,16 @@ public class SQLTranslator {
 		Race race = new Race(Integer.parseInt(rRes.get("id")), LocalDate.parse(rRes.get("date")), Integer.parseInt(rRes.get("price")));
 		response = new Response(Constants.SUCCESS, race);
 		break;
+
+	case Constants.PAY_ANNUAL_FEE:
+		if(queryResult.isEmpty()) {
+			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Membership Fee"));
+			break;
+		}
+		Map<String, String> mRes = queryResult.get(0);
+		MembershipFee membershipFee = new MembershipFee(Integer.parseInt(mRes.get("id")), LocalDate.parse(mRes.get("payment_date")), LocalDate.parse(mRes.get("expiration_date")), Integer.parseInt(mRes.get("amount")), mRes.get("id_member"));
+		response = new Response(Constants.SUCCESS, membershipFee);
+		break;
 		
 	}
 		
