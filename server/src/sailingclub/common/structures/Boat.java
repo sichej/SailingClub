@@ -3,8 +3,9 @@ package sailingclub.common.structures;
 import java.io.Serializable;
 
 import sailingclub.common.Insertable;
+import sailingclub.common.Removable;
 
-public class Boat implements Insertable, Serializable{
+public class Boat implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
@@ -66,5 +67,10 @@ public class Boat implements Insertable, Serializable{
 	@Override
 	public String getPk() {
 		return "id";
+	}
+
+	@Override
+	public String getPkValue() {
+		return Integer.toString(this.id);
 	}
 }

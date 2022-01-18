@@ -15,6 +15,7 @@ import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Insertable;
+import sailingclub.common.Removable;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
@@ -47,14 +48,15 @@ public class SQLTranslator {
 				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non � in AI
 					query += "SELECT LAST_INSERT_ID() AS last_id;";
 				break;
-			/*case Actions.DELETE:  //bisogna decidere se serviranno solo delete by id faremo un interfaccia deletable dove ci saranno i metodi geit ecc..
-				query += "DELETE FROM " + model.getSQLTableName() + " WHERE "
-				      + model.getSQLPrimaryKeyName() + " = " + model.getSQLPrimaryKeyValue() + ";";
-			break;*/
+			case Constants.DELETE:
+				Removable deletableModel = (Removable) model;
+				query += "DELETE FROM " + deletableModel.getInstanceName() + " WHERE "
+				      + deletableModel.getPk() + " = " + deletableModel.getPkValue() + ";";
+			break;
 			case Constants.LOGIN:
 				User user = (User)model;
-				query += "SELECT * FROM user WHERE username = '" + user.getUsername() + "' and password = '" 
-					  + user.getPassword()+ "';";
+				query += "SELECT * FROM user, membership_fee f WHERE username = '" + user.getUsername() + "' AND password = '" 
+					  + user.getPassword()+ "' AND f.id_member = user.username";
 				break;
 			case Constants.CLOSE_CONNECTION: break;
 			case Constants.GET_BOAT_BY_ID:
@@ -66,19 +68,15 @@ public class SQLTranslator {
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
 				query += "UPDATE boat_storage_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
 					  + bsf.getExpirationDate().plusYears(1) + "' WHERE id_boat = " + ((Boat)model).getId() + "; " 
-					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_boat = " 
+					  + "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND bs.id_boat = " 
 					  + ((Boat)model).getId() + ";";
 				break;
 			case Constants.PAY_MEMBERSHIP_FEE:
-				User msfu = (User)model;
-				//UPDATE table SET date = DATE_ADD(date, INTERVAL 1 YEAR) 
-				query += "UPDATE membership_fee SET payment_date = DATE_ADD(payment_date, INTERVAL 1 YEAR)"
-				       + "expiration_date = DATE_ADD(expiration_date, INTERVAL 1 YEAR)"
-					   + "WHERE id_member = " + msfu.getUsername();
-				break;
-			case Constants.REMOVE_BOAT:
-				boat = (Boat)model;
-				query += "DELETE FROM boat WHERE id = '" + boat.getId() + "';";		
+				MembershipFee msf = ((User)model).getMembershipFee();
+				query += "UPDATE membership_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
+						  + msf.getExpirationDate().plusYears(1) + "' WHERE id_member = '" + ((User)model).getUsername() + "'; " 
+						  + "SELECT * FROM membership_fee ms, user u WHERE u.username = ms.id_member AND ms.id_member = '" 
+						  + ((User)model).getUsername() + "';";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -94,6 +92,9 @@ public class SQLTranslator {
 			else 
 				response = new Response(Constants.SUCCESS, new EmptyPayload("No id to be returned!"));
 			break;
+		case Constants.DELETE:
+				response = new Response(Constants.SUCCESS, new EmptyPayload("Item deleted!"));
+			break;
 		case Constants.PAY_BOAT_STORAGE_FEE:
 		case Constants.GET_BOAT_BY_ID:
 			if(queryResult.isEmpty()) {
@@ -108,6 +109,7 @@ public class SQLTranslator {
 			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
+		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:
 			if(queryResult.isEmpty()) {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong login!"));
@@ -115,29 +117,12 @@ public class SQLTranslator {
 			}
 			
 			Map<String, String> uRes = queryResult.get(0);
-			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"));
+			LocalDate pmDate = LocalDate.parse(uRes.get("payment_date"), dateFormatter);
+			LocalDate emDate = LocalDate.parse(uRes.get("expiration_date"), dateFormatter);
+			MembershipFee mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
+			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"),mfee);
 			response = new Response(Constants.SUCCESS, user);
 			break;
-			
-		case Constants.REMOVE_BOAT:
-			if(queryResult.isEmpty()) {
-				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Boat"));
-				break;
-			}
-			
-			Map<String, String> bRes = queryResult.get(0);
-			boat = new Boat(Integer.parseInt(bRes.get("id")));
-			response = new Response(Constants.SUCCESS, boat);
-			break;
-	case Constants.PAY_MEMBERSHIP_FEE:
-		if(queryResult.isEmpty()) {
-			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong Membership Fee"));
-			break;
-		}
-		Map<String, String> mRes = queryResult.get(0);
-		MembershipFee membershipFee = new MembershipFee(Integer.parseInt(mRes.get("id")), LocalDate.parse(mRes.get("payment_date")), LocalDate.parse(mRes.get("expiration_date")), Integer.parseInt(mRes.get("amount")), mRes.get("id_member"));
-		response = new Response(Constants.SUCCESS, membershipFee);
-		break;
 		
 	}
 		

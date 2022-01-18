@@ -12,8 +12,9 @@ public class User implements Insertable, Serializable{
 	private String fiscalCode;
 	private String userType;
 	private String password;
+	private MembershipFee fee;
 	
-	public User(String username, String name, String surname, String address, String fiscalCode, String userType, String password) {
+	public User(String username, String name, String surname, String address, String fiscalCode, String userType, String password, MembershipFee fee) {
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
@@ -21,6 +22,7 @@ public class User implements Insertable, Serializable{
 		this.fiscalCode = fiscalCode;
 		this.userType = userType;
 		this.password = password;
+		this.fee = fee;
 	}
 	
 	public User(String username, String password) {
@@ -39,6 +41,7 @@ public class User implements Insertable, Serializable{
 	public String getFiscalCode() { return fiscalCode; }
 	public String getUserType() { return userType; }
 	public String getPassword() { return password; }
+	public MembershipFee getMembershipFee() { return fee; }
 
 	@Override
 	public String[] getAttributes() {
