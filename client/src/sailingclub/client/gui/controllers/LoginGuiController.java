@@ -60,7 +60,7 @@ public class LoginGuiController{
     		}
     		
     		Scene scene = new Scene(userGui);
-    		//stage.getStylesheets().add("eshop/gui/css/Theme.css");
+    		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
     		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
     		stage.setTitle(this.loggedUser.getUsername() + " - DASHBOARD'S");
     		stage.setScene(scene);

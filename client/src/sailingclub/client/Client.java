@@ -33,7 +33,8 @@ public class Client extends Application {
 			Parent gui = loader.load();
 			LoginGuiController controller = loader.getController();
 			controller.setStreams(out, in);
-			// scene.getStylesheets().add("eshop/gui/css/Theme.css");
+			Scene scene = new Scene(gui);
+			scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
 			// primaryStage.getIcons().add(new Image("eshop/gui/css/appico.png"));
 
 			primaryStage.setOnCloseRequest(event -> {
@@ -46,7 +47,7 @@ public class Client extends Application {
 			});
 
 			primaryStage.setTitle("Login");
-			primaryStage.setScene(new Scene(gui));
+			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.centerOnScreen();
 			primaryStage.show();

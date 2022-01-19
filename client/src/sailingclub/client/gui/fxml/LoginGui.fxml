@@ -11,28 +11,26 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: #abcbff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.LoginGuiController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #14274e;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.LoginGuiController">
    <children>
-      <ImageView fitHeight="214.0" fitWidth="199.0" layoutX="81.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="166.0" fitWidth="360.0" layoutX="19.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/logo.png" />
          </image>
       </ImageView>
-      <Label layoutX="63.0" layoutY="287.0" prefHeight="43.0" prefWidth="183.0" text="Sailing club">
-         <font>
-            <Font name="Lucida Calligraphy Italic" size="28.0" />
-         </font>
-      </Label>
-      <VBox alignment="CENTER" layoutX="309.0" layoutY="14.0" prefWidth="325.0" spacing="20.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="309.0" layoutY="14.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label prefHeight="36.0" prefWidth="75.0" text="LOGIN">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="txtUsername" prefHeight="26.0" prefWidth="205.0" promptText="Username" />
-            <PasswordField fx:id="txtPassword" prefHeight="26.0" prefWidth="206.0" promptText="Password" />
-            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#OnBtnLoginClick" prefHeight="26.0" prefWidth="308.0" text="Login" />
+            <TextField fx:id="txtUsername" prefHeight="30.0" prefWidth="400.0" promptText="Username" styleClass="logininput" />
+            <PasswordField fx:id="txtPassword" prefHeight="30.0" prefWidth="360.0" promptText="Password" styleClass="logininput" />
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#OnBtnLoginClick" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #14274e;" text="Login" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />

@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.MemberGuiController" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.MemberGuiController">
+   <children>
+      <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" prefHeight="315.0" prefWidth="410.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <Label layoutX="284.0" layoutY="218.0" text="RACE PAG 3">
+                     <font>
+                        <Font size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <Label layoutX="341.0" layoutY="201.0" text="USER PAG 2">
+                     <font>
+                        <Font size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <Label layoutX="348.0" layoutY="206.0" prefHeight="87.0" prefWidth="258.0" text="BOATS PAG 1">
+                     <font>
+                        <Font size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+      <VBox fx:id="vbMenu" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="260.0" spacing="30.0" style="-fx-background-color: #14274e;">
+         <effect>
+            <DropShadow />
+         </effect>
+         <children>
+            <ImageView fitHeight="101.0" fitWidth="219.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="TOP_CENTER" prefHeight="356.0" prefWidth="260.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Button fx:id="btnBoatsManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Boats managment" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnProfileManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Profile managment" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnRaceManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Race management" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </VBox>
+      <Button fx:id="btnToggleMenu" mnemonicParsing="false" onAction="#OnBtnToggleMenuClick" prefHeight="46.0" prefWidth="54.0" styleClass="openbutton">
+         <graphic>
+            <ImageView fx:id="imgBtnToggleMenu" fitHeight="27.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/menu_closed.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

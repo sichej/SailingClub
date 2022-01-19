@@ -1,0 +1,12 @@
+.menubuttons,.openbutton{
+  -fx-background-color: #ffffff00;
+}
+
+.menubuttons:hover{
+  -fx-background-color: #cccccc;
+}
+
+.logininput:focused{
+
+  -fx-focus-color: #14274e;
+}
