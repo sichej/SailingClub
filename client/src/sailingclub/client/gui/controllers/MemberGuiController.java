@@ -25,13 +25,16 @@ import javafx.scene.layout.VBox;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.User;
+import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private User loggedUser;
+	private ArrayList<Boat> boats;
 	private Map<String, String> btnTabAssoc;
 	
 	@FXML Button btnToggleMenu;
@@ -56,8 +59,9 @@ public class MemberGuiController implements Initializable{
 		this.btnTabAssoc.put("btnRaceManagment", "tabRaceManagment");
 	}
 	
-	public void setLoggedUser(User user) {
+	public void setLoggedUser(User user) throws Exception {
 		this.loggedUser = user;
+		//getBoats();
 		System.out.println(this.loggedUser.getUsername());
 		System.out.println(this.loggedUser.getMembershipFee());
 	}
@@ -84,9 +88,17 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
-	public void OnBtnMenuClick(ActionEvent event) throws IOException {
+	public void OnBtnMenuClick(ActionEvent event) throws Exception {
+		// when a member selects a specific menu option, automatically close the meu to show the full application screen
+		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
+		vbMenu.setVisible(false);
+		
 		String pressedBtn = ((Button) event.getSource()).getId();
 		String tab = this.btnTabAssoc.get(pressedBtn);
+		
+		if (tab.toString() == "tabBoatsManagment") {
+			getBoats();
+		}
 		
 		ObservableList<Node> tabs = FXCollections.observableArrayList(this.stckBody.getChildren());
 		
@@ -97,5 +109,21 @@ public class MemberGuiController implements Initializable{
 		Collections.swap(tabs, index, tabs.size() - 1);
 		this.stckBody.getChildren().setAll(tabs);
 		
+	}
+	
+	private void getBoats() throws Exception {
+		out.writeObject(new Request(Constants.GET_BOATS, loggedUser));
+    	Response r = (Response)in.readObject();
+    	//System.out.print("ciao");
+    	
+    	if(r.getStatusCode() == Constants.SUCCESS) {
+    		// print boats
+    		boats = new ArrayList<Boat>();
+    		boats = ((ArrayList<Boat>)r.getPayload());
+    		for(int i = 0; i < boats.size(); i++) {
+    			System.out.println(boats.get(i).getName());
+    		}
+    		
+    	}
 	}
 }

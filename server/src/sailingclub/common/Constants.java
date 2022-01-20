@@ -9,6 +9,7 @@ public class Constants {
 	public static final int GET_BOAT_BY_ID = 5;
 	public static final int PAY_BOAT_STORAGE_FEE = 6;
 	public static final int PAY_MEMBERSHIP_FEE = 8;
+	public static final int GET_BOATS = 9;
 	
 	
 	public static final int SUCCESS = 200;

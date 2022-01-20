@@ -78,6 +78,10 @@ public class SQLTranslator {
 						  + "SELECT * FROM membership_fee ms, user u WHERE u.username = ms.id_member AND ms.id_member = '" 
 						  + ((User)model).getUsername() + "';";
 				break;
+			case Constants.GET_BOATS:
+				user = (User)model;
+				query += "SELECT * FROM boat WHERE id_member = '" + user.getUsername() + "' ;";
+				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
@@ -108,6 +112,20 @@ public class SQLTranslator {
 			BoatStorageFee fee = new BoatStorageFee(Integer.parseInt(fRes.get("id")),pDate,eDate,Double.parseDouble(fRes.get("amount")),Integer.parseInt(fRes.get("id_boat")));
 			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fee);
 			response = new Response(Constants.SUCCESS,boat);
+			break;
+		case Constants.GET_BOATS:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
+				break;
+			}
+
+			ArrayList<Boat> boats = new ArrayList<Boat>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> bRes = queryResult.get(i);
+				boat = new Boat(Integer.parseInt(bRes.get("id")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"));
+				boats.add(boat);
+			}
+			response = new Response(Constants.SUCCESS,boats);
 			break;
 		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:
