@@ -15,11 +15,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import sailingclub.common.Constants;
@@ -31,10 +33,10 @@ import sailingclub.common.structures.User;
 import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
+	private final int COLS_PER_ROW = 4;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private User loggedUser;
-	private ArrayList<Boat> boats;
 	private Map<String, String> btnTabAssoc;
 	
 	@FXML Button btnToggleMenu;
@@ -47,6 +49,7 @@ public class MemberGuiController implements Initializable{
 	@FXML AnchorPane tabProfileManagment;
 	@FXML AnchorPane tabBoatsManagment;
 	@FXML AnchorPane tabRaceManagment;
+	@FXML GridPane grdBoats;
 	
 
 	@Override
@@ -61,7 +64,6 @@ public class MemberGuiController implements Initializable{
 	
 	public void setLoggedUser(User user) throws Exception {
 		this.loggedUser = user;
-		//getBoats();
 		System.out.println(this.loggedUser.getUsername());
 		System.out.println(this.loggedUser.getMembershipFee());
 	}
@@ -97,7 +99,7 @@ public class MemberGuiController implements Initializable{
 		String tab = this.btnTabAssoc.get(pressedBtn);
 		
 		if (tab.toString() == "tabBoatsManagment") {
-			getBoats();
+			displayBoats();
 		}
 		
 		ObservableList<Node> tabs = FXCollections.observableArrayList(this.stckBody.getChildren());
@@ -111,19 +113,24 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
-	private void getBoats() throws Exception {
-		out.writeObject(new Request(Constants.GET_BOATS, loggedUser));
+	@SuppressWarnings("unchecked")
+	private void displayBoats() throws Exception {
+		out.writeObject(new Request(Constants.GET_BOATS, this.loggedUser));
     	Response r = (Response)in.readObject();
-    	//System.out.print("ciao");
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
-    	if(r.getStatusCode() == Constants.SUCCESS) {
-    		// print boats
-    		boats = new ArrayList<Boat>();
-    		boats = ((ArrayList<Boat>)r.getPayload());
-    		for(int i = 0; i < boats.size(); i++) {
-    			System.out.println(boats.get(i).getName());
-    		}
-    		
-    	}
+    	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
+		
+    	int col = 0 , row = 0;
+		for(int i = 0; i < boats.size(); i++) {
+			Button button = new Button(col + " " + row);
+			
+			this.grdBoats.add(button,col, row);
+			
+			if(col / (COLS_PER_ROW - 1)  == 1) {
+				row++;
+				col = 0;
+			}else col++; 
+		}
 	}
 }
