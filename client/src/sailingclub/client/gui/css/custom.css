@@ -10,3 +10,12 @@
 
   -fx-focus-color: #14274e;
 }
+
+.scroll-bar:vertical{
+  -fx-pref-width: 16px;
+}
+
+.btnBoatsGrid{
+  -fx-background-color: #ccc;
+  -fx-content-display: top;
+}

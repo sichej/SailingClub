@@ -52,11 +52,11 @@ public class LoginGuiController{
     		Object controller = loader.getController();
     		
     		if(this.loggedUser.getUserType().equals("member")) {
-    			((MemberGuiController)controller).setLoggedUser(this.loggedUser);
     			((MemberGuiController)controller).setStreams(this.out, this.in);
+    			((MemberGuiController)controller).setLoggedUser(this.loggedUser);
     		} else if(this.loggedUser.getUserType().equals("employee")) {
-    			((EmployeeGuiController)controller).setLoggedUser(this.loggedUser);
     			((EmployeeGuiController)controller).setStreams(this.out, this.in);
+    			((EmployeeGuiController)controller).setLoggedUser(this.loggedUser);
     		}
     		
     		Scene scene = new Scene(userGui);

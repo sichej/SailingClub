@@ -10,18 +10,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import sailingclub.common.Constants;
@@ -34,6 +43,10 @@ import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
 	private final int COLS_PER_ROW = 4;
+	private final double SCROLL_SIZE = 19.5;
+	private final int N_ROWS_VISIBLE = 2;
+	private final int COLS_GAP = 10;
+	private final int ROWS_GAP = 10;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private User loggedUser;
@@ -50,8 +63,11 @@ public class MemberGuiController implements Initializable{
 	@FXML AnchorPane tabBoatsManagment;
 	@FXML AnchorPane tabRaceManagment;
 	@FXML GridPane grdBoats;
+	@FXML ScrollPane scrContainer;
+	@FXML AnchorPane tabBoatOptions;
+	@FXML Label tempinfo;
+	@FXML Label lblTitle;
 	
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
@@ -60,21 +76,25 @@ public class MemberGuiController implements Initializable{
 		this.btnTabAssoc.put("btnProfileManagment", "tabProfileManagment");
 		this.btnTabAssoc.put("btnBoatsManagment", "tabBoatsManagment");
 		this.btnTabAssoc.put("btnRaceManagment", "tabRaceManagment");
+		
+		RowConstraints rowConstraints = new RowConstraints();
+		rowConstraints.setVgrow(Priority.NEVER);
+		this.grdBoats = new GridPane();  
+		this.grdBoats.getRowConstraints().add(rowConstraints);
+		this.grdBoats.setHgap(COLS_GAP);
+		this.grdBoats.setVgap(ROWS_GAP);
+		this.grdBoats.setPadding(new Insets(10, 0, 0, 0));
+		this.grdBoats.setAlignment(Pos.CENTER);
+		this.scrContainer.setContent(grdBoats);
 	}
 	
-	public void setLoggedUser(User user) throws Exception {
+	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
-		System.out.println(this.loggedUser.getUsername());
-		System.out.println(this.loggedUser.getMembershipFee());
 	}
-	
 	
 	public void setStreams(ObjectOutputStream out, ObjectInputStream in) {
 		this.out = out;
 		this.in = in;
-		
-		Boat bt = new Boat(3);
-		Response rs = null;
 	}
 	
 	public void OnBtnToggleMenuClick(ActionEvent event) throws IOException {
@@ -98,8 +118,13 @@ public class MemberGuiController implements Initializable{
 		String pressedBtn = ((Button) event.getSource()).getId();
 		String tab = this.btnTabAssoc.get(pressedBtn);
 		
-		if (tab.toString() == "tabBoatsManagment") {
+		if (tab.toString().equals("tabBoatsManagment")) {
 			displayBoats();
+			this.lblTitle.setText("Boats management");
+		}else if(tab.toString().equals("tabProfileManagment")) {
+			this.lblTitle.setText("Profile management");
+		}else if(tab.toString().equals("tabRaceManagment")){
+			this.lblTitle.setText("Race management");
 		}
 		
 		ObservableList<Node> tabs = FXCollections.observableArrayList(this.stckBody.getChildren());
@@ -113,6 +138,16 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
+	
+	private void OnBtnBoatsGridClick(Boat selectedBoat) {
+		this.tabBoatOptions.toFront();
+		String info = "id: " + selectedBoat.getId() + "\n" +
+				"name: " + selectedBoat.getName() + "\n" +
+				"length: " + selectedBoat.getLength() + "\n" +
+				"fee: " + selectedBoat.getBoatStorageFee().getAmount();
+		this.tempinfo.setText(info);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws Exception {
 		out.writeObject(new Request(Constants.GET_BOATS, this.loggedUser));
@@ -120,11 +155,19 @@ public class MemberGuiController implements Initializable{
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
-		
     	int col = 0 , row = 0;
 		for(int i = 0; i < boats.size(); i++) {
-			Button button = new Button(col + " " + row);
-			
+			Button button = new Button(boats.get(i).getName());
+			double numRows = Math.ceil(((double)boats.size()) / ((double)this.COLS_PER_ROW));
+			button.setMinWidth((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW);
+			button.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
+			button.getStyleClass().add("btnBoatsGrid");
+		    ImageView view = new ImageView(new Image("sailingclub/client/gui/images/boat.jpg"));
+		    view.setPreserveRatio(true);
+		    view.setFitWidth((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW);
+		    button.setGraphic(view);
+		    final Boat selectedBoat = boats.get(i);
+		    button.setOnAction(event -> OnBtnBoatsGridClick(selectedBoat));
 			this.grdBoats.add(button,col, row);
 			
 			if(col / (COLS_PER_ROW - 1)  == 1) {

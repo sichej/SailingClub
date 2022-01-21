@@ -3,52 +3,49 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.MemberGuiController">
    <children>
-      <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" prefHeight="315.0" prefWidth="410.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" prefHeight="315.0" prefWidth="410.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+            <AnchorPane fx:id="tabBoatOptions" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <Label layoutX="284.0" layoutY="218.0" text="RACE PAG 3">
+                  <Label fx:id="tempinfo" layoutX="214.0" layoutY="147.0" prefHeight="266.0" prefWidth="374.0" text="Label">
                      <font>
-                        <Font size="43.0" />
+                        <Font size="15.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <Label layoutX="341.0" layoutY="201.0" text="USER PAG 2">
-                     <font>
-                        <Font size="43.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
+            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" />
+            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" />
             <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <GridPane fx:id="grdBoats" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                    </rowConstraints>
-                  </GridPane>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </ScrollPane>
                </children>
             </AnchorPane>
          </children>
+         <effect>
+            <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
+               <color>
+                  <Color red="0.0784313753247261" green="0.15294118225574493" blue="0.30588236451148987" />
+               </color>
+            </InnerShadow>
+         </effect>
       </StackPane>
       <VBox fx:id="vbMenu" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="260.0" spacing="30.0" style="-fx-background-color: #14274e;" visible="false">
          <effect>
@@ -93,5 +90,10 @@
             </ImageView>
          </graphic>
       </Button>
+      <Label fx:id="lblTitle" layoutX="286.0" layoutY="5.0" text="Boats management" textFill="#14274e">
+         <font>
+            <Font name="System Bold Italic" size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

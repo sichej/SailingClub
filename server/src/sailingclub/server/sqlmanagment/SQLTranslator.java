@@ -80,7 +80,7 @@ public class SQLTranslator {
 				break;
 			case Constants.GET_BOATS:
 				user = (User)model;
-				query += "SELECT * FROM boat WHERE id_member = '" + user.getUsername() + "' ;";
+				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -122,7 +122,10 @@ public class SQLTranslator {
 			ArrayList<Boat> boats = new ArrayList<Boat>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> bRes = queryResult.get(i);
-				boat = new Boat(Integer.parseInt(bRes.get("id")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"));
+				pDate = LocalDate.parse(bRes.get("payment_date"), dateFormatter);
+				eDate = LocalDate.parse(bRes.get("expiration_date"), dateFormatter);
+				fee = new BoatStorageFee(Integer.parseInt(bRes.get("id")),pDate,eDate,Double.parseDouble(bRes.get("amount")),Integer.parseInt(bRes.get("id_boat")));
+				boat = new Boat(Integer.parseInt(bRes.get("id")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),fee);
 				boats.add(boat);
 			}
 			response = new Response(Constants.SUCCESS,boats);
