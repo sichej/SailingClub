@@ -1,7 +1,6 @@
 package sailingclub.common.structures;
 
 import java.io.Serializable;
-
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
@@ -12,6 +11,8 @@ public class Boat implements Insertable, Removable, Serializable{
 	private double length;
 	private String idMember;
 	private BoatStorageFee boatStorageFee;
+	private String pictureName;
+	private byte[] picture;
 	
 	public Boat(String name, double length, String idMember) {
 		this.name = name;
@@ -19,28 +20,15 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = null;
 	}
-
-	public Boat(int id, String name, double length, String idMember) {
-		this.name = name;
-		this.length = length;
-		this.idMember = idMember;
-		this.id = id;
-		this.boatStorageFee = null;
-	}
 	
-	public Boat(int id, String name, double length, String idMember, BoatStorageFee boatStorageFee) {
+	public Boat(int id, String name, double length, String idMember, String pictureName, byte[] picture ,BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;
 		this.length = length;
 		this.idMember = idMember;
 		this.boatStorageFee = boatStorageFee;
-	}
-	
-	public Boat(String name, double length, String idMember, BoatStorageFee boatStorageFee) {
-		this.name = name;
-		this.length = length;
-		this.idMember = idMember;
-		this.boatStorageFee = boatStorageFee;
+		this.pictureName = pictureName;
+		this.picture = picture;
 	}
 	
 	public Boat(int id) {
@@ -51,7 +39,8 @@ public class Boat implements Insertable, Removable, Serializable{
 	public String getName() { return name; }
 	public double getLength() { return length; }
 	public String getIdMember() { return idMember; }
-	
+	public byte[] getPicture() { return picture; }
+	public String getPictureName() { return pictureName; }
 
 	public BoatStorageFee getBoatStorageFee() { return boatStorageFee; }
 
@@ -59,7 +48,7 @@ public class Boat implements Insertable, Removable, Serializable{
 
 	@Override
 	public String[] getAttributes() {
-		return new String[]{"name", "length", "id_member"};
+		return new String[]{"name", "length", "id_member", "picture"};
 	}
 
 	@Override
@@ -69,7 +58,7 @@ public class Boat implements Insertable, Removable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{"'" + this.name + "'", Double.toString(this.length), "'" + this.idMember + "'"};
+		return new String[]{"'" + this.name + "'", Double.toString(this.length), "'" + this.idMember + "'",  "'" + this.pictureName +"'"};
 	}
 	
 	@Override

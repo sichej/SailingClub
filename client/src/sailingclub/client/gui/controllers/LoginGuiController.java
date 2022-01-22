@@ -1,6 +1,5 @@
 package sailingclub.client.gui.controllers;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.event.ActionEvent;

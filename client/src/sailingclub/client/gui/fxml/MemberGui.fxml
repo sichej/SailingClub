@@ -9,22 +9,47 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.MemberGuiController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #14274e;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.MemberGuiController">
    <children>
       <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" prefHeight="315.0" prefWidth="410.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
             <AnchorPane fx:id="tabBoatOptions" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <Label fx:id="tempinfo" layoutX="214.0" layoutY="147.0" prefHeight="266.0" prefWidth="374.0" text="Label">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="120.0" prefWidth="780.0" spacing="20.0" styleClass="boatbox" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <ImageView fx:id="imgBoatInfo" fitHeight="128.0" fitWidth="192.0" pickOnBounds="true" preserveRatio="true" styleClass="thumbnail">
+                           <image>
+                              <Image url="@../images/boatnotfound.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lblBoatInfo" prefHeight="136.0" prefWidth="313.0" text="infobox">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btnDeleteBoat" mnemonicParsing="false" onAction="#OnBtnDeleteBoatClick" prefHeight="64.0" prefWidth="146.0" styleClass="openbutton" text="Delete" textAlignment="CENTER" textFill="RED">
+                           <graphic>
+                              <ImageView fitHeight="59.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/trash.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </HBox>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" />
@@ -49,7 +74,7 @@
       </StackPane>
       <VBox fx:id="vbMenu" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="260.0" spacing="30.0" style="-fx-background-color: #14274e;" visible="false">
          <effect>
-            <DropShadow />
+            <DropShadow radius="32.225" spread="0.17" width="109.9" />
          </effect>
          <children>
             <ImageView fitHeight="101.0" fitWidth="219.0" pickOnBounds="true" preserveRatio="true">
@@ -90,10 +115,11 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="lblTitle" layoutX="286.0" layoutY="5.0" text="Boats management" textFill="#14274e">
+      <Label fx:id="lblTitle" layoutX="286.0" layoutY="5.0" text="Boats management" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="25.0" />
          </font>
       </Label>
+      <AnchorPane fx:id="pnlBackdrop" prefHeight="200.0" prefWidth="200.0" styleClass="overlaypane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

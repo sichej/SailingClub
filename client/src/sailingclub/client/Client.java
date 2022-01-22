@@ -6,14 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import sailingclub.client.gui.controllers.LoginGuiController;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.structures.EmptyPayload;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.fxml.*;
 
 /**

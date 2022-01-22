@@ -19,3 +19,13 @@
   -fx-background-color: #ccc;
   -fx-content-display: top;
 }
+
+.boatbox{
+  -fx-border-color: #14274e;
+  -fx-border-style: hidden hidden solid hidden;
+  -fx-border-width: 1;
+}
+
+.overlaypane{
+  -fx-background-color: rgba(0, 0, 0, 0.4);
+}

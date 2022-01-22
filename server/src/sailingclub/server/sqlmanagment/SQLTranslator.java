@@ -1,26 +1,24 @@
 package sailingclub.server.sqlmanagment;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.imageio.ImageIO;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
-import sailingclub.common.structures.Race;
 import sailingclub.common.structures.Boat;
 
 public class SQLTranslator {
@@ -87,7 +85,7 @@ public class SQLTranslator {
 		return query;
 	}
 	
-	public Response SQLToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException {
+	public Response SQLToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException, IOException {
 		Response response = null;
 		switch(this.lastRequest) {
 		case Constants.INSERT:
@@ -107,10 +105,11 @@ public class SQLTranslator {
 			}
 			
 			Map<String, String> fRes = queryResult.get(0);
+			byte[] img = Utils.toByteArray(ImageIO.read(new File("images/" + fRes.get("picture"))),"jpg");
 			LocalDate pDate = LocalDate.parse(fRes.get("payment_date"), dateFormatter);
 			LocalDate eDate = LocalDate.parse(fRes.get("expiration_date"), dateFormatter);
 			BoatStorageFee fee = new BoatStorageFee(Integer.parseInt(fRes.get("id")),pDate,eDate,Double.parseDouble(fRes.get("amount")),Integer.parseInt(fRes.get("id_boat")));
-			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fee);
+			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fRes.get("picture"),img,fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
 		case Constants.GET_BOATS:
@@ -122,10 +121,11 @@ public class SQLTranslator {
 			ArrayList<Boat> boats = new ArrayList<Boat>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> bRes = queryResult.get(i);
+				img = Utils.toByteArray(ImageIO.read(new File("images/" + bRes.get("picture"))),"jpg");
 				pDate = LocalDate.parse(bRes.get("payment_date"), dateFormatter);
 				eDate = LocalDate.parse(bRes.get("expiration_date"), dateFormatter);
 				fee = new BoatStorageFee(Integer.parseInt(bRes.get("id")),pDate,eDate,Double.parseDouble(bRes.get("amount")),Integer.parseInt(bRes.get("id_boat")));
-				boat = new Boat(Integer.parseInt(bRes.get("id")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),fee);
+				boat = new Boat(Integer.parseInt(bRes.get("id_boat")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),bRes.get("picture"),img,fee);
 				boats.add(boat);
 			}
 			response = new Response(Constants.SUCCESS,boats);
