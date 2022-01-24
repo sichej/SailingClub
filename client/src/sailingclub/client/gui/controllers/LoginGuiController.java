@@ -32,6 +32,10 @@ public class LoginGuiController{
 		this.in = in;
 	}
 	
+	public void setLoggedUser(User user) throws Exception{
+		this.loggedUser = user;
+	}
+	
 	public void OnBtnLoginClick(ActionEvent event) throws Exception {
 		String username = this.txtUsername.getText();
 		String password = this.txtPassword.getText();

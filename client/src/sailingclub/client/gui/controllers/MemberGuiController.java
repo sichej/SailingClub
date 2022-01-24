@@ -14,10 +14,13 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -32,6 +35,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
@@ -189,9 +193,19 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
-		// logout
-		//setLoggedUser(null);
-		System.out.print("ciao");
+		setLoggedUser(null);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/LoginGui.fxml"));
+		Parent userGui = loader.load();
+		Object controller = loader.getController();
+		((LoginGuiController)controller).setLoggedUser(null);
+		((LoginGuiController)controller).setStreams(out, in);
+		Scene scene = new Scene(userGui);
+		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
+		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		stage.setTitle("Login");
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.show();
 	}
 	
 	private void displayInfo() {
