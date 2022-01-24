@@ -41,6 +41,7 @@ import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 import java.util.ArrayList;
 
@@ -60,6 +61,8 @@ public class MemberGuiController implements Initializable{
 	@FXML Button btnToggleMenu;
 	@FXML VBox vbMenu;
 	@FXML VBox vbInfo;
+	@FXML VBox vbMyRaces;
+	@FXML VBox vbAvaliableRaces;
 	@FXML ImageView imgBtnToggleMenu;
 	@FXML Button btnProfileManagment;
 	@FXML Button btnBoatsManagment;
@@ -78,6 +81,7 @@ public class MemberGuiController implements Initializable{
 	@FXML Label lblUsername;
 	@FXML Label lblAddress;
 	@FXML Label lblFiscalCode;
+	@FXML Label lblDatePrize;
 	@FXML AnchorPane pnlBackdrop;
 	@FXML Button btnDeleteBoat;
 	@FXML ImageView imgBoatInfo;
@@ -148,6 +152,8 @@ public class MemberGuiController implements Initializable{
 			displayInfo();
 		}else if(tab.toString().equals("tabRaceManagment")){
 			this.lblTitle.setText("Race management");
+			displayMyRaces();
+			displayAvaliableRaces();
 		}
 		
 		ObservableList<Node> tabs = FXCollections.observableArrayList(this.stckBody.getChildren());
@@ -217,6 +223,24 @@ public class MemberGuiController implements Initializable{
 		lblUsername.setText(this.loggedUser.getUsername());
 		lblAddress.setText(this.loggedUser.getAddress());
 		lblFiscalCode.setText(this.loggedUser.getFiscalCode());
+	}
+	
+	private void displayMyRaces() {
+		vbMyRaces.setVisible(true);
+		lblDatePrize.setText("ciao");
+	}
+	
+	private void displayAvaliableRaces() throws IOException, ClassNotFoundException {
+		vbAvaliableRaces.setVisible(true);
+		//lblDatePrize.setText("ciao");
+		out.writeObject(new Request(Constants.GET_RACES, this.loggedUser));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	ArrayList<Race> races = (ArrayList<Race>)r.getPayload();
+    	for(int i = 0; i < races.size(); i++) {
+    		System.out.println(races.get(i).getPrice());
+    	}
 	}
 	
 	@SuppressWarnings("unchecked")

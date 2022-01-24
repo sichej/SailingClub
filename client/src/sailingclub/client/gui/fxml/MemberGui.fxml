@@ -52,7 +52,6 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" />
             <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -95,6 +94,17 @@
                         <Label fx:id="lblFiscalCode" text="Label" />
                      </children>
                   </VBox>
+               </children></AnchorPane>
+            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <VBox fx:id="vbMyRaces" layoutX="40.0" layoutY="61.0" prefHeight="328.0" prefWidth="245.0">
+                     <children>
+                        <Label fx:id="lblDatePrize" text="Label" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="vbAvaliableRaces" layoutX="488.0" layoutY="66.0" prefHeight="318.0" prefWidth="245.0" />
+                  <Label layoutX="133.0" layoutY="44.0" text="MY RACES" />
+                  <Label layoutX="557.0" layoutY="36.0" text="AVALIABLE RACES" />
                </children></AnchorPane>
          </children>
          <effect>

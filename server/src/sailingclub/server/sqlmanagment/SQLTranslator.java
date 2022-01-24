@@ -19,6 +19,7 @@ import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
+import sailingclub.common.structures.Race;
 import sailingclub.common.structures.Boat;
 
 public class SQLTranslator {
@@ -61,6 +62,9 @@ public class SQLTranslator {
 				Boat boat = (Boat)model;
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND bt.id = " 
 					  + boat.getId() + " ;";
+				break;
+			case Constants.GET_RACES:
+				query += "SELECT * FROM race";
 				break;
 			case Constants.PAY_BOAT_STORAGE_FEE:
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
@@ -129,6 +133,24 @@ public class SQLTranslator {
 				boats.add(boat);
 			}
 			response = new Response(Constants.SUCCESS,boats);
+			break;
+		
+		case Constants.GET_RACES:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Races not found!"));
+				break;
+			}
+			ArrayList<Race> races = new ArrayList<Race>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> rRes = queryResult.get(i);
+				//img = Utils.toByteArray(ImageIO.read(new File("images/" + bRes.get("picture"))),"jpg");
+				LocalDate date = LocalDate.parse(rRes.get("date"), dateFormatter);
+				//eDate = LocalDate.parse(rRes.get("expiration_date"), dateFormatter);
+				//fee = new BoatStorageFee(Integer.parseInt(rRes.get("id")),pDate,eDate,Double.parseDouble(rRes.get("amount")),Integer.parseInt(rRes.get("id_boat")));
+				Race race = new Race(date,Double.parseDouble(rRes.get("price")));
+				races.add(race);
+			}
+			response = new Response(Constants.SUCCESS,races);
 			break;
 		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:
