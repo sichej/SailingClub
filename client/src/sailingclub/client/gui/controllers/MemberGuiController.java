@@ -89,6 +89,7 @@ public class MemberGuiController implements Initializable{
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		vbInfo.setVisible(false);
+		imgBtnLogout.setVisible(false);
 		this.btnTabAssoc = new HashMap<String,String>();
 		this.btnTabAssoc.put("btnProfileManagment", "tabProfileManagment");
 		this.btnTabAssoc.put("btnBoatsManagment", "tabBoatsManagment");
@@ -143,6 +144,7 @@ public class MemberGuiController implements Initializable{
 			this.lblTitle.setText("Boats management");
 		}else if(tab.toString().equals("tabProfileManagment")) {
 			this.lblTitle.setText("Profile management");
+			imgBtnLogout.setVisible(true);
 			displayInfo();
 		}else if(tab.toString().equals("tabRaceManagment")){
 			this.lblTitle.setText("Race management");
