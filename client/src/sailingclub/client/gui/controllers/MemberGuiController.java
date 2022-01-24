@@ -55,6 +55,7 @@ public class MemberGuiController implements Initializable{
 	
 	@FXML Button btnToggleMenu;
 	@FXML VBox vbMenu;
+	@FXML VBox vbInfo;
 	@FXML ImageView imgBtnToggleMenu;
 	@FXML Button btnProfileManagment;
 	@FXML Button btnBoatsManagment;
@@ -68,14 +69,22 @@ public class MemberGuiController implements Initializable{
 	@FXML AnchorPane tabBoatOptions;
 	@FXML Label lblTitle;
 	@FXML Label lblBoatInfo;
+	@FXML Label lblName;
+	@FXML Label lblSurname;
+	@FXML Label lblUsername;
+	@FXML Label lblAddress;
+	@FXML Label lblFiscalCode;
 	@FXML AnchorPane pnlBackdrop;
 	@FXML Button btnDeleteBoat;
 	@FXML ImageView imgBoatInfo;
+	@FXML Button imgBtnLogout;
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
+		vbInfo.setVisible(false);
 		this.btnTabAssoc = new HashMap<String,String>();
 		this.btnTabAssoc.put("btnProfileManagment", "tabProfileManagment");
 		this.btnTabAssoc.put("btnBoatsManagment", "tabBoatsManagment");
@@ -117,7 +126,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	public void OnBtnMenuClick(ActionEvent event) throws Exception {
-		// when a member selects a specific menu option, automatically close the meu to show the full application screen
+		// when a member selects a specific menu option, automatically close the menu to show the full application screen
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		pnlBackdrop.setVisible(false);
@@ -130,6 +139,7 @@ public class MemberGuiController implements Initializable{
 			this.lblTitle.setText("Boats management");
 		}else if(tab.toString().equals("tabProfileManagment")) {
 			this.lblTitle.setText("Profile management");
+			displayInfo();
 		}else if(tab.toString().equals("tabRaceManagment")){
 			this.lblTitle.setText("Race management");
 		}
@@ -176,6 +186,21 @@ public class MemberGuiController implements Initializable{
 			if(rs.getStatusCode() == Constants.SUCCESS)
 				this.btnBoatsManagment.fire();
 		}
+	}
+	
+	public void onBtnLogoutClick(ActionEvent event) throws Exception {
+		// logout
+		//setLoggedUser(null);
+		System.out.print("ciao");
+	}
+	
+	private void displayInfo() {
+		vbInfo.setVisible(true);
+		lblName.setText(this.loggedUser.getName());
+		lblSurname.setText(this.loggedUser.getSurname());
+		lblUsername.setText(this.loggedUser.getUsername());
+		lblAddress.setText(this.loggedUser.getAddress());
+		lblFiscalCode.setText(this.loggedUser.getFiscalCode());
 	}
 	
 	@SuppressWarnings("unchecked")
