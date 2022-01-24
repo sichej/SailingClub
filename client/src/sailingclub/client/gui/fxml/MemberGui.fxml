@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
@@ -63,7 +65,7 @@
             </AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <Button fx:id="imgBtnLogout" layoutX="731.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" text="Logout" />
+                  <Button fx:id="btnLogout" layoutX="731.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" text="Logout" />
                   <VBox fx:id="vbInfo" layoutX="36.0" layoutY="41.0" prefHeight="369.0" prefWidth="245.0">
                      <children>
                         <Label text="NAME:" />
@@ -97,14 +99,15 @@
                </children></AnchorPane>
             <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <VBox fx:id="vbMyRaces" layoutX="40.0" layoutY="61.0" prefHeight="328.0" prefWidth="245.0">
-                     <children>
-                        <Label fx:id="lblDatePrize" text="Label" />
-                     </children>
-                  </VBox>
-                  <VBox fx:id="vbAvaliableRaces" layoutX="488.0" layoutY="66.0" prefHeight="318.0" prefWidth="245.0" />
-                  <Label layoutX="133.0" layoutY="44.0" text="MY RACES" />
-                  <Label layoutX="557.0" layoutY="36.0" text="AVALIABLE RACES" />
+                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="colRaceId" prefWidth="75.0" text="Id" />
+                      <TableColumn fx:id="colRaceName" prefWidth="75.0" text="Name" />
+                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
+                        <TableColumn fx:id="colRacePrice" prefWidth="75.0" text="Price" />
+                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
+                    </columns>
+                  </TableView>
                </children></AnchorPane>
          </children>
          <effect>

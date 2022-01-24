@@ -9,19 +9,29 @@ public class Race implements Insertable, Serializable{
 	private Integer id;
 	private LocalDate date;
 	private double price;
+	private String name;
 	
-	public Race(LocalDate date, double price) {
+	public Race(LocalDate date, double price, String name) {
 		this.date = date;
 		this.price = price;
+		this.name = name;
+	}
+	
+	public Race(int id, LocalDate date, double price, String name) {
+		this.id = id;
+		this.date = date;
+		this.price = price;
+		this.name = name;
 	}
 
 	public Integer getId() { return id; }
 	public LocalDate getDate() { return date; }
 	public double getPrice() { return price; }
+	public String getName() { return name; }
 
 	@Override
 	public String[] getAttributes() {
-		return new String[]{"date", "price"};
+		return new String[]{"date", "price", "name"};
 	}
 
 	@Override
@@ -31,7 +41,7 @@ public class Race implements Insertable, Serializable{
 
 	@Override
 	public String[] getValues() {
-		return new String[]{ "'" + this.date.toString() + "'", Double.toString(this.price)};
+		return new String[]{ "'" + this.date.toString() + "'", Double.toString(this.price), "'" + this.name + "'"};
 	}
 	
 	@Override

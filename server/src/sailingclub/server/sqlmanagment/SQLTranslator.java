@@ -66,6 +66,10 @@ public class SQLTranslator {
 			case Constants.GET_RACES:
 				query += "SELECT * FROM race";
 				break;
+			case Constants.GET_RACES_PARTICIPATIONS:
+				User us = (User)model;
+				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + us.getUsername() + "';";
+				break;
 			case Constants.PAY_BOAT_STORAGE_FEE:
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
 				query += "UPDATE boat_storage_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
@@ -143,14 +147,25 @@ public class SQLTranslator {
 			ArrayList<Race> races = new ArrayList<Race>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> rRes = queryResult.get(i);
-				//img = Utils.toByteArray(ImageIO.read(new File("images/" + bRes.get("picture"))),"jpg");
 				LocalDate date = LocalDate.parse(rRes.get("date"), dateFormatter);
-				//eDate = LocalDate.parse(rRes.get("expiration_date"), dateFormatter);
-				//fee = new BoatStorageFee(Integer.parseInt(rRes.get("id")),pDate,eDate,Double.parseDouble(rRes.get("amount")),Integer.parseInt(rRes.get("id_boat")));
-				Race race = new Race(date,Double.parseDouble(rRes.get("price")));
+				Race race = new Race(Integer.parseInt(rRes.get("id")),date,Double.parseDouble(rRes.get("price")), rRes.get("name"));
 				races.add(race);
 			}
 			response = new Response(Constants.SUCCESS,races);
+			break;
+		case Constants.GET_RACES_PARTICIPATIONS:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Races not found!"));
+				break;
+			}
+			ArrayList<Race> usRaces = new ArrayList<Race>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> rRes = queryResult.get(i);
+				LocalDate date = LocalDate.parse(rRes.get("date"), dateFormatter);
+				Race race = new Race(Integer.parseInt(rRes.get("id")),date,Double.parseDouble(rRes.get("price")), rRes.get("name"));
+				usRaces.add(race);
+			}
+			response = new Response(Constants.SUCCESS, usRaces);
 			break;
 		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:

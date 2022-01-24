@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +40,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sailingclub.client.gui.fxml.RaceModel;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
@@ -57,43 +62,50 @@ public class MemberGuiController implements Initializable{
 	private User loggedUser;
 	private Map<String, String> btnTabAssoc;
 	private Boat selectedBoat;
+	private ObservableList<RaceModel> raceModels;
 	
-	@FXML Button btnToggleMenu;
-	@FXML VBox vbMenu;
-	@FXML VBox vbInfo;
-	@FXML VBox vbMyRaces;
-	@FXML VBox vbAvaliableRaces;
-	@FXML ImageView imgBtnToggleMenu;
-	@FXML Button btnProfileManagment;
-	@FXML Button btnBoatsManagment;
-	@FXML Button btnRaceManagment;
-	@FXML StackPane stckBody;
-	@FXML AnchorPane tabProfileManagment;
-	@FXML AnchorPane tabBoatsManagment;
-	@FXML AnchorPane tabRaceManagment;
-	@FXML GridPane grdBoats;
-	@FXML ScrollPane scrContainer;
-	@FXML AnchorPane tabBoatOptions;
-	@FXML Label lblTitle;
-	@FXML Label lblBoatInfo;
-	@FXML Label lblName;
-	@FXML Label lblSurname;
-	@FXML Label lblUsername;
-	@FXML Label lblAddress;
-	@FXML Label lblFiscalCode;
-	@FXML Label lblDatePrize;
-	@FXML AnchorPane pnlBackdrop;
-	@FXML Button btnDeleteBoat;
-	@FXML ImageView imgBoatInfo;
-	@FXML Button imgBtnLogout;
-	
+	@FXML private Button btnToggleMenu;
+	@FXML private VBox vbMenu;
+	@FXML private VBox vbInfo;
+	@FXML private VBox vbMyRaces;
+	@FXML private VBox vbAvaliableRaces;
+	@FXML private ImageView imgBtnToggleMenu;
+	@FXML private Button btnProfileManagment;
+	@FXML private Button btnBoatsManagment;
+	@FXML private Button btnRaceManagment;
+	@FXML private StackPane stckBody;
+	@FXML private AnchorPane tabProfileManagment;
+	@FXML private AnchorPane tabBoatsManagment;
+	@FXML private AnchorPane tabRaceManagment;
+	@FXML private GridPane grdBoats;
+	@FXML private ScrollPane scrContainer;
+	@FXML private AnchorPane tabBoatOptions;
+	@FXML private Label lblTitle;
+	@FXML private Label lblBoatInfo;
+	@FXML private Label lblName;
+	@FXML private Label lblSurname;
+	@FXML private Label lblUsername;
+	@FXML private Label lblAddress;
+	@FXML private Label lblFiscalCode;
+	@FXML private Label lblDatePrize;
+	@FXML private AnchorPane pnlBackdrop;
+	@FXML private Button btnDeleteBoat;
+	@FXML private ImageView imgBoatInfo;
+	@FXML private Button btnLogout;
+	@FXML private TableView<RaceModel> tblRaces;
+	@FXML private TableColumn<RaceModel, Integer> colRaceId;
+	@FXML private TableColumn<RaceModel, String> colRaceName;
+	@FXML private TableColumn<RaceModel, LocalDate> colRaceDate;
+	@FXML private TableColumn<RaceModel, Double> colRacePrice;
+	@FXML private TableColumn<RaceModel, Button> colRaceAction;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		raceModels =  FXCollections.observableArrayList();
+		
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		vbInfo.setVisible(false);
-		imgBtnLogout.setVisible(false);
 		this.btnTabAssoc = new HashMap<String,String>();
 		this.btnTabAssoc.put("btnProfileManagment", "tabProfileManagment");
 		this.btnTabAssoc.put("btnBoatsManagment", "tabBoatsManagment");
@@ -108,6 +120,12 @@ public class MemberGuiController implements Initializable{
 		this.grdBoats.setPadding(new Insets(10, 0, 0, 0));
 		this.grdBoats.setAlignment(Pos.CENTER);
 		this.scrContainer.setContent(grdBoats);
+		
+		this.colRaceId.setCellValueFactory(new PropertyValueFactory<RaceModel,Integer>("raceId"));
+		this.colRaceName.setCellValueFactory(new PropertyValueFactory<RaceModel,String>("raceName"));
+		this.colRaceDate.setCellValueFactory(new PropertyValueFactory<RaceModel,LocalDate>("raceDate"));
+		this.colRacePrice.setCellValueFactory(new PropertyValueFactory<RaceModel,Double>("racePrice"));
+		this.colRaceAction.setCellValueFactory(new PropertyValueFactory<RaceModel,Button>("btnAction"));
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -148,12 +166,10 @@ public class MemberGuiController implements Initializable{
 			this.lblTitle.setText("Boats management");
 		}else if(tab.toString().equals("tabProfileManagment")) {
 			this.lblTitle.setText("Profile management");
-			imgBtnLogout.setVisible(true);
 			displayInfo();
 		}else if(tab.toString().equals("tabRaceManagment")){
 			this.lblTitle.setText("Race management");
-			displayMyRaces();
-			displayAvaliableRaces();
+			displayRaces();
 		}
 		
 		ObservableList<Node> tabs = FXCollections.observableArrayList(this.stckBody.getChildren());
@@ -225,22 +241,36 @@ public class MemberGuiController implements Initializable{
 		lblFiscalCode.setText(this.loggedUser.getFiscalCode());
 	}
 	
-	private void displayMyRaces() {
-		vbMyRaces.setVisible(true);
-		lblDatePrize.setText("ciao");
-	}
-	
-	private void displayAvaliableRaces() throws IOException, ClassNotFoundException {
-		vbAvaliableRaces.setVisible(true);
-		//lblDatePrize.setText("ciao");
+	@SuppressWarnings("unchecked")
+	private void displayRaces() throws IOException, ClassNotFoundException{
 		out.writeObject(new Request(Constants.GET_RACES, this.loggedUser));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
-    	ArrayList<Race> races = (ArrayList<Race>)r.getPayload();
-    	for(int i = 0; i < races.size(); i++) {
-    		System.out.println(races.get(i).getPrice());
-    	}
+    	ArrayList<Race> allRaces = (ArrayList<Race>)r.getPayload();
+    	
+		out.writeObject(new Request(Constants.GET_RACES_PARTICIPATIONS, this.loggedUser));
+    	r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	ArrayList<Race> userRaces = (ArrayList<Race>)r.getPayload();
+    	
+		this.raceModels =  FXCollections.observableArrayList();
+		
+		for(int i = 0; i < allRaces.size(); i++) {
+			Button btnAction = new Button();
+			for(int j = 0; j < userRaces.size(); j++) {
+				if(userRaces.get(j).getId() == allRaces.get(i).getId()) {
+					btnAction.setText("Unsubscribe");
+					break;
+				}else {
+					btnAction.setText("Subscribe");
+				}
+			}
+			this.raceModels.add(new RaceModel(allRaces.get(i),btnAction));
+		}
+		
+		this.tblRaces.setItems(raceModels);
 	}
 	
 	@SuppressWarnings("unchecked")
