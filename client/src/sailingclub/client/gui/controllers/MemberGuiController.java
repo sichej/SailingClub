@@ -54,6 +54,8 @@ import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
 	private final String BOAT_NOT_FOUND_ALT = "sailingclub/client/gui/images/boatnotfound.jpg";
+	private final String REGISTERED_STATE = "Unsubscribe";
+	private final String NOT_REGISTERED_STATE = "Subscribe";
 	private final int COLS_PER_ROW = 4;
 	private final double SCROLL_SIZE = 19.5;
 	private final int N_ROWS_VISIBLE = 2;
@@ -128,6 +130,7 @@ public class MemberGuiController implements Initializable{
 		this.colRaceDate.setCellValueFactory(new PropertyValueFactory<RaceModel,LocalDate>("raceDate"));
 		this.colRacePrice.setCellValueFactory(new PropertyValueFactory<RaceModel,Double>("racePrice"));
 		this.colRaceAction.setCellValueFactory(new PropertyValueFactory<RaceModel,Button>("btnAction"));
+		this.tblRaces.setPlaceholder(new Label("No races available!"));
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -243,6 +246,28 @@ public class MemberGuiController implements Initializable{
 		lblFiscalCode.setText(this.loggedUser.getFiscalCode());
 	}
 	
+	private void onBtnRaceActionClick(ActionEvent evt) {
+		int raceId = Integer.parseInt(((Button)evt.getSource()).getId());
+		String raceState = ((Button)evt.getSource()).getText();
+		RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername());
+		
+		System.out.println("\n\n---------------" + raceId + " " + raceState);
+		
+		try {
+			if(raceState.equals(this.NOT_REGISTERED_STATE)) 		//subscription request
+				out.writeObject(new Request(Constants.INSERT, subscription));
+			else if(raceState.equals(this.REGISTERED_STATE))  		//unsubscribe request
+				out.writeObject(new Request(Constants.DELETE, subscription));
+			
+			Response r = (Response)in.readObject();
+	    	if(r.getStatusCode() != Constants.SUCCESS) return;
+	    	
+			this.displayRaces();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception{
 		out.writeObject(new Request(Constants.GET_RACES, this.loggedUser));
@@ -261,31 +286,27 @@ public class MemberGuiController implements Initializable{
 		
 		for(int i = 0; i < allRaces.size(); i++) {
 			Button btnAction = new Button();
+			btnAction.setId(Integer.toString(allRaces.get(i).getId()));
+			if(allRaces.get(i).getDate().isBefore(LocalDate.now())) {
+				btnAction.setDisable(true);
+				btnAction.setText("Race ended");
+				this.raceModels.add(new RaceModel(allRaces.get(i), btnAction));
+				continue;
+			}
 			for(int j = 0; j < userRaces.size(); j++) {
 				if(userRaces.get(j).getId() == allRaces.get(i).getId()) {
-					btnAction.setText("Unsubscribe");
-					//btnAction.setOnAction(unsubscribe());
+					btnAction.setText(this.REGISTERED_STATE);
+					btnAction.setOnAction(this::onBtnRaceActionClick);
 					break;
 				}else {
-					btnAction.setText("Subscribe");
+					btnAction.setText(this.NOT_REGISTERED_STATE);
+					btnAction.setOnAction(this::onBtnRaceActionClick);
 				}
 			}
 			this.raceModels.add(new RaceModel(allRaces.get(i),btnAction));
 		}
 		
 		this.tblRaces.setItems(raceModels);
-	}
-	
-	public void onBtnSubscribeClick(ActionEvent evt) {
-
-	}
-	
-	public EventHandler<ActionEvent> unsubscribe() throws Exception {
-		out.writeObject(new Request(Constants.UNSUBSCRIBE, new RaceParticipation(1, this.loggedUser.getUsername())));
-    	Response r = (Response)in.readObject();
-    	System.out.print("del ");
-		return null;
-		
 	}
 	
 	@SuppressWarnings("unchecked")

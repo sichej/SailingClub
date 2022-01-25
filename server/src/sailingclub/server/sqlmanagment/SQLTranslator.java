@@ -45,7 +45,7 @@ public class SQLTranslator {
 					  + String.join(",", insertableModel.getAttributes()) + ") VALUES ("		
 					  + String.join(",", insertableModel.getValues()) + ");";
 				
-				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non � in AI
+				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non in AI
 					query += "SELECT LAST_INSERT_ID() AS last_id;";
 				break;
 			case Constants.DELETE:
@@ -85,10 +85,6 @@ public class SQLTranslator {
 						  + "SELECT * FROM membership_fee ms, user u WHERE u.username = ms.id_member AND ms.id_member = '" 
 						  + ((User)model).getUsername() + "';";
 				break;
-			case Constants.UNSUBSCRIBE:
-				RaceParticipation rp = (RaceParticipation)model;
-				query += "DELETE FROM race_participation WHERE id_member = '" + rp.getIdMember() + "' and id_race = '" + rp.getIdRace() + "';";
-				break;
 			case Constants.GET_BOATS:
 				user = (User)model;
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
@@ -109,9 +105,6 @@ public class SQLTranslator {
 			break;
 		case Constants.DELETE:
 				response = new Response(Constants.SUCCESS, new EmptyPayload("Item deleted!"));
-			break;
-		case Constants.UNSUBSCRIBE:
-				response = new Response(Constants.SUCCESS, new EmptyPayload("Successfully unsubscribed!"));
 			break;
 		case Constants.PAY_BOAT_STORAGE_FEE:
 		case Constants.GET_BOAT_BY_ID:
