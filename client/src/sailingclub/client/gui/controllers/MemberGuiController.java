@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,6 +49,7 @@ import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
+import sailingclub.common.structures.RaceParticipation;
 import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
@@ -242,7 +244,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void displayRaces() throws IOException, ClassNotFoundException{
+	private void displayRaces() throws Exception{
 		out.writeObject(new Request(Constants.GET_RACES, this.loggedUser));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -262,6 +264,7 @@ public class MemberGuiController implements Initializable{
 			for(int j = 0; j < userRaces.size(); j++) {
 				if(userRaces.get(j).getId() == allRaces.get(i).getId()) {
 					btnAction.setText("Unsubscribe");
+					//btnAction.setOnAction(unsubscribe());
 					break;
 				}else {
 					btnAction.setText("Subscribe");
@@ -271,6 +274,18 @@ public class MemberGuiController implements Initializable{
 		}
 		
 		this.tblRaces.setItems(raceModels);
+	}
+	
+	public void onBtnSubscribeClick(ActionEvent evt) {
+
+	}
+	
+	public EventHandler<ActionEvent> unsubscribe() throws Exception {
+		out.writeObject(new Request(Constants.UNSUBSCRIBE, new RaceParticipation(1, this.loggedUser.getUsername())));
+    	Response r = (Response)in.readObject();
+    	System.out.print("del ");
+		return null;
+		
 	}
 	
 	@SuppressWarnings("unchecked")
