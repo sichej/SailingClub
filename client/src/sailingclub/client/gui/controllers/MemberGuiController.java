@@ -27,6 +27,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -47,6 +48,7 @@ import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.RaceParticipation;
@@ -56,6 +58,7 @@ public class MemberGuiController implements Initializable{
 	private final String BOAT_NOT_FOUND_ALT = "sailingclub/client/gui/images/boatnotfound.jpg";
 	private final String REGISTERED_STATE = "Unsubscribe";
 	private final String NOT_REGISTERED_STATE = "Subscribe";
+	private final int GRD_PADDING = 10;
 	private final int COLS_PER_ROW = 4;
 	private final double SCROLL_SIZE = 19.5;
 	private final int N_ROWS_VISIBLE = 2;
@@ -81,6 +84,7 @@ public class MemberGuiController implements Initializable{
 	@FXML private AnchorPane tabProfileManagment;
 	@FXML private AnchorPane tabBoatsManagment;
 	@FXML private AnchorPane tabRaceManagment;
+	@FXML private AnchorPane tabAddBoat;
 	@FXML private GridPane grdBoats;
 	@FXML private ScrollPane scrContainer;
 	@FXML private AnchorPane tabBoatOptions;
@@ -222,6 +226,10 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
+		out.writeObject(new Request(Constants.LOGOUT, new EmptyPayload()));
+    	Response rs = (Response)in.readObject();
+		if(rs.getStatusCode() != Constants.SUCCESS) return;
+			
 		setLoggedUser(null);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/LoginGui.fxml"));
 		Parent userGui = loader.load();
@@ -270,13 +278,13 @@ public class MemberGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception{
-		out.writeObject(new Request(Constants.GET_RACES, this.loggedUser));
+		out.writeObject(new Request(Constants.GET_RACES, new EmptyPayload()));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Race> allRaces = (ArrayList<Race>)r.getPayload();
     	
-		out.writeObject(new Request(Constants.GET_RACES_PARTICIPATIONS, this.loggedUser));
+		out.writeObject(new Request(Constants.GET_RACES_PARTICIPATIONS, new EmptyPayload()));
     	r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
@@ -309,31 +317,52 @@ public class MemberGuiController implements Initializable{
 		this.tblRaces.setItems(raceModels);
 	}
 	
+	private void OnBtnAddBoatClick() {
+		this.tabAddBoat.toFront();
+		System.out.println("AGGIUNGI BARCA TODO");
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws IOException, ClassNotFoundException {
-		out.writeObject(new Request(Constants.GET_BOATS, this.loggedUser));
+		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
     	this.grdBoats.getChildren().clear();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
     	int col = 0 , row = 0;
+    	double numRows = Math.ceil(((double)boats.size()) / ((double)this.COLS_PER_ROW));
+    	
 		for(int i = 0; i < boats.size(); i++) {
-			Button button = new Button(boats.get(i).getName());
-			double numRows = Math.ceil(((double)boats.size()) / ((double)this.COLS_PER_ROW));
-			button.setMinWidth((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW);
+			Button button = new Button();
+			button.setMinWidth(((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW) - this.GRD_PADDING);
 			button.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
 			button.getStyleClass().add("btnBoatsGrid");
 		    ImageView view = new ImageView();
 			try {
-				view.setImage(SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null));
+				Image boatThumbnail = SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null);
+				view.setImage(boatThumbnail);
 			} catch (IOException e) {
 				view.setImage(new Image(BOAT_NOT_FOUND_ALT));
 				e.printStackTrace();
 			}
 		    view.setPreserveRatio(true);
-		    view.setFitWidth((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW);
-		    button.setGraphic(view);
+		    view.setFitWidth(button.getMinWidth());
+		    AnchorPane imageLayout = new AnchorPane();
+		    imageLayout.getChildren().add(view);
+		    Label txtBoat = new Label(boats.get(i).getName());
+		    txtBoat.setAlignment(Pos.CENTER);
+		    txtBoat.getStyleClass().add("lblBoat");
+		    AnchorPane.setBottomAnchor(txtBoat, button.getMinHeight() / 10);
+		    AnchorPane.setLeftAnchor(txtBoat, 0.0);
+		    AnchorPane.setRightAnchor(txtBoat, 0.0);
+		    imageLayout.getChildren().add(txtBoat);
+		    imageLayout.setPrefHeight(button.getMinHeight());
+		    AnchorPane.setTopAnchor(view, 0.0); 
+		    AnchorPane.setLeftAnchor(view, 0.0);
+		    AnchorPane.setRightAnchor(view, 0.0);
+		    button.setGraphic(imageLayout);
+		    
 		    final Boat boat = boats.get(i);
 		    button.setOnAction(event -> OnBtnBoatsGridClick(boat));
 			this.grdBoats.add(button,col, row);
@@ -343,5 +372,28 @@ public class MemberGuiController implements Initializable{
 				col = 0;
 			}else col++; 
 		}
+		
+		Button addBtn = new Button();
+		addBtn.getStyleClass().add("btnBoatsGrid");
+		addBtn.setMinWidth(((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW) - this.GRD_PADDING);
+		addBtn.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
+		
+		ImageView view = new ImageView(new Image("sailingclub/client/gui/images/add_boat.png"));
+	    view.setPreserveRatio(true);
+	    view.setFitWidth(addBtn.getMinWidth());
+	    AnchorPane imageLayout = new AnchorPane();
+	    imageLayout.getChildren().add(view);
+	    imageLayout.setPrefHeight(addBtn.getMinHeight());
+	    AnchorPane.setTopAnchor(view, 0.0);
+	    AnchorPane.setBottomAnchor(view, 0.0); 
+	    AnchorPane.setLeftAnchor(view, 0.0);
+	    AnchorPane.setRightAnchor(view, 0.0);
+	    addBtn.setGraphic(imageLayout);
+	    addBtn.setOnAction(event -> OnBtnAddBoatClick());
+		
+		if(col + 1 / (COLS_PER_ROW - 1)  == 1) this.grdBoats.add(addBtn,0, row + 1);
+		else this.grdBoats.add(addBtn,col, row);
+		
+		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
 }

@@ -26,6 +26,7 @@ import sailingclub.common.structures.Boat;
 public class SQLTranslator {
 	private int lastRequest;
 	private DateTimeFormatter dateFormatter;
+	private User loggedUser;
 	
 	public SQLTranslator() {
 		this.lastRequest = -1;
@@ -68,8 +69,7 @@ public class SQLTranslator {
 				query += "SELECT * FROM race";
 				break;
 			case Constants.GET_RACES_PARTICIPATIONS:
-				User us = (User)model;
-				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + us.getUsername() + "';";
+				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
 			case Constants.PAY_BOAT_STORAGE_FEE:
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
@@ -79,15 +79,18 @@ public class SQLTranslator {
 					  + ((Boat)model).getId() + ";";
 				break;
 			case Constants.PAY_MEMBERSHIP_FEE:
-				MembershipFee msf = ((User)model).getMembershipFee();
+				MembershipFee msf = this.loggedUser.getMembershipFee();
 				query += "UPDATE membership_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
-						  + msf.getExpirationDate().plusYears(1) + "' WHERE id_member = '" + ((User)model).getUsername() + "'; " 
+						  + msf.getExpirationDate().plusYears(1) + "' WHERE id_member = '" + this.loggedUser.getUsername() + "'; " 
 						  + "SELECT * FROM membership_fee ms, user u WHERE u.username = ms.id_member AND ms.id_member = '" 
-						  + ((User)model).getUsername() + "';";
+						  + this.loggedUser.getUsername() + "';";
 				break;
 			case Constants.GET_BOATS:
-				user = (User)model;
-				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
+				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + this.loggedUser.getUsername() + "' ;";
+				break;
+			case Constants.LOGOUT:
+				this.loggedUser = null;
+				query += "SELECT null";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -181,6 +184,13 @@ public class SQLTranslator {
 			MembershipFee mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
 			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"),mfee);
 			response = new Response(Constants.SUCCESS, user);
+			this.loggedUser = user;
+			break;
+		case Constants.LOGOUT:
+			if(this.loggedUser == null)
+				response = new Response(Constants.SUCCESS, new EmptyPayload("Logged out!"));
+			else
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong login!"));
 			break;
 		
 	}

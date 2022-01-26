@@ -54,15 +54,6 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <padding>
-                        <Insets bottom="10.0" />
-                     </padding>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <Button fx:id="btnLogout" layoutX="731.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" text="Logout" />
@@ -112,6 +103,16 @@
                      </columnResizePolicy>
                   </TableView>
                </children></AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabAddBoat" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <Label layoutX="386.0" layoutY="184.0" text="TAB ADD BOAT" />
+               </children>
+            </AnchorPane>
          </children>
          <effect>
             <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
@@ -155,9 +156,9 @@
             <Insets top="20.0" />
          </padding>
       </VBox>
-      <Button fx:id="btnToggleMenu" mnemonicParsing="false" onAction="#OnBtnToggleMenuClick" prefHeight="46.0" prefWidth="54.0" styleClass="openbutton">
+      <Button fx:id="btnToggleMenu" layoutX="2.0" layoutY="4.0" mnemonicParsing="false" onAction="#OnBtnToggleMenuClick" prefHeight="18.0" prefWidth="18.0" styleClass="openbutton">
          <graphic>
-            <ImageView fx:id="imgBtnToggleMenu" fitHeight="27.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgBtnToggleMenu" fitHeight="37.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/menu_closed.png" />
                </image>
