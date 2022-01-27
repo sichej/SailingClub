@@ -71,6 +71,10 @@ public class SQLTranslator {
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND bt.id = " 
 					  + boat.getId() + " ;";
 				break;
+			case Constants.GET_CREDIT_CARDS:
+				user = (User)model;
+				query += "SELECT card_number FROM credit_card WHERE id_member = '" + user.getUsername() + "';";
+				break;
 			case Constants.GET_RACES:
 				query += "SELECT * FROM race";
 				break;
@@ -180,6 +184,18 @@ public class SQLTranslator {
 				races.add(race);
 			}
 			response = new Response(Constants.SUCCESS,races);
+			break;
+		case Constants.GET_CREDIT_CARDS:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Credit cards not found!"));
+				break;
+			}
+			ArrayList<String> cc = new ArrayList<String>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> cRes = queryResult.get(i);
+				cc.add(cRes.get("card_number"));
+			}
+			response = new Response(Constants.SUCCESS, cc);
 			break;
 		case Constants.GET_RACES_PARTICIPATIONS:
 			if(queryResult.isEmpty()) {

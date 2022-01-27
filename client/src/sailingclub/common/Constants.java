@@ -12,7 +12,8 @@ public class Constants {
 	public static final int GET_BOATS = 9;
 	public static final int GET_RACES = 10;
 	public static final int GET_RACES_PARTICIPATIONS = 11;
-	public static final int LOGOUT = 12; 
+	public static final int LOGOUT = 12;
+	public static final int GET_CREDIT_CARDS = 13;
 	
 	public static final int SUCCESS = 200;
 	public static final int BAD_REQUEST = 400;

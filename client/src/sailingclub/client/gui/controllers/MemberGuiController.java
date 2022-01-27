@@ -31,6 +31,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -85,6 +86,7 @@ public class MemberGuiController implements Initializable{
 	private File boatNewImage;
 	
 	@FXML private Button btnToggleMenu;
+	@FXML private ComboBox cmBoxPaymentMethod;
 	@FXML private VBox vbMenu;
 	@FXML private VBox vbInfo;
 	@FXML private VBox vbMyRaces;
@@ -225,7 +227,8 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
-	private void OnBtnBoatsGridClick(Boat clickedBoat)  {
+	@SuppressWarnings("unchecked")
+	private void OnBtnBoatsGridClick(Boat clickedBoat) throws IOException, ClassNotFoundException  {
 		this.selectedBoat = clickedBoat;
 		this.tabBoatOptions.toFront();
 		String info = "Boat id: " + this.selectedBoat.getId() + "\n" +
@@ -241,6 +244,12 @@ public class MemberGuiController implements Initializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, this.loggedUser));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	ArrayList<String> cc = (ArrayList<String>)r.getPayload();
+    	for(int i = 0; i < cc.size(); i++)
+    		this.cmBoxPaymentMethod.getItems().addAll(cc.get(i));
 	}
 	
 	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -429,7 +438,14 @@ public class MemberGuiController implements Initializable{
 		    button.setGraphic(imageLayout);
 		    
 		    final Boat boat = boats.get(i);
-		    button.setOnAction(event -> OnBtnBoatsGridClick(boat));
+		    button.setOnAction(event -> {
+				try {
+					OnBtnBoatsGridClick(boat);
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 			this.grdBoats.add(button,col, row);
 			
 			if(col / (COLS_PER_ROW - 1)  == 1) {
