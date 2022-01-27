@@ -1,5 +1,6 @@
 package sailingclub.client.gui.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -30,8 +34,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,13 +48,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sailingclub.client.Client;
 import sailingclub.client.gui.fxml.RaceModel;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
@@ -55,9 +65,9 @@ import sailingclub.common.structures.RaceParticipation;
 import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
-	private final String BOAT_NOT_FOUND_ALT = "sailingclub/client/gui/images/boatnotfound.jpg";
 	private final String REGISTERED_STATE = "Unsubscribe";
 	private final String NOT_REGISTERED_STATE = "Subscribe";
+	private final Double BOAT_FEE_MULTIPLIER = 20.5;
 	private final int GRD_PADDING = 10;
 	private final int COLS_PER_ROW = 4;
 	private final double SCROLL_SIZE = 19.5;
@@ -70,6 +80,9 @@ public class MemberGuiController implements Initializable{
 	private Map<String, String> btnTabAssoc;
 	private Boat selectedBoat;
 	private ObservableList<RaceModel> raceModels;
+	private double boatFeeNewPrice;
+	private double boatNewLenght;
+	private File boatNewImage;
 	
 	@FXML private Button btnToggleMenu;
 	@FXML private VBox vbMenu;
@@ -106,6 +119,12 @@ public class MemberGuiController implements Initializable{
 	@FXML private TableColumn<RaceModel, LocalDate> colRaceDate;
 	@FXML private TableColumn<RaceModel, Double> colRacePrice;
 	@FXML private TableColumn<RaceModel, Button> colRaceAction;
+	@FXML private Button btnLoadBoatImg;
+	@FXML private TextField txtBoatName;
+	@FXML private Spinner<Double> spnBoatLenght;
+	@FXML private Button btnInsertBoat;
+	@FXML private Label lblFeeAmount;
+	@FXML private ImageView imgNewBoat;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -135,6 +154,21 @@ public class MemberGuiController implements Initializable{
 		this.colRacePrice.setCellValueFactory(new PropertyValueFactory<RaceModel,Double>("racePrice"));
 		this.colRaceAction.setCellValueFactory(new PropertyValueFactory<RaceModel,Button>("btnAction"));
 		this.tblRaces.setPlaceholder(new Label("No races available!"));
+		
+		SpinnerValueFactory<Double> spnFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 600, 5);
+		this.spnBoatLenght.setValueFactory(spnFactory);
+		this.spnBoatLenght.setEditable(true);
+		this.boatFeeNewPrice = (5 * this.BOAT_FEE_MULTIPLIER);
+		this.lblFeeAmount.setText("Storage fee amount: " + this.boatFeeNewPrice);
+		this.boatNewImage = null;
+		
+		spnBoatLenght.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+			
+			try { this.boatNewLenght = Double.parseDouble(newValue); }
+			catch(Exception e) {this.boatNewLenght = 0.1;};
+			this.boatFeeNewPrice = boatNewLenght *  this.BOAT_FEE_MULTIPLIER;
+			this.lblFeeAmount.setText("Storage fee amount: " + this.boatFeeNewPrice);
+	    });
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -162,7 +196,6 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	public void OnBtnMenuClick(ActionEvent event) throws Exception {
-		// when a member selects a specific menu option, automatically close the menu to show the full application screen
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		pnlBackdrop.setVisible(false);
@@ -259,8 +292,6 @@ public class MemberGuiController implements Initializable{
 		String raceState = ((Button)evt.getSource()).getText();
 		RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername());
 		
-		System.out.println("\n\n---------------" + raceId + " " + raceState);
-		
 		try {
 			if(raceState.equals(this.NOT_REGISTERED_STATE)) 		//subscription request
 				out.writeObject(new Request(Constants.INSERT, subscription));
@@ -274,6 +305,43 @@ public class MemberGuiController implements Initializable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public void OnBtnLoadBoatImgClick(ActionEvent evt) {
+		FileChooser fileChooser = new FileChooser();
+		Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg","*.JPG", "*.JPEG","*.png"));
+		this.boatNewImage = fileChooser.showOpenDialog(stage);
+		
+		if(this.boatNewImage == null) return;
+		
+		this.imgNewBoat.setImage(new Image(boatNewImage.getAbsolutePath()));
+	}
+	
+	public void OnBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
+		String boatName = this.txtBoatName.getText();
+		if(boatName.equals("")) return;
+		byte[] img = null;
+		
+		Boat newBoat;
+		if(this.boatNewImage != null) {
+			img = Utils.toByteArray(ImageIO.read(this.boatNewImage), this.boatNewImage.getName().substring(this.boatNewImage.getName().lastIndexOf('.') + 1));
+			newBoat = new Boat(boatName,this.boatNewLenght, this.loggedUser.getUsername(),this.boatNewImage.getName(), img);
+		}else {
+			newBoat = new Boat(boatName,this.boatNewLenght, this.loggedUser.getUsername(),"", null);
+		}
+		
+		out.writeObject(new Request(Constants.INSERT, newBoat));
+    	Response rBoat = (Response)in.readObject();
+    	
+    	if(rBoat.getStatusCode() == Constants.SUCCESS) {
+    		int newBoatId = Integer.parseInt((String)rBoat.getPayload());
+    		BoatStorageFee fee = new BoatStorageFee(LocalDate.now(), LocalDate.now().plusYears(1), this.boatFeeNewPrice, newBoatId);
+    		out.writeObject(new Request(Constants.INSERT, fee));
+        	Response rFee = (Response)in.readObject();
+        	
+        	if(rFee.getStatusCode() == 200) this.btnBoatsManagment.fire();
+    	}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -319,7 +387,9 @@ public class MemberGuiController implements Initializable{
 	
 	private void OnBtnAddBoatClick() {
 		this.tabAddBoat.toFront();
-		System.out.println("AGGIUNGI BARCA TODO");
+		this.txtBoatName.setText("");
+		this.spnBoatLenght.getEditor().setText(Integer.toString(5));
+		this.imgNewBoat.setImage(new Image("sailingclub/client/gui/images/add_image.png"));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -339,13 +409,8 @@ public class MemberGuiController implements Initializable{
 			button.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
 			button.getStyleClass().add("btnBoatsGrid");
 		    ImageView view = new ImageView();
-			try {
-				Image boatThumbnail = SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null);
-				view.setImage(boatThumbnail);
-			} catch (IOException e) {
-				view.setImage(new Image(BOAT_NOT_FOUND_ALT));
-				e.printStackTrace();
-			}
+			Image boatThumbnail = SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null);
+			view.setImage(boatThumbnail);
 		    view.setPreserveRatio(true);
 		    view.setFitWidth(button.getMinWidth());
 		    AnchorPane imageLayout = new AnchorPane();
@@ -391,8 +456,9 @@ public class MemberGuiController implements Initializable{
 	    addBtn.setGraphic(imageLayout);
 	    addBtn.setOnAction(event -> OnBtnAddBoatClick());
 		
-		if(col + 1 / (COLS_PER_ROW - 1)  == 1) this.grdBoats.add(addBtn,0, row + 1);
-		else this.grdBoats.add(addBtn,col, row);
+	    System.out.println(col + " " + row);
+	    
+		this.grdBoats.add(addBtn,col, row);
 		
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
