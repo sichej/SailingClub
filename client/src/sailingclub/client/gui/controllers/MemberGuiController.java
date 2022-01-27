@@ -252,6 +252,10 @@ public class MemberGuiController implements Initializable{
     		this.cmBoxPaymentMethod.getItems().addAll(cc.get(i));
 	}
 	
+	public void onBtnPayBoatStorageFeeClick(ActionEvent event) {
+		
+	}
+	
 	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Risk alert!");
