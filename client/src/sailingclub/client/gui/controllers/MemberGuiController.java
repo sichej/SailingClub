@@ -32,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -48,6 +49,7 @@ import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
@@ -100,6 +102,9 @@ public class MemberGuiController implements Initializable{
 	@FXML private Button btnDeleteBoat;
 	@FXML private ImageView imgBoatInfo;
 	@FXML private Button btnLogout;
+	@FXML private Button btnAddBoatToDb;
+	@FXML private TextField txtBoatName;
+	@FXML private TextField txtBoatLength;
 	@FXML private TableView<RaceModel> tblRaces;
 	@FXML private TableColumn<RaceModel, Integer> colRaceId;
 	@FXML private TableColumn<RaceModel, String> colRaceName;
@@ -319,7 +324,19 @@ public class MemberGuiController implements Initializable{
 	
 	private void OnBtnAddBoatClick() {
 		this.tabAddBoat.toFront();
-		System.out.println("AGGIUNGI BARCA TODO");
+		
+		
+	}
+	
+	public void onAddBoatToDbClick(ActionEvent evt) throws NumberFormatException, IOException, ClassNotFoundException {
+		out.writeObject(new Request(Constants.INSERT, new Boat(this.txtBoatName.getText(), Double.parseDouble(this.txtBoatLength.getText()), this.loggedUser.getUsername(), "generic.jpg")));
+    	Response r = (Response)in.readObject();
+    	//System.out.print(r.getPayload());
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	out.writeObject(new Request(Constants.INSERT, new BoatStorageFee(LocalDate.now(), LocalDate.now().plusYears(1), Double.parseDouble(this.txtBoatLength.getText())*12, Integer.parseInt(r.getPayload().toString()))));
+    	r = (Response)in.readObject();
+    	this.txtBoatName.clear();
+    	this.txtBoatLength.clear();
 	}
 	
 	@SuppressWarnings("unchecked")

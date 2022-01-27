@@ -20,6 +20,14 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = null;
 	}
+
+	public Boat(String name, double length, String idMember, String pictureName) {
+		this.name = name;
+		this.length = length;
+		this.idMember = idMember;
+		this.boatStorageFee = null;
+		this.pictureName = pictureName;
+	}
 	
 	public Boat(int id, String name, double length, String idMember, String pictureName, byte[] picture ,BoatStorageFee boatStorageFee) {
 		this.id = id;
