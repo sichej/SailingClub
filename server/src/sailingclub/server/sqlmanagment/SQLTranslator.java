@@ -33,7 +33,7 @@ public class SQLTranslator {
 		this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	};
 	
-	public String RequestToSQL(Request request) throws RequestToSQLException {
+	public String RequestToSQL(Request request) throws RequestToSQLException, IOException {
 		String query = "";
 		Object model = request.getPayload();
 		
@@ -48,6 +48,12 @@ public class SQLTranslator {
 				
 				if(!Arrays.asList(insertableModel.getAttributes()).contains(insertableModel.getPk()))  //se la table non in AI
 					query += "SELECT LAST_INSERT_ID() AS last_id;";
+				if(model instanceof Boat && !((Boat)model).getPictureName().equals("")) {
+					byte[] img = ((Boat)model).getPicture();
+					File f = new File("images/" + ((Boat)model).getPictureName());
+					String ext = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+					ImageIO.write(Utils.toBufferedImage(img), ext , f);
+				}
 				break;
 			case Constants.DELETE:
 				Removable deletableModel = (Removable) model;
@@ -117,7 +123,16 @@ public class SQLTranslator {
 			}
 			
 			Map<String, String> fRes = queryResult.get(0);
-			byte[] img = Utils.toByteArray(ImageIO.read(new File("images/" + fRes.get("picture"))),"jpg");
+			File f = new File("images/" + fRes.get("picture"));
+			String ext = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+			byte[] img;
+			
+			if(f.exists() && !f.isDirectory()) { 
+				img = Utils.toByteArray(ImageIO.read(f),ext);
+			}else {
+				img = Utils.toByteArray(ImageIO.read(new File("images/generic.jpg")),"jpg");
+			}
+			
 			LocalDate pDate = LocalDate.parse(fRes.get("payment_date"), dateFormatter);
 			LocalDate eDate = LocalDate.parse(fRes.get("expiration_date"), dateFormatter);
 			BoatStorageFee fee = new BoatStorageFee(Integer.parseInt(fRes.get("id")),pDate,eDate,Double.parseDouble(fRes.get("amount")),Integer.parseInt(fRes.get("id_boat")));
@@ -133,7 +148,16 @@ public class SQLTranslator {
 			ArrayList<Boat> boats = new ArrayList<Boat>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> bRes = queryResult.get(i);
-				img = Utils.toByteArray(ImageIO.read(new File("images/" + bRes.get("picture"))),"jpg");
+				
+				f = new File("images/" + bRes.get("picture"));
+				ext = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+				
+				if(f.exists() && !f.isDirectory()) { 
+					img = Utils.toByteArray(ImageIO.read(f),ext);
+				}else {
+					img = Utils.toByteArray(ImageIO.read(new File("images/generic.jpg")),"jpg");
+				}
+
 				pDate = LocalDate.parse(bRes.get("payment_date"), dateFormatter);
 				eDate = LocalDate.parse(bRes.get("expiration_date"), dateFormatter);
 				fee = new BoatStorageFee(Integer.parseInt(bRes.get("id")),pDate,eDate,Double.parseDouble(bRes.get("amount")),Integer.parseInt(bRes.get("id_boat")));
