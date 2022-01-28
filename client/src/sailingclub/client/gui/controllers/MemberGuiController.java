@@ -293,7 +293,7 @@ public class MemberGuiController implements Initializable{
 		out.writeObject(new Request(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload()));
     	Response r = (Response)in.readObject();
     	
-    	if(r.getStatusCode() == Constants.SUCCESS) {
+    	if(r.getStatusCode() != Constants.SUCCESS) {
     		System.out.print("no");
     		return;
     	}
