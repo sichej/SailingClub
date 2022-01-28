@@ -262,6 +262,8 @@ public class MemberGuiController implements Initializable{
     	r = (Response)in.readObject();
     	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
     	
+    	this.cmBoxPaymentMethod.getItems().clear();
+
     	for(CreditCard c: creditCards) {
     		this.cmBoxPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
     	}
@@ -272,6 +274,9 @@ public class MemberGuiController implements Initializable{
     		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
     		this.cmBoxPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
     	}
+    	
+    	if(!this.cmBoxPaymentMethod.getItems().isEmpty())
+    		this.cmBoxPaymentMethod.getSelectionModel().selectFirst();
 	}
 	
 	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
@@ -279,7 +284,7 @@ public class MemberGuiController implements Initializable{
     	Response r = (Response)in.readObject();
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
-    		OnBtnBoatsGridClick(this.selectedBoat);
+    		this.btnBoatsManagment.fire();
     	}
 	}
 	
