@@ -29,7 +29,7 @@
             <PasswordField fx:id="txtPassword" prefHeight="30.0" prefWidth="360.0" promptText="Password" styleClass="logininput" />
             <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#OnBtnLoginClick" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #14274e;" text="Login" textFill="WHITE">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="15.0" />
                </font></Button>
          </children>
          <padding>

@@ -31,10 +31,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
@@ -57,8 +59,10 @@ import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
+import sailingclub.common.structures.BankTransfer;
 import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
+import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
@@ -86,7 +90,6 @@ public class MemberGuiController implements Initializable{
 	private File boatNewImage;
 	
 	@FXML private Button btnToggleMenu;
-	@FXML private ComboBox cmBoxPaymentMethod;
 	@FXML private VBox vbMenu;
 	@FXML private VBox vbInfo;
 	@FXML private VBox vbMyRaces;
@@ -127,6 +130,9 @@ public class MemberGuiController implements Initializable{
 	@FXML private Button btnInsertBoat;
 	@FXML private Label lblFeeAmount;
 	@FXML private ImageView imgNewBoat;
+	@FXML private ComboBox cmBoxPaymentMethod;
+	@FXML private Button btnPayBoatStorageFee;
+	@FXML private Label lblPaymentDescription;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -238,22 +244,43 @@ public class MemberGuiController implements Initializable{
 				"Storage fee exp. date: " + this.selectedBoat.getBoatStorageFee().getExpirationDate() + "\n" +
 				"Storage fee amount: " + this.selectedBoat.getBoatStorageFee().getAmount() + " $";
 		this.lblBoatInfo.setText(info);
-		
+				
 		try {
 			this.imgBoatInfo.setImage(SwingFXUtils.toFXImage(Utils.toBufferedImage(clickedBoat.getPicture()), null));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, this.loggedUser));
+		
+		this.lblPaymentDescription.setText("Lenght: " + this.selectedBoat.getLength() + " mt\nMultiplier: " + this.BOAT_FEE_MULTIPLIER +
+											"\n------------------" + 
+											"\nTotal: " + this.selectedBoat.getBoatStorageFee().getAmount() + "$");
+		
+		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
-    	if(r.getStatusCode() != Constants.SUCCESS) return;
-    	ArrayList<String> cc = (ArrayList<String>)r.getPayload();
-    	for(int i = 0; i < cc.size(); i++)
-    		this.cmBoxPaymentMethod.getItems().addAll(cc.get(i));
+    	ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
+    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
+    	r = (Response)in.readObject();
+    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
+    	
+    	for(CreditCard c: creditCards) {
+    		this.cmBoxPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
+    	}
+    	
+    	this.cmBoxPaymentMethod.getItems().add(new Separator());
+    	
+    	for(BankTransfer b: bankTransfers) {
+    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
+    		this.cmBoxPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
+    	}
 	}
 	
-	public void onBtnPayBoatStorageFeeClick(ActionEvent event) {
-		
+	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
+		out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat));
+    	Response r = (Response)in.readObject();
+    	
+    	if(r.getStatusCode() == Constants.SUCCESS) {
+    		OnBtnBoatsGridClick(this.selectedBoat);
+    	}
 	}
 	
 	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {

@@ -17,10 +17,12 @@ import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.BoatStorageFee;
+import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.RaceParticipation;
+import sailingclub.common.structures.BankTransfer;
 import sailingclub.common.structures.Boat;
 
 public class SQLTranslator {
@@ -72,8 +74,10 @@ public class SQLTranslator {
 					  + boat.getId() + " ;";
 				break;
 			case Constants.GET_CREDIT_CARDS:
-				user = (User)model;
-				query += "SELECT card_number FROM credit_card WHERE id_member = '" + user.getUsername() + "';";
+				query += "SELECT * FROM credit_card WHERE id_member = '" + loggedUser.getUsername() + "';";
+				break;
+			case Constants.GET_BANK_TRANSFERS:
+				query += "SELECT * FROM bank_transfer WHERE id_member = '" + loggedUser.getUsername() + "';";
 				break;
 			case Constants.GET_RACES:
 				query += "SELECT * FROM race";
@@ -190,12 +194,26 @@ public class SQLTranslator {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Credit cards not found!"));
 				break;
 			}
-			ArrayList<String> cc = new ArrayList<String>();
+			
+			ArrayList<CreditCard> cc = new ArrayList<CreditCard>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> cRes = queryResult.get(i);
-				cc.add(cRes.get("card_number"));
+				cc.add(new CreditCard(cRes.get("card_number"),Integer.parseInt(cRes.get("cvv")), LocalDate.parse(cRes.get("expiration_date"), dateFormatter), cRes.get("id_member")));
 			}
 			response = new Response(Constants.SUCCESS, cc);
+			break;
+		case Constants.GET_BANK_TRANSFERS:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Bank account not found!"));
+				break;
+			}
+			
+			ArrayList<BankTransfer> bnkt = new ArrayList<BankTransfer>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> bnRes = queryResult.get(i);
+				bnkt.add(new BankTransfer(bnRes.get("iban"), bnRes.get("bank"), bnRes.get("id_member")));
+			}
+			response = new Response(Constants.SUCCESS, bnkt);
 			break;
 		case Constants.GET_RACES_PARTICIPATIONS:
 			if(queryResult.isEmpty()) {

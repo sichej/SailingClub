@@ -26,8 +26,8 @@
 }
 
 .boatbox{
-  -fx-border-color: #14274e;
-  -fx-border-style: hidden hidden solid hidden;
+  -fx-border-color: #000;
+  -fx-border-style: hidden solid hidden hidden;
   -fx-border-width: 1;
 }
 
@@ -38,4 +38,14 @@
 .lblBoat{
   -fx-text-fill:#fff;
   -fx-font-size: 15pt ;
+}
+
+.paymentForm{
+  -fx-background-radius: 8px;
+  -fx-background-color: #fff;
+}
+
+.cmbPay{
+  -fx-border-color: #14274e;
+  -fx-border-radius: 5px;
 }
