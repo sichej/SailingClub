@@ -133,6 +133,7 @@ public class MemberGuiController implements Initializable{
 	@FXML private ComboBox cmBoxPaymentMethod;
 	@FXML private Button btnPayBoatStorageFee;
 	@FXML private Label lblPaymentDescription;
+	@FXML private Button btnPayMembershipFee;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -288,6 +289,16 @@ public class MemberGuiController implements Initializable{
     	}
 	}
 	
+	public void onBtnPayMembershipFee(ActionEvent event) throws Exception {
+		out.writeObject(new Request(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload()));
+    	Response r = (Response)in.readObject();
+    	
+    	if(r.getStatusCode() == Constants.SUCCESS) {
+    		System.out.print("no");
+    		return;
+    	}
+	}
+	
 	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Risk alert!");
@@ -323,13 +334,39 @@ public class MemberGuiController implements Initializable{
 		stage.show();
 	}
 	
-	private void displayInfo() {
+	@SuppressWarnings("unchecked")
+	private void displayInfo() throws IOException, ClassNotFoundException {
 		vbInfo.setVisible(true);
 		lblName.setText(this.loggedUser.getName());
 		lblSurname.setText(this.loggedUser.getSurname());
 		lblUsername.setText(this.loggedUser.getUsername());
 		lblAddress.setText(this.loggedUser.getAddress());
 		lblFiscalCode.setText(this.loggedUser.getFiscalCode());
+		
+		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
+    	Response r = (Response)in.readObject();
+		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
+    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
+    	r = (Response)in.readObject();
+    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
+    	
+    	this.cmBoxPaymentMethod.getItems().clear();
+
+    	for(CreditCard c: creditCards) {
+    		this.cmBoxPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
+    	}
+    	
+    	this.cmBoxPaymentMethod.getItems().add(new Separator());
+    	
+    	for(BankTransfer b: bankTransfers) {
+    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
+    		this.cmBoxPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
+    	}
+    	
+    	if(!this.cmBoxPaymentMethod.getItems().isEmpty())
+    		this.cmBoxPaymentMethod.getSelectionModel().selectFirst();
+    	
+		
 	}
 	
 	private void onBtnRaceActionClick(ActionEvent evt) {
