@@ -39,11 +39,6 @@
                      </columnResizePolicy>
                   </TableView>
                </children></AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabAddBoat" style="-fx-background-color: #fff;">
                <children>
                   <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
@@ -207,6 +202,11 @@
                      </children>
                   </VBox>
                </children></AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
          <effect>
             <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
