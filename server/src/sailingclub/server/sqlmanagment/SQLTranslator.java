@@ -106,6 +106,10 @@ public class SQLTranslator {
 				this.loggedUser = null;
 				query += "SELECT null";
 				break;
+			case Constants.GET_SUBSCRIPTED_BOAT:
+				int rid = ((Race)model).getId();
+				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
+				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
@@ -216,10 +220,6 @@ public class SQLTranslator {
 			response = new Response(Constants.SUCCESS, bnkt);
 			break;
 		case Constants.GET_RACES_PARTICIPATIONS:
-			if(queryResult.isEmpty()) {
-				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Races not found!"));
-				break;
-			}
 			ArrayList<Race> usRaces = new ArrayList<Race>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> rRes = queryResult.get(i);
@@ -228,6 +228,9 @@ public class SQLTranslator {
 				usRaces.add(race);
 			}
 			response = new Response(Constants.SUCCESS, usRaces);
+			break;
+		case Constants.GET_SUBSCRIPTED_BOAT:
+			response = new Response(Constants.SUCCESS, new Boat(Integer.parseInt(queryResult.get(0).get("id_boat"))));
 			break;
 		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:

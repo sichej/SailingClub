@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import sailingclub.common.structures.Race;
 
 public class RaceModel {
@@ -14,13 +15,15 @@ public class RaceModel {
 	private LocalDate raceDate;
 	private SimpleDoubleProperty racePrice;
 	private Button btnAction;
+	private ComboBox<String> cmbBoat;
 	
-	public RaceModel(Race race, Button btnAction) {
+	public RaceModel(Race race, Button btnAction, ComboBox<String> cmbBoat) {
 		this.raceId = new SimpleIntegerProperty(Integer.valueOf(race.getId()));
 		this.raceName = new SimpleStringProperty(race.getName());
 		this.raceDate = race.getDate();
 		this.racePrice = new SimpleDoubleProperty(Double.valueOf(race.getPrice()));
 		this.btnAction = btnAction;
+		this.cmbBoat = cmbBoat;
 	}
 
 	public int getRaceId() {
@@ -62,4 +65,14 @@ public class RaceModel {
 	public void setBtnAction(Button btnAction) {
 		this.btnAction = btnAction;
 	}
+
+	public ComboBox<String> getCmbBoat() {
+		return cmbBoat;
+	}
+
+	public void setCmbBoat(ComboBox<String> cmbBoat) {
+		this.cmbBoat = cmbBoat;
+	}
+	
+	
 }
