@@ -110,6 +110,13 @@ public class SQLTranslator {
 				int rid = ((Race)model).getId();
 				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
+			case Constants.GET_MEMBERS:
+				query += "SELECT username FROM user WHERE user_type = 'member';";
+				break;
+			case Constants.GET_MEMBER_BY_USERNAME:
+				user = (User)model;
+				query += "SELECT * FROM user, membership_fee f WHERE username = '" + user.getUsername() + "' AND f.id_member = user.username";
+				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
@@ -228,6 +235,17 @@ public class SQLTranslator {
 				usRaces.add(race);
 			}
 			response = new Response(Constants.SUCCESS, usRaces);
+			break;
+
+		// EMPLOYEE QUERIES
+		case Constants.GET_MEMBERS:
+			ArrayList<String> members = new ArrayList<String>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> mRes = queryResult.get(i);
+				String member = mRes.get("username");
+				members.add(member);
+			}
+			response = new Response(Constants.SUCCESS, members);
 			break;
 		case Constants.GET_SUBSCRIPTED_BOAT:
 			response = new Response(Constants.SUCCESS, new Boat(Integer.parseInt(queryResult.get(0).get("id_boat"))));

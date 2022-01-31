@@ -24,7 +24,7 @@ public class User implements Insertable, Serializable{
 		this.password = password;
 		this.fee = fee;
 	}
-	
+
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
