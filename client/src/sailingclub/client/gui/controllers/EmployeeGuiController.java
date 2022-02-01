@@ -130,6 +130,7 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private Label lblBoatPaymentDescription;
 	@FXML private Label lblMemberPaymentDescription;
 	@FXML private Button btnSelectUser;
+	@FXML private Label lblUserToManage;
 	@FXML private Label lblUsername;
 	
 	@Override
@@ -293,7 +294,7 @@ public class EmployeeGuiController implements Initializable{
     	if(r.getStatusCode() == Constants.SUCCESS) {
     		//open info user
     		this.userToManage = (User)r.getPayload();
-    		System.out.print(this.userToManage.getName());
+    		this.lblUserToManage.setText(this.userToManage.getUsername()); //(this.userToManage.getName());
     	}
 	}
 	

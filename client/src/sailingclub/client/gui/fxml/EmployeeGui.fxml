@@ -132,6 +132,22 @@
                   <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
+                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
+                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
+                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
+                        <TableColumn fx:id="colRaceParticipants" prefWidth="159.20004272460938" text="Participants" />
+                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children></AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -214,22 +230,6 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
-                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
-                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
-                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
-                        <TableColumn fx:id="colRaceParticipants" prefWidth="159.20004272460938" text="Participants" />
-                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children></AnchorPane>
          </children>
          <effect>
             <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
@@ -288,5 +288,15 @@
          </font>
       </Label>
       <AnchorPane fx:id="pnlBackdrop" prefHeight="200.0" prefWidth="200.0" styleClass="overlaypane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label fx:id="lblUserToManage" layoutX="708.0" layoutY="14.0" text=" -" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblTextInfo" layoutX="577.0" layoutY="14.0" text="User to manage:" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="17.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
