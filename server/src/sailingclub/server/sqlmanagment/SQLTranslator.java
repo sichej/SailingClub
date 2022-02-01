@@ -250,6 +250,19 @@ public class SQLTranslator {
 		case Constants.GET_SUBSCRIPTED_BOAT:
 			response = new Response(Constants.SUCCESS, new Boat(Integer.parseInt(queryResult.get(0).get("id_boat"))));
 			break;
+		case Constants.GET_MEMBER_BY_USERNAME:
+		if(queryResult.isEmpty()) {
+			response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong login!"));
+			break;
+		}
+		
+		Map<String, String> umRes = queryResult.get(0);
+		LocalDate pmDate = LocalDate.parse(umRes.get("payment_date"), dateFormatter);
+		LocalDate emDate = LocalDate.parse(umRes.get("expiration_date"), dateFormatter);
+		MembershipFee mfee = new MembershipFee(Integer.parseInt(umRes.get("id")), pmDate, emDate, Double.parseDouble(umRes.get("price")), umRes.get("id_member"));
+		User user = new User(umRes.get("username"), umRes.get("name"), umRes.get("surname"), umRes.get("address"), umRes.get("fiscal_code"), umRes.get("user_type"), umRes.get("password"),mfee);
+		response = new Response(Constants.SUCCESS, user);
+			break;
 		case Constants.PAY_MEMBERSHIP_FEE:
 		case Constants.LOGIN:
 			if(queryResult.isEmpty()) {
@@ -258,10 +271,10 @@ public class SQLTranslator {
 			}
 			
 			Map<String, String> uRes = queryResult.get(0);
-			LocalDate pmDate = LocalDate.parse(uRes.get("payment_date"), dateFormatter);
-			LocalDate emDate = LocalDate.parse(uRes.get("expiration_date"), dateFormatter);
-			MembershipFee mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
-			User user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"),mfee);
+			pmDate = LocalDate.parse(uRes.get("payment_date"), dateFormatter);
+			emDate = LocalDate.parse(uRes.get("expiration_date"), dateFormatter);
+			mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
+			user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"),mfee);
 			response = new Response(Constants.SUCCESS, user);
 			this.loggedUser = user;
 			break;

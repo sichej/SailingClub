@@ -25,6 +25,14 @@ public class RaceModel {
 		this.btnAction = btnAction;
 		this.cmbBoat = cmbBoat;
 	}
+	
+	public RaceModel(Race race, Button btnAction) {
+		this.raceId = new SimpleIntegerProperty(Integer.valueOf(race.getId()));
+		this.raceName = new SimpleStringProperty(race.getName());
+		this.raceDate = race.getDate();
+		this.racePrice = new SimpleDoubleProperty(Double.valueOf(race.getPrice()));
+		this.btnAction = btnAction;
+	}
 
 	public int getRaceId() {
 		return raceId.get();
