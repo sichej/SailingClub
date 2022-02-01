@@ -127,11 +127,6 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -236,6 +231,11 @@
                         <DropShadow spread="0.24" />
                      </effect>
                   </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>
