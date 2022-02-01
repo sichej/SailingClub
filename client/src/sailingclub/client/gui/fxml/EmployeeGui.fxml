@@ -215,6 +215,14 @@
                                  </font>
                               </Button>
                               <Label alignment="CENTER" prefHeight="31.0" prefWidth="306.0" text="NOTE: you can pay in advance and one year &#10;will be added to your subscription" textFill="RED" />
+                              <Button fx:id="btnNormalManage" layoutX="20.0" layoutY="149.0" mnemonicParsing="false" onAction="#onBtnNormalManage" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Normal Manage" textFill="WHITE">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
                            </children>
                            <padding>
                               <Insets left="10.0" right="10.0" top="10.0" />

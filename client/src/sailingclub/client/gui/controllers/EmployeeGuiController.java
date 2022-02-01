@@ -130,6 +130,7 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private Label lblBoatPaymentDescription;
 	@FXML private Label lblMemberPaymentDescription;
 	@FXML private Button btnSelectUser;
+	@FXML private Button btnNormalManage;
 	@FXML private Label lblUserToManage;
 	@FXML private Label lblUsername;
 	
@@ -294,8 +295,14 @@ public class EmployeeGuiController implements Initializable{
     	if(r.getStatusCode() == Constants.SUCCESS) {
     		//open info user
     		this.userToManage = (User)r.getPayload();
-    		this.lblUserToManage.setText(this.userToManage.getUsername()); //(this.userToManage.getName());
+    		this.lblUserToManage.setText(this.userToManage.getUsername());
     	}
+	}
+	
+	public void onBtnNormalManage(ActionEvent event) throws Exception {
+		this.userToManage = null;
+		this.lblUserToManage.setText(" - ");
+		
 	}
 	
 	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -446,10 +453,55 @@ public class EmployeeGuiController implements Initializable{
 			}
 		}else {
 			// user to manage
+			displayRacesUser();
 		}
 		
 		this.tblRaces.setItems(raceModels);
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private void displayRacesUser() throws Exception{
+    	
+		out.writeObject(new Request(Constants.GET_RACES_PARTICIPATIONS_EMP, this.userToManage));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	ArrayList<Race> userRaces = (ArrayList<Race>)r.getPayload();
+    	
+		this.raceModels = FXCollections.observableArrayList();
+		out.writeObject(new Request(Constants.GET_BOATS_EMP, this.userToManage));
+    	ArrayList<Boat> boats = (ArrayList<Boat>)((Response)in.readObject()).getPayload();
+		
+		for(int i = 0; i < userRaces.size(); i++) {
+			Button btnAction = new Button();
+			ComboBox<String> cmb = new ComboBox<String>();
+			for(Boat b: boats) cmb.getItems().add(b.getName() + " - " + b.getId());
+			
+			btnAction.setId(Integer.toString(userRaces.get(i).getId()));
+			
+			cmb.getSelectionModel().selectFirst();
+			btnAction.setText(this.NOT_REGISTERED_STATE);
+			btnAction.setOnAction(event -> onBtnRaceActionClick(btnAction, null));
+						
+			for(int j = 0; j < userRaces.size(); j++) {
+				btnAction.setText(this.REGISTERED_STATE);
+				btnAction.setOnAction(event -> onBtnRaceActionClick(btnAction, null));
+				break;
+			}
+			
+			if(userRaces.get(i).getDate().isBefore(LocalDate.now())) {  //se gara finita
+				cmb.setDisable(true);
+				btnAction.setDisable(true);
+				btnAction.setText("Race ended");
+			}
+			this.raceModels.add(new RaceModel(userRaces.get(i),btnAction));
+		}
+		
+		this.tblRaces.setItems(raceModels);
+	}
+	
+	
 	
 	private void OnBtnAddBoatClick() {
 		this.tabAddBoat.toFront();

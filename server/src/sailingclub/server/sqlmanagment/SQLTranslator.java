@@ -85,6 +85,10 @@ public class SQLTranslator {
 			case Constants.GET_RACES_PARTICIPATIONS:
 				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
+			case Constants.GET_RACES_PARTICIPATIONS_EMP:
+				user = (User)model;
+				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + user.getUsername() + "';";
+				break;
 			case Constants.PAY_BOAT_STORAGE_FEE:
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
 				query += "UPDATE boat_storage_fee SET payment_date = '" + LocalDate.now() + "' , expiration_date = '"
@@ -102,6 +106,10 @@ public class SQLTranslator {
 			case Constants.GET_BOATS:
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + this.loggedUser.getUsername() + "' ;";
 				break;
+			case Constants.GET_BOATS_EMP:
+				user = (User)model;
+				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
+				break;
 			case Constants.LOGOUT:
 				this.loggedUser = null;
 				query += "SELECT null";
@@ -109,6 +117,11 @@ public class SQLTranslator {
 			case Constants.GET_SUBSCRIPTED_BOAT:
 				int rid = ((Race)model).getId();
 				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
+				break;
+			case Constants.GET_SUBSCRIPTED_BOAT_EMP:
+				user = (User)model;
+				rid = ((Race)model).getId();
+				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + user.getUsername() + "';";
 				break;
 			case Constants.GET_MEMBERS:
 				query += "SELECT username FROM user WHERE user_type = 'member';";
@@ -158,6 +171,7 @@ public class SQLTranslator {
 			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fRes.get("picture"),img,fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
+		case Constants.GET_BOATS_EMP:
 		case Constants.GET_BOATS:
 			if(queryResult.isEmpty()) {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
@@ -226,6 +240,7 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, bnkt);
 			break;
+		case Constants.GET_RACES_PARTICIPATIONS_EMP:
 		case Constants.GET_RACES_PARTICIPATIONS:
 			ArrayList<Race> usRaces = new ArrayList<Race>();
 			for(int i = 0; i < queryResult.size(); i++){
@@ -237,7 +252,6 @@ public class SQLTranslator {
 			response = new Response(Constants.SUCCESS, usRaces);
 			break;
 
-		// EMPLOYEE QUERIES
 		case Constants.GET_MEMBERS:
 			ArrayList<String> members = new ArrayList<String>();
 			for(int i = 0; i < queryResult.size(); i++){
@@ -247,6 +261,7 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, members);
 			break;
+		case Constants.GET_SUBSCRIPTED_BOAT_EMP:
 		case Constants.GET_SUBSCRIPTED_BOAT:
 			response = new Response(Constants.SUCCESS, new Boat(Integer.parseInt(queryResult.get(0).get("id_boat"))));
 			break;
