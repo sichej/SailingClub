@@ -371,9 +371,9 @@ public class EmployeeGuiController implements Initializable{
 		Boat newBoat;
 		if(this.boatNewImage != null) {
 			img = Utils.toByteArray(ImageIO.read(this.boatNewImage), this.boatNewImage.getName().substring(this.boatNewImage.getName().lastIndexOf('.') + 1));
-			newBoat = new Boat(boatName,this.boatNewLenght, this.loggedUser.getUsername(),this.boatNewImage.getName(), img);
+			newBoat = new Boat(boatName,this.boatNewLenght, this.userToManage.getUsername(),this.boatNewImage.getName(), img);
 		}else {
-			newBoat = new Boat(boatName,this.boatNewLenght, this.loggedUser.getUsername(),"", null);
+			newBoat = new Boat(boatName,this.boatNewLenght, this.userToManage.getUsername(),"", null);
 		}
 		
 		out.writeObject(new Request(Constants.INSERT, newBoat));
@@ -466,10 +466,18 @@ public class EmployeeGuiController implements Initializable{
 	
 	
 	private void OnBtnAddBoatClick() {
-		this.tabAddBoat.toFront();
-		this.txtBoatName.setText("");
-		this.spnBoatLenght.getEditor().setText(Integer.toString(5));
-		this.imgNewBoat.setImage(new Image("sailingclub/client/gui/images/add_image.png"));
+		if(this.userToManage != null) {
+			this.tabAddBoat.toFront();
+			this.txtBoatName.setText("");
+			this.spnBoatLenght.getEditor().setText(Integer.toString(5));
+			this.imgNewBoat.setImage(new Image("sailingclub/client/gui/images/add_image.png"));
+		}else {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Error");
+			alert.setHeaderText("Select a user before trying to add Boats");
+			//alert.setContentText("This operation is irreversible");
+			Optional<ButtonType> option = alert.showAndWait();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
