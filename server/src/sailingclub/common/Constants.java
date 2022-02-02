@@ -23,6 +23,7 @@ public class Constants {
 	public static final int GET_RACES_PARTICIPATIONS_EMP = 18;
 	public static final int GET_BOATS_EMP = 19;
 	public static final int GET_SUBSCRIPTED_BOAT_EMP = 20;
+	public static final int GET_ALL_BOATS_EMP = 21;
 	
 	public static final int SUCCESS = 200;
 	public static final int BAD_REQUEST = 400;

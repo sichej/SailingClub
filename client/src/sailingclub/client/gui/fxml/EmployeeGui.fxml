@@ -143,6 +143,11 @@
                      </columnResizePolicy>
                   </TableView>
                </children></AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -180,7 +185,7 @@
                         </VBox>
                         <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="350.0" spacing="20.0">
                            <children>
-                              <Label text="Pay Membership Fee" textFill="#14274e">
+                              <Label text="Manage Users" textFill="#14274e">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -231,11 +236,6 @@
                         <DropShadow spread="0.24" />
                      </effect>
                   </HBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

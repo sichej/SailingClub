@@ -110,6 +110,9 @@ public class SQLTranslator {
 				user = (User)model;
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
 				break;
+			case Constants.GET_ALL_BOATS_EMP:
+				query += "SELECT * FROM boat_storage_fee bs, boat b WHERE bs.id_boat = b.id;";
+				break;
 			case Constants.LOGOUT:
 				this.loggedUser = null;
 				query += "SELECT null";
@@ -171,6 +174,23 @@ public class SQLTranslator {
 			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fRes.get("picture"),img,fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
+		case Constants.GET_ALL_BOATS_EMP:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
+				break;
+			}
+			ArrayList<Boat> boats = new ArrayList<Boat>();
+			for(int i = 0; i < queryResult.size(); i++){
+				Map<String, String> bRes = queryResult.get(i);
+
+				pDate = LocalDate.parse(bRes.get("payment_date"), dateFormatter);
+				eDate = LocalDate.parse(bRes.get("expiration_date"), dateFormatter);
+				fee = new BoatStorageFee(Integer.parseInt(bRes.get("id")),pDate,eDate,Double.parseDouble(bRes.get("amount")),Integer.parseInt(bRes.get("id_boat")));
+				boat = new Boat(Integer.parseInt(bRes.get("id_boat")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),fee);
+				boats.add(boat);
+			}
+			response = new Response(Constants.SUCCESS,boats);
+			break;
 		case Constants.GET_BOATS_EMP:
 		case Constants.GET_BOATS:
 			if(queryResult.isEmpty()) {
@@ -178,7 +198,7 @@ public class SQLTranslator {
 				break;
 			}
 
-			ArrayList<Boat> boats = new ArrayList<Boat>();
+			boats = new ArrayList<Boat>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> bRes = queryResult.get(i);
 				
