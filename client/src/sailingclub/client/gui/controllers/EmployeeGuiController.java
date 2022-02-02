@@ -255,10 +255,8 @@ public class EmployeeGuiController implements Initializable{
 	public void onBtnSelectUser(ActionEvent event) throws Exception {
 		out.writeObject(new Request(Constants.GET_MEMBER_BY_USERNAME, new User(this.cmBoxSelectUser.getValue().toString())));
     	Response r = (Response)in.readObject();
-    	//System.out.println(this.cmBoxSelectUser.getValue());
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
-    		//open info user
     		this.userToManage = (User)r.getPayload();
     		this.lblUserToManage.setText(this.userToManage.getUsername());
     	}
