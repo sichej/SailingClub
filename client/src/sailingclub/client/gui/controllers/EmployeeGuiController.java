@@ -232,7 +232,6 @@ public class EmployeeGuiController implements Initializable{
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void OnBtnBoatsGridClick(Boat clickedBoat) throws IOException, ClassNotFoundException  {
 		this.selectedBoat = clickedBoat;
 		this.tabBoatOptions.toFront();
@@ -247,14 +246,14 @@ public class EmployeeGuiController implements Initializable{
 		try {
 			this.imgBoatInfo.setImage(SwingFXUtils.toFXImage(Utils.toBufferedImage(clickedBoat.getPicture()), null));
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.imgBoatInfo.setImage(new Image("sailingclub/client/gui/images/yatch.jpg"));
 		}
 		
-		this.lblBoatPaymentDescription.setText("Lenght: " + this.selectedBoat.getLength() + " mt\nMultiplier: " + this.BOAT_FEE_MULTIPLIER +
+		/*this.lblBoatPaymentDescription.setText("Lenght: " + this.selectedBoat.getLength() + " mt\nMultiplier: " + this.BOAT_FEE_MULTIPLIER +
 											"\n------------------" + 
-											"\nTotal: " + this.selectedBoat.getBoatStorageFee().getAmount() + "$");
+											"\nTotal: " + this.selectedBoat.getBoatStorageFee().getAmount() + "$");*/
 		
-		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
+		/*out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
     	ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
     	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
@@ -275,17 +274,17 @@ public class EmployeeGuiController implements Initializable{
     	}
     	
     	if(!this.cmBoxBoatPaymentMethod.getItems().isEmpty())
-    		this.cmBoxBoatPaymentMethod.getSelectionModel().selectFirst();
+    		this.cmBoxBoatPaymentMethod.getSelectionModel().selectFirst();*/
 	}
 	
-	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
+	/*public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
 		out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat));
     	Response r = (Response)in.readObject();
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
     		this.btnBoatsManagment.fire();
     	}
-	}
+	}*/
 	
 	public void onBtnSelectUser(ActionEvent event) throws Exception {
 		out.writeObject(new Request(Constants.GET_MEMBER_BY_USERNAME, new User(this.cmBoxSelectUser.getValue().toString())));

@@ -179,14 +179,22 @@ public class SQLTranslator {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
 				break;
 			}
+			
 			ArrayList<Boat> boats = new ArrayList<Boat>();
 			for(int i = 0; i < queryResult.size(); i++){
 				Map<String, String> bRes = queryResult.get(i);
-
+				f = new File("images/" + bRes.get("picture"));
+				ext = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+			
+				if(f.exists() && !f.isDirectory()) { 
+					img = Utils.toByteArray(ImageIO.read(f),ext);
+				}else {
+					img = Utils.toByteArray(ImageIO.read(new File("images/generic.jpg")),"jpg");
+				}
 				pDate = LocalDate.parse(bRes.get("payment_date"), dateFormatter);
 				eDate = LocalDate.parse(bRes.get("expiration_date"), dateFormatter);
 				fee = new BoatStorageFee(Integer.parseInt(bRes.get("id")),pDate,eDate,Double.parseDouble(bRes.get("amount")),Integer.parseInt(bRes.get("id_boat")));
-				boat = new Boat(Integer.parseInt(bRes.get("id_boat")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),fee);
+				boat = new Boat(Integer.parseInt(bRes.get("id_boat")),bRes.get("name"),Double.parseDouble(bRes.get("length")),bRes.get("id_member"),bRes.get("picture"),img,fee);
 				boats.add(boat);
 			}
 			response = new Response(Constants.SUCCESS,boats);
