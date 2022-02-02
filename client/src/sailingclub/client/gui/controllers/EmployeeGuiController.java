@@ -249,42 +249,8 @@ public class EmployeeGuiController implements Initializable{
 			this.imgBoatInfo.setImage(new Image("sailingclub/client/gui/images/yatch.jpg"));
 		}
 		
-		/*this.lblBoatPaymentDescription.setText("Lenght: " + this.selectedBoat.getLength() + " mt\nMultiplier: " + this.BOAT_FEE_MULTIPLIER +
-											"\n------------------" + 
-											"\nTotal: " + this.selectedBoat.getBoatStorageFee().getAmount() + "$");*/
 		
-		/*out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
-    	ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
-    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
-    	r = (Response)in.readObject();
-    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
-    	
-    	this.cmBoxBoatPaymentMethod.getItems().clear();
-
-    	for(CreditCard c: creditCards) {
-    		this.cmBoxBoatPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
-    	}
-    	
-    	this.cmBoxBoatPaymentMethod.getItems().add(new Separator());
-    	
-    	for(BankTransfer b: bankTransfers) {
-    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
-    		this.cmBoxBoatPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
-    	}
-    	
-    	if(!this.cmBoxBoatPaymentMethod.getItems().isEmpty())
-    		this.cmBoxBoatPaymentMethod.getSelectionModel().selectFirst();*/
 	}
-	
-	/*public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat));
-    	Response r = (Response)in.readObject();
-    	
-    	if(r.getStatusCode() == Constants.SUCCESS) {
-    		this.btnBoatsManagment.fire();
-    	}
-	}*/
 	
 	public void onBtnSelectUser(ActionEvent event) throws Exception {
 		out.writeObject(new Request(Constants.GET_MEMBER_BY_USERNAME, new User(this.cmBoxSelectUser.getValue().toString())));
