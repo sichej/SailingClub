@@ -3,281 +3,106 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #14274e;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sailingclub.client.gui.controllers.EmployeeGuiController">
    <children>
-      <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-         <children>
-            <AnchorPane fx:id="tabAddBoat" style="-fx-background-color: #fff;">
-               <children>
-                  <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
+      <TabPane style="-fx-background-color: #fff;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+        <tabs>
+          <Tab onSelectionChanged="#onTabRacesSelected" text="Races management">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#OnBtnLoadBoatImgClick" styleClass="menubuttons">
-                           <graphic>
-                              <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/add_image.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
-                        <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="400.0" styleClass="logininput" />
-                        <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#OnBtnInsertBoatClick" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
-                        <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="400.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
-                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
-                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
-                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
-                        <TableColumn fx:id="colRaceParticipants" prefWidth="159.20004272460938" text="Participants" />
-                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children></AnchorPane>
-            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="480.0" spacing="20.0" styleClass="boatbox">
+                        <VBox styleClass="boatbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <HBox prefHeight="166.0" prefWidth="433.0" spacing="15.0">
-                                 <children>
-                                    <ImageView fitHeight="211.0" fitWidth="215.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/employee_sign.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="lblUsername" prefHeight="179.0" prefWidth="218.0" text="User" textFill="#14274e">
-                                       <font>
-                                          <Font name="System Bold Italic" size="40.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="lblUserInfo" prefHeight="121.0" prefWidth="430.0" text="Label">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" prefWidth="435.0" style="-fx-background-color: #14274e;" text="Logout" textFill="WHITE">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
+                              <TableView fx:id="tblRaces" prefHeight="477.0" prefWidth="800.0">
+                                 <columns>
+                                    <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
+                                    <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
+                                    <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
+                                    <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
+                                    <TableColumn fx:id="colSubscriptions" prefWidth="75.0" text="Subscriptions" />
+                                    <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
                            </children>
-                           <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </padding>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="350.0" spacing="20.0">
+                        <VBox alignment="TOP_CENTER" layoutX="646.0" layoutY="64.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label text="Manage Users" textFill="#14274e">
+                              <Label text="Add a new race" textFill="#14274e">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lblMemberPaymentDescription" text="Description">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
+                              <TextField fx:id="txtRaceName" prefHeight="30.0" promptText="Race name" styleClass="logininput" />
+                              <DatePicker fx:id="dtpRaceDate" prefHeight="30.0" prefWidth="285.0" promptText="Race date" styleClass="logininput" />
+                              <Spinner fx:id="spnRacePrice" editable="true" prefHeight="30.0" prefWidth="266.0" styleClass="logininput" />
+                              <Button mnemonicParsing="false" onAction="#onBtnAddRaceClick" prefHeight="30.0" prefWidth="248.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
                                  <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox fx:id="cmBoxSelectUser" prefHeight="30.0" prefWidth="450.0" promptText="Select a User" styleClass="logininput">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <Button fx:id="btnSelectUser" mnemonicParsing="false" onAction="#onBtnSelectUser" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Select" textFill="WHITE">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                              <Label alignment="CENTER" prefHeight="31.0" prefWidth="306.0" text="NOTE: you can pay in advance and one year &#10;will be added to your subscription" textFill="RED" />
-                              <Button fx:id="btnNormalManage" layoutX="20.0" layoutY="149.0" mnemonicParsing="false" onAction="#onBtnNormalManage" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Normal Manage" textFill="WHITE">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                    <Font size="15.0" />
+                                    <Font size="16.0" />
                                  </font>
                               </Button>
                            </children>
                            <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
+                              <Insets left="10.0" right="10.0" top="20.0" />
                            </padding>
                         </VBox>
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <effect>
-                        <DropShadow spread="0.24" />
-                     </effect>
-                  </HBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabBoatOptions" style="-fx-background-color: #fff;">
-               <children>
-                  <HBox alignment="CENTER" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab onSelectionChanged="#onTabMembersSelected" text="Members management">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab text="Boats management">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab onSelectionChanged="#onTabPaymentsTrackingSelected" text="Payment tracking">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox alignment="CENTER" styleClass="boatbox">
-                           <children>
-                              <ImageView fx:id="imgBoatInfo" fitHeight="284.0" fitWidth="436.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/generic.jpg" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="176.0" prefWidth="426.0">
-                                 <children>
-                                    <Label fx:id="lblBoatInfo" prefHeight="150.0" prefWidth="300.0" text="infobox">
-                                       <font>
-                                          <Font name="System Bold" size="17.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="btnDeleteBoat" contentDisplay="TOP" mnemonicParsing="false" onAction="#OnBtnDeleteBoatClick" prefHeight="98.0" prefWidth="134.0" styleClass="openbutton" text="Remove" textAlignment="CENTER" textFill="RED">
-                                       <graphic>
-                                          <ImageView fitHeight="59.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../images/trash.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font size="20.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
+                        <TableView fx:id="tblPayment" layoutX="171.0" layoutY="47.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="colPaymentsAmount" prefWidth="75.0" text="Amount" />
+                            <TableColumn fx:id="colPaymentsFrom" prefWidth="75.0" text="From" />
+                              <TableColumn fx:id="colPaymentsMethod" prefWidth="75.0" text="Method" />
+                              <TableColumn fx:id="colPaymentsDetails" prefWidth="75.0" text="Details" />
+                              <TableColumn fx:id="colPaymentsDate" prefWidth="75.0" text="Date" />
+                              <TableColumn fx:id="colPaymentsPurpose" prefWidth="75.0" text="Purpose" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
                      </children>
-                     <effect>
-                        <DropShadow height="30.0" radius="14.5" spread="0.23" width="30.0" />
-                     </effect>
-                  </HBox>
-               </children>
-            </AnchorPane>
-         </children>
-         <effect>
-            <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
-               <color>
-                  <Color red="0.0784313753247261" green="0.15294118225574493" blue="0.30588236451148987" />
-               </color>
-            </InnerShadow>
-         </effect>
-      </StackPane>
-      <VBox fx:id="vbMenu" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="260.0" spacing="30.0" style="-fx-background-color: #14274e;" visible="false">
-         <effect>
-            <DropShadow radius="32.225" spread="0.17" width="109.9" />
-         </effect>
-         <children>
-            <ImageView fitHeight="101.0" fitWidth="219.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/logo.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="TOP_CENTER" prefHeight="356.0" prefWidth="260.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Button fx:id="btnBoatsManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Boats managment" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnProfileManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Profile managment" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnRaceManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Race management" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-         <padding>
-            <Insets top="20.0" />
-         </padding>
-      </VBox>
-      <Button fx:id="btnToggleMenu" layoutX="2.0" layoutY="4.0" mnemonicParsing="false" onAction="#OnBtnToggleMenuClick" prefHeight="18.0" prefWidth="18.0" styleClass="openbutton">
-         <graphic>
-            <ImageView fx:id="imgBtnToggleMenu" fitHeight="37.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/menu_closed.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Label fx:id="lblTitle" layoutX="286.0" layoutY="5.0" text="Boats management" textFill="WHITE">
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Label layoutX="14.0" layoutY="5.0" text="Employee dashboard" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="25.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="pnlBackdrop" prefHeight="200.0" prefWidth="200.0" styleClass="overlaypane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Label fx:id="lblUserToManage" layoutX="708.0" layoutY="14.0" text=" -" textFill="WHITE">
-         <font>
-            <Font name="System Bold Italic" size="17.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblTextInfo" layoutX="577.0" layoutY="14.0" text="User to manage:" textFill="WHITE">
-         <font>
-            <Font name="System Bold Italic" size="17.0" />
-         </font>
-      </Label>
+      <ComboBox fx:id="cmbSelectedUser" layoutX="562.0" layoutY="10.0" prefHeight="30.0" prefWidth="150.0" styleClass="logininput" AnchorPane.rightAnchor="87.60000000000002" AnchorPane.topAnchor="10.0" />
+      <Button layoutX="731.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" text="Logout" />
    </children>
 </AnchorPane>

@@ -51,6 +51,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import sailingclub.client.gui.fxml.RaceModel;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
@@ -61,6 +62,7 @@ import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 import sailingclub.common.structures.RaceParticipation;
@@ -165,7 +167,6 @@ public class MemberGuiController implements Initializable{
 		this.boatNewImage = null;
 		
 		spnBoatLenght.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-			
 			try { this.boatNewLenght = Double.parseDouble(newValue); }
 			catch(Exception e) {this.boatNewLenght = 0.1;};
 			this.boatFeeNewPrice = boatNewLenght *  this.BOAT_FEE_MULTIPLIER;
@@ -182,7 +183,15 @@ public class MemberGuiController implements Initializable{
 		this.in = in;
 	}
 	
-	public void OnBtnToggleMenuClick(ActionEvent event) throws IOException {
+	public void onStageShow() {
+		try {
+			this.displayBoats();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void onBtnToggleMenuClick(ActionEvent event) throws IOException {
 		
 		if(this.vbMenu.isVisible()) {
 	        imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
@@ -197,7 +206,7 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
-	public void OnBtnMenuClick(ActionEvent event) throws Exception {
+	public void onBtnMenuClick(ActionEvent event) throws Exception {
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		pnlBackdrop.setVisible(false);
@@ -228,7 +237,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void OnBtnBoatsGridClick(Boat clickedBoat) throws IOException, ClassNotFoundException  {
+	private void onBtnBoatsGridClick(Boat clickedBoat) throws IOException, ClassNotFoundException  {
 		this.selectedBoat = clickedBoat;
 		this.tabBoatOptions.toFront();
 		String info = "Boat id: " + this.selectedBoat.getId() + "\n" +
@@ -278,6 +287,13 @@ public class MemberGuiController implements Initializable{
     	Response r = (Response)in.readObject();
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
+    		double amount = this.selectedBoat.getBoatStorageFee().getAmount();
+    		String method = ((String)this.cmBoxBoatPaymentMethod.getValue()).split(" - ")[0];
+    		String details = ((String)this.cmBoxBoatPaymentMethod.getValue()).split(" - ")[1];
+    		
+    		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for storage fee of:\n" + this.selectedBoat.getName());
+    		out.writeObject(new Request(Constants.INSERT, paymentLog));
+    		in.readObject();
     		this.btnBoatsManagment.fire();
     	}
 	}
@@ -289,11 +305,18 @@ public class MemberGuiController implements Initializable{
     	if(r.getStatusCode() == Constants.SUCCESS) {
     		out.writeObject(new Request(Constants.LOGIN, this.loggedUser));
         	this.loggedUser = (User)((Response)in.readObject()).getPayload();
+        	double amount = this.loggedUser.getMembershipFee().getPrice();
+    		String method = ((String)this.cmBoxMemberPaymentMethod.getValue()).split(" - ")[0];
+    		String details = ((String)this.cmBoxMemberPaymentMethod.getValue()).split(" - ")[1];
+    		
+    		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for annual fee of:\n" + this.loggedUser.getName() + " " + this.loggedUser.getSurname());
+    		out.writeObject(new Request(Constants.INSERT, paymentLog));
+    		in.readObject();
     		this.btnProfileManagment.fire();
     	}
 	}
 	
-	public void OnBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
+	public void onBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Risk alert!");
 		alert.setHeaderText("Are you sure you want to remove the boat?");
@@ -389,7 +412,7 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
-	public void OnBtnLoadBoatImgClick(ActionEvent evt) {
+	public void onBtnLoadBoatImgClick(ActionEvent evt) {
 		FileChooser fileChooser = new FileChooser();
 		Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg","*.JPG", "*.JPEG","*.png"));
@@ -400,7 +423,7 @@ public class MemberGuiController implements Initializable{
 		this.imgNewBoat.setImage(new Image(boatNewImage.getAbsolutePath()));
 	}
 	
-	public void OnBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
+	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
 		String boatName = this.txtBoatName.getText();
 		if(boatName.equals("")) return;
 		byte[] img = null;
@@ -480,7 +503,7 @@ public class MemberGuiController implements Initializable{
 		this.tblRaces.setItems(raceModels);
 	}
 	
-	private void OnBtnAddBoatClick() {
+	private void onBtnAddBoatClick() {
 		this.tabAddBoat.toFront();
 		this.txtBoatName.setText("");
 		this.spnBoatLenght.getEditor().setText(Integer.toString(5));
@@ -526,7 +549,7 @@ public class MemberGuiController implements Initializable{
 		    final Boat boat = boats.get(i);
 		    button.setOnAction(event -> {
 				try {
-					OnBtnBoatsGridClick(boat);
+					onBtnBoatsGridClick(boat);
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
@@ -555,7 +578,7 @@ public class MemberGuiController implements Initializable{
 	    AnchorPane.setLeftAnchor(view, 0.0);
 	    AnchorPane.setRightAnchor(view, 0.0);
 	    addBtn.setGraphic(imageLayout);
-	    addBtn.setOnAction(event -> OnBtnAddBoatClick());
+	    addBtn.setOnAction(event -> onBtnAddBoatClick());
 		
 	    System.out.println(col + " " + row);
 	    

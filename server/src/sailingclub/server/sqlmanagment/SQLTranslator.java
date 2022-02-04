@@ -20,6 +20,7 @@ import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
+import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.RaceParticipation;
 import sailingclub.common.structures.BankTransfer;
@@ -35,7 +36,7 @@ public class SQLTranslator {
 		this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	};
 	
-	public String RequestToSQL(Request request) throws RequestToSQLException, IOException {
+	public String requestToSql(Request request) throws RequestToSQLException, IOException {
 		String query = "";
 		Object model = request.getPayload();
 		
@@ -64,8 +65,8 @@ public class SQLTranslator {
 			break;
 			case Constants.LOGIN:
 				User user = (User)model;
-				query += "SELECT * FROM user, membership_fee f WHERE username = '" + user.getUsername() + "' AND password = '" 
-					  + user.getPassword()+ "' AND f.id_member = user.username";
+				query += "SELECT * FROM user LEFT JOIN membership_fee ON membership_fee.id_member = user.username WHERE user.username = '" 
+					  + user.getUsername() + "' AND user.password = '" + user.getPassword()+ "'";
 				break;
 			case Constants.CLOSE_CONNECTION: break;
 			case Constants.GET_BOAT_BY_ID:
@@ -85,9 +86,8 @@ public class SQLTranslator {
 			case Constants.GET_RACES_PARTICIPATIONS:
 				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
-			case Constants.GET_RACES_PARTICIPATIONS_EMP:
-				user = (User)model;
-				query += "SELECT * FROM race r ,race_participation rp WHERE r.id = rp.id_race AND rp.id_member = '" + user.getUsername() + "';";
+			case Constants.GET_RACES_SUB:
+				query += "SELECT count(*) AS subs FROM race_participation rp WHERE rp.id_race = " + (String)model + " GROUP BY rp.id_race;";
 				break;
 			case Constants.PAY_BOAT_STORAGE_FEE:
 				BoatStorageFee bsf = ((Boat)model).getBoatStorageFee();
@@ -121,24 +121,21 @@ public class SQLTranslator {
 				int rid = ((Race)model).getId();
 				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
-			case Constants.GET_SUBSCRIPTED_BOAT_EMP:
-				user = (User)model;
-				rid = ((Race)model).getId();
-				query += "SELECT * FROM race_participation rp WHERE rp.id_race = " + rid + " AND rp.id_member = '" + user.getUsername() + "';";
-				break;
 			case Constants.GET_MEMBERS:
 				query += "SELECT username FROM user WHERE user_type = 'member';";
 				break;
 			case Constants.GET_MEMBER_BY_USERNAME:
-				user = (User)model;
-				query += "SELECT * FROM user, membership_fee f WHERE username = '" + user.getUsername() + "' AND f.id_member = user.username";
+				query += "SELECT * FROM user, membership_fee f WHERE username = '" + (String)model + "' AND f.id_member = user.username";
+				break;
+			case Constants.GET_PAYMENTS:
+				query += "SELECT * FROM payment;";
 				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
 	}
 	
-	public Response SQLToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException, IOException {
+	public Response sqlToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException, IOException {
 		Response response = null;
 		switch(this.lastRequest) {
 		case Constants.INSERT:
@@ -268,7 +265,13 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, bnkt);
 			break;
-		case Constants.GET_RACES_PARTICIPATIONS_EMP:
+		case Constants.GET_RACES_SUB:
+			if(queryResult.isEmpty()) {
+				response = new Response(Constants.BAD_REQUEST, "0");
+				break;
+			}
+			response = new Response(Constants.SUCCESS, queryResult.get(0).get("subs"));
+			break;
 		case Constants.GET_RACES_PARTICIPATIONS:
 			ArrayList<Race> usRaces = new ArrayList<Race>();
 			for(int i = 0; i < queryResult.size(); i++){
@@ -289,7 +292,6 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, members);
 			break;
-		case Constants.GET_SUBSCRIPTED_BOAT_EMP:
 		case Constants.GET_SUBSCRIPTED_BOAT:
 			response = new Response(Constants.SUCCESS, new Boat(Integer.parseInt(queryResult.get(0).get("id_boat"))));
 			break;
@@ -314,9 +316,13 @@ public class SQLTranslator {
 			}
 			
 			Map<String, String> uRes = queryResult.get(0);
-			pmDate = LocalDate.parse(uRes.get("payment_date"), dateFormatter);
-			emDate = LocalDate.parse(uRes.get("expiration_date"), dateFormatter);
-			mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
+			mfee = null;
+			if(uRes.get("id") != null) {
+				pmDate = LocalDate.parse(uRes.get("payment_date"), dateFormatter);
+				emDate = LocalDate.parse(uRes.get("expiration_date"), dateFormatter);
+				mfee = new MembershipFee(Integer.parseInt(uRes.get("id")), pmDate, emDate, Double.parseDouble(uRes.get("price")), uRes.get("id_member"));
+			}
+			
 			user = new User(uRes.get("username"), uRes.get("name"), uRes.get("surname"), uRes.get("address"), uRes.get("fiscal_code"), uRes.get("user_type"), uRes.get("password"),mfee);
 			response = new Response(Constants.SUCCESS, user);
 			this.loggedUser = user;
@@ -327,7 +333,14 @@ public class SQLTranslator {
 			else
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Wrong login!"));
 			break;
-		
+		case Constants.GET_PAYMENTS:
+			ArrayList<Payment> payments = new ArrayList<Payment>();
+			for(Map<String, String> m: queryResult){
+				LocalDate date = LocalDate.parse(m.get("date"), dateFormatter);
+				payments.add(new Payment(Integer.parseInt(m.get("id")), Double.parseDouble(m.get("amount")), m.get("member_id"), m.get("method"), m.get("details"),date, m.get("purpose")));
+			}
+			response = new Response(Constants.SUCCESS, payments);
+			break;
 	}
 		
 		if(response == null) throw new SQLToResponseException();

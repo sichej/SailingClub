@@ -49,12 +49,12 @@ public class ClientHandler implements Runnable {
 					Request request = (Request)in.readObject();  //read the incoming request
 					if(request.getHeader() == Constants.CLOSE_CONNECTION) break;  //if it's a close connection request
 					
-					String query  = this.translator.RequestToSQL(request); //convert the request into a db request
+					String query  = this.translator.requestToSql(request); //convert the request into a db request
 					
 					System.out.println("TRYING TO EXECUTE:\n" + query);
 					
 					List<Map<String, String>> queryResult = this.dbManager.executeSQLStatement(query);  //execute the query
-					response = this.translator.SQLToResponse(queryResult); //translate the query result into a java response object
+					response = this.translator.sqlToResponse(queryResult); //translate the query result into a java response object
 				}catch(RequestToSQLException rtse) {  //in case of bad request
 					rtse.printStackTrace();
 					response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Bad request"));

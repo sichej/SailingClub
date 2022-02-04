@@ -24,38 +24,6 @@
    <children>
       <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <AnchorPane fx:id="tabAddBoat" style="-fx-background-color: #fff;">
-               <children>
-                  <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#OnBtnLoadBoatImgClick" styleClass="menubuttons">
-                           <graphic>
-                              <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/add_image.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
-                        <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="400.0" styleClass="logininput" />
-                        <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#OnBtnInsertBoatClick" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
-                        <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="400.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -138,6 +106,54 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="tabAddBoat" style="-fx-background-color: #fff;">
+               <children>
+                  <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#onBtnLoadBoatImgClick" styleClass="menubuttons">
+                           <graphic>
+                              <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/add_image.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
+                        <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="400.0" styleClass="logininput" />
+                        <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#onBtnInsertBoatClick" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="400.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
+                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
+                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
+                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
+                        <TableColumn fx:id="colRaceBoat" prefWidth="159.20004272460938" text="Boat" />
+                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children></AnchorPane>
             <AnchorPane fx:id="tabBoatOptions" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -156,7 +172,7 @@
                                           <Font name="System Bold" size="17.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="btnDeleteBoat" contentDisplay="TOP" mnemonicParsing="false" onAction="#OnBtnDeleteBoatClick" prefHeight="98.0" prefWidth="134.0" styleClass="openbutton" text="Remove" textAlignment="CENTER" textFill="RED">
+                                    <Button fx:id="btnDeleteBoat" contentDisplay="TOP" mnemonicParsing="false" onAction="#onBtnDeleteBoatClick" prefHeight="98.0" prefWidth="134.0" styleClass="openbutton" text="Remove" textAlignment="CENTER" textFill="RED">
                                        <graphic>
                                           <ImageView fitHeight="59.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -214,22 +230,6 @@
                   <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="72.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
-                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
-                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
-                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
-                        <TableColumn fx:id="colRaceBoat" prefWidth="159.20004272460938" text="Boat" />
-                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children></AnchorPane>
          </children>
          <effect>
             <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">
@@ -251,17 +251,17 @@
             </ImageView>
             <VBox alignment="TOP_CENTER" prefHeight="356.0" prefWidth="260.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <Button fx:id="btnBoatsManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Boats managment" textAlignment="CENTER">
+                  <Button fx:id="btnBoatsManagment" mnemonicParsing="false" onAction="#onBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Boats managment" textAlignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnProfileManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Profile managment" textAlignment="CENTER">
+                  <Button fx:id="btnProfileManagment" mnemonicParsing="false" onAction="#onBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Profile managment" textAlignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnRaceManagment" mnemonicParsing="false" onAction="#OnBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Race management" textAlignment="CENTER">
+                  <Button fx:id="btnRaceManagment" mnemonicParsing="false" onAction="#onBtnMenuClick" prefHeight="58.0" prefWidth="260.0" styleClass="menubuttons" text="Race management" textAlignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -273,7 +273,7 @@
             <Insets top="20.0" />
          </padding>
       </VBox>
-      <Button fx:id="btnToggleMenu" layoutX="2.0" layoutY="4.0" mnemonicParsing="false" onAction="#OnBtnToggleMenuClick" prefHeight="18.0" prefWidth="18.0" styleClass="openbutton">
+      <Button fx:id="btnToggleMenu" layoutX="2.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtnToggleMenuClick" prefHeight="18.0" prefWidth="18.0" styleClass="openbutton">
          <graphic>
             <ImageView fx:id="imgBtnToggleMenu" fitHeight="37.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -16,6 +16,7 @@ public class RaceModel {
 	private SimpleDoubleProperty racePrice;
 	private Button btnAction;
 	private ComboBox<String> cmbBoat;
+	private SimpleIntegerProperty subs;
 	
 	public RaceModel(Race race, Button btnAction, ComboBox<String> cmbBoat) {
 		this.raceId = new SimpleIntegerProperty(Integer.valueOf(race.getId()));
@@ -26,12 +27,13 @@ public class RaceModel {
 		this.cmbBoat = cmbBoat;
 	}
 	
-	public RaceModel(Race race, Button btnAction) {
+	public RaceModel(Race race, Button btnAction, Integer subs) {
 		this.raceId = new SimpleIntegerProperty(Integer.valueOf(race.getId()));
 		this.raceName = new SimpleStringProperty(race.getName());
 		this.raceDate = race.getDate();
 		this.racePrice = new SimpleDoubleProperty(Double.valueOf(race.getPrice()));
 		this.btnAction = btnAction;
+		this.subs = new SimpleIntegerProperty(Integer.valueOf(subs));
 	}
 
 	public int getRaceId() {
@@ -81,6 +83,12 @@ public class RaceModel {
 	public void setCmbBoat(ComboBox<String> cmbBoat) {
 		this.cmbBoat = cmbBoat;
 	}
-	
-	
+
+	public int getSubs() {
+		return subs.get();
+	}
+
+	public void setSubs(int subs) {
+		this.subs.set(subs);
+	}
 }

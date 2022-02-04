@@ -3,8 +3,9 @@ package sailingclub.common.structures;
 import java.io.Serializable;
 import java.time.LocalDate;
 import sailingclub.common.Insertable;
+import sailingclub.common.Removable;
 
-public class Race implements Insertable, Serializable{
+public class Race implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private LocalDate date;
@@ -47,5 +48,10 @@ public class Race implements Insertable, Serializable{
 	@Override
 	public String getPk() {
 		return "id";
+	}
+
+	@Override
+	public String getPkValue() {
+		return Integer.toString(this.getId());
 	}
 }

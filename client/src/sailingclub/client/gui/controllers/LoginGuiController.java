@@ -1,5 +1,6 @@
 package sailingclub.client.gui.controllers;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.event.ActionEvent;
@@ -53,6 +54,9 @@ public class LoginGuiController{
     		FXMLLoader loader = new FXMLLoader(getClass().getResource(gui));
     		Parent userGui = loader.load();
     		Object controller = loader.getController();
+    		Scene scene = new Scene(userGui);
+    		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
+    		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
     		
     		if(this.loggedUser.getUserType().equals("member")) {
     			((MemberGuiController)controller).setStreams(this.out, this.in);
@@ -62,13 +66,14 @@ public class LoginGuiController{
     			((EmployeeGuiController)controller).setLoggedUser(this.loggedUser);
     		}
     		
-    		Scene scene = new Scene(userGui);
-    		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
-    		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
     		stage.setTitle(this.loggedUser.getUsername() + " - DASHBOARD'S");
     		stage.setScene(scene);
     		stage.centerOnScreen();
     		stage.show();
+    		
+    		if(this.loggedUser.getUserType().equals("member")) ((MemberGuiController)controller).onStageShow();
+    		else if(this.loggedUser.getUserType().equals("employee")) ((EmployeeGuiController)controller).onStageShow();
+ 
     	}else if(r.getStatusCode() == Constants.BAD_REQUEST) {
     		System.out.println("WRONG USER OR PASSWORD " + r.getPayload());
     	}else if(r.getStatusCode() == Constants.INTERNAL_SERVER_ERROR) {

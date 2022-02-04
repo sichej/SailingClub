@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import sailingclub.client.gui.controllers.LoginGuiController;
@@ -12,6 +14,7 @@ import sailingclub.common.Request;
 import sailingclub.common.structures.EmptyPayload;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.fxml.*;
 
 /**
@@ -23,7 +26,17 @@ public class Client extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket socket = new Socket("localhost", 12345);
+			Socket socket = null;
+			Scanner scan = new Scanner(System.in);
+			do {
+				try {
+					System.out.print("\nChecking connection to the server...!");
+					socket = new Socket("localhost", 12345);
+				}catch(Exception e) {
+					System.out.print("\nServer offline...! Press any key to retry [KEY]");
+					scan.next();
+				}
+			}while(socket == null);
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
@@ -33,12 +46,13 @@ public class Client extends Application {
 			controller.setStreams(out, in);
 			Scene scene = new Scene(gui);
 			scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
-			// primaryStage.getIcons().add(new Image("eshop/gui/css/appico.png"));
+			primaryStage.getIcons().add(new Image("sailingclub/client/gui/images/appico.png"));
 
+			final Socket fSock = socket;
 			primaryStage.setOnCloseRequest(event -> {
 				try {
 					out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
-					socket.close();
+					fSock.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

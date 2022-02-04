@@ -16,14 +16,14 @@ public class Constants {
 	public static final int GET_CREDIT_CARDS = 13;
 	public static final int GET_BANK_TRANSFERS = 14;
 	public static final int GET_SUBSCRIPTED_BOAT = 15;
-
+	
 	// Constants for emp
 	public static final int GET_MEMBERS = 16;
 	public static final int GET_MEMBER_BY_USERNAME = 17;
-	public static final int GET_RACES_PARTICIPATIONS_EMP = 18;
+	public static final int GET_RACES_SUB = 18;
 	public static final int GET_BOATS_EMP = 19;
-	public static final int GET_SUBSCRIPTED_BOAT_EMP = 20;
 	public static final int GET_ALL_BOATS_EMP = 21;
+	public static final int GET_PAYMENTS = 22;
 	
 	public static final int SUCCESS = 200;
 	public static final int BAD_REQUEST = 400;
