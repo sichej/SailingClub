@@ -209,27 +209,27 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabRaceManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="34.0" prefHeight="416.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tblRaces" layoutX="74.0" layoutY="34.0" prefHeight="416.0" prefWidth="800.0" styleClass="tbAlignement" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" text="Id" />
-                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" text="Name" />
-                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" text="Date" />
-                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" text="Price" />
-                        <TableColumn fx:id="colRaceBoat" prefWidth="159.20004272460938" text="Boat" />
-                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" text="Action" />
+                      <TableColumn fx:id="colRaceId" prefWidth="104.79998934268951" styleClass="tbAlignement" text="Id" />
+                      <TableColumn fx:id="colRaceName" prefWidth="162.39998626708984" styleClass="tbAlignement" text="Name" />
+                        <TableColumn fx:id="colRaceDate" prefWidth="75.0" styleClass="tbAlignement" text="Date" />
+                        <TableColumn fx:id="colRacePrice" prefWidth="108.0" styleClass="tbAlignement" text="Price" />
+                        <TableColumn fx:id="colRaceBoat" prefWidth="159.20004272460938" styleClass="tbAlignement" text="Boat" />
+                        <TableColumn fx:id="colRaceAction" prefWidth="75.0" styleClass="tbAlignement" text="Action" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
                </children></AnchorPane>
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
          <effect>
             <InnerShadow choke="0.27" height="39.75" radius="9.4375" width="0.0">

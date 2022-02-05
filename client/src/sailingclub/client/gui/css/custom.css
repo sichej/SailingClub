@@ -49,3 +49,7 @@
   -fx-border-color: #14274e;
   -fx-border-radius: 5px;
 }
+
+.tbAlignement {
+  -fx-alignment: CENTER;
+}

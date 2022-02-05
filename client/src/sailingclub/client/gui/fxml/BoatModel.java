@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Button;
 import sailingclub.common.structures.Boat;
 
 public class BoatModel {
@@ -13,6 +14,7 @@ public class BoatModel {
 	private SimpleStringProperty boatOwner;
 	private LocalDate boatFeeExpDate;
 	private SimpleDoubleProperty boatFeeAmount;
+	private Button btnNotify;
 	
 	public BoatModel(Boat b) {
 		this.boatId = new SimpleIntegerProperty(Integer.valueOf(b.getId()));
@@ -21,6 +23,21 @@ public class BoatModel {
 		this.boatFeeExpDate = b.getBoatStorageFee().getExpirationDate();
 		this.boatFeeAmount = new SimpleDoubleProperty(Double.valueOf(b.getBoatStorageFee().getAmount()));
 		this.boatOwner = new SimpleStringProperty(b.getIdMember());
+	}
+	
+	public BoatModel(Boat b, Button btnNotify) {
+		this.boatId = new SimpleIntegerProperty(Integer.valueOf(b.getId()));
+		this.boatName = new SimpleStringProperty(b.getName());
+		this.boatFeeExpDate = b.getBoatStorageFee().getExpirationDate();
+		this.btnNotify = btnNotify;
+	}
+	
+	public Button getBtnNotify() {
+		return btnNotify;
+	}
+
+	public void setBtnNotify(Button btnNotify) {
+		this.btnNotify = btnNotify;
 	}
 
 	public int getBoatId() {

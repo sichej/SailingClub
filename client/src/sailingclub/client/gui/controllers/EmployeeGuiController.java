@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
@@ -26,6 +27,8 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import sailingclub.client.gui.fxml.BoatModel;
 import sailingclub.client.gui.fxml.PaymentModel;
@@ -41,12 +44,16 @@ import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
 public class EmployeeGuiController implements Initializable{
+	private final int BOAT_NOTIFICATION = 0;
+	private final int MEMBERSHIP_NOTIFICATION = 1;
+	private final double BTN_NOTIFY_MAX_W = 50;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private User loggedUser;
-	private User userToManage;
+	private User userFilter;
 	private Race selectedRace;
 	private Boat selectedBoat;
+	private User selectedMember;
 	private ObservableList<RaceModel> raceModels;
 	private ObservableList<PaymentModel> paymentsModels;
 	private ObservableList<BoatModel> boatsModels;
@@ -70,9 +77,6 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private DatePicker dtpRaceDate;
 	@FXML private Spinner<Double> spnRacePrice;
 	@FXML private Label lblSelectedRace;
-	@FXML private TextField txtRaceNameUR;
-	@FXML private DatePicker dtpRaceDateUR;
-	@FXML private Spinner<Double> spnRacePriceUR;
 	@FXML private TableView<BoatModel> tblBoats;
 	@FXML private TableColumn<BoatModel, Integer> colBoatId;
 	@FXML private TableColumn<BoatModel, String> colBoatName;
@@ -85,7 +89,17 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private DatePicker dtpBoatFeeExpDate;
 	@FXML private Spinner<Double> spnBoatFeeAmount;
 	@FXML private Label lblSelectedBoat;
-
+	@FXML private TableView<BoatModel> tblMemberBoatNotifications;
+	@FXML private TableColumn<BoatModel, String> colMemberBoatName;
+	@FXML private TableColumn<BoatModel, LocalDate> colMemberBoatFee;
+	@FXML private TableColumn<BoatModel, Button> colMemberBoatNotify;
+	@FXML private TextField txtUsername;
+	@FXML private PasswordField txtNewPassword;
+	@FXML private TextField txtName;
+	@FXML private TextField txtSurname;
+	@FXML private TextField txtAddress;
+	@FXML private TextField txtFiscalCode;
+	@FXML private Label lblSelectedMember;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -109,9 +123,9 @@ public class EmployeeGuiController implements Initializable{
 		    row.setOnMouseClicked(event -> {
 		        if (! row.isEmpty()) {
 		        	RaceModel rowData = row.getItem();
-		            this.txtRaceNameUR.setText(rowData.getRaceName());
-		            this.spnRacePriceUR.getEditor().setText(Double.toString(rowData.getRacePrice()));
-		            this.dtpRaceDateUR.setValue(rowData.getRaceDate());
+		            this.txtRaceName.setText(rowData.getRaceName());
+		            this.spnRacePrice.getEditor().setText(Double.toString(rowData.getRacePrice()));
+		            this.dtpRaceDate.setValue(rowData.getRaceDate());
 		            this.lblSelectedRace.setText("Selected race id: " + rowData.getRaceId());
 		            this.selectedRace = new Race(rowData.getRaceId(),rowData.getRaceDate(), rowData.getRacePrice(), rowData.getRaceName());
 		        }
@@ -148,11 +162,17 @@ public class EmployeeGuiController implements Initializable{
 		this.colPaymentsDate.setCellValueFactory(new PropertyValueFactory<PaymentModel,LocalDate>("date"));
 		this.colPaymentsPurpose.setCellValueFactory(new PropertyValueFactory<PaymentModel,String>("purpose"));
 
+		this.colMemberBoatFee.setCellValueFactory(new PropertyValueFactory<BoatModel,LocalDate>("boatFeeExpDate"));
+		this.colMemberBoatName.setCellValueFactory(new PropertyValueFactory<BoatModel,String>("boatName"));
+		this.colMemberBoatNotify.setCellValueFactory(new PropertyValueFactory<BoatModel,Button>("btnNotify"));
 		
 		SpinnerValueFactory<Double> spnFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(50, 99999999, 10);
-		SpinnerValueFactory<Double> spnFactoryUR = new SpinnerValueFactory.DoubleSpinnerValueFactory(50, 99999999, 10);
 		this.spnRacePrice.setValueFactory(spnFactory);
-		this.spnRacePriceUR.setValueFactory(spnFactoryUR);
+		
+		SpinnerValueFactory<Double> spnFactoryLength = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 99999999, 10);
+		this.spnBoatLength.setValueFactory(spnFactoryLength);
+		SpinnerValueFactory<Double> spnFactoryPrice = new SpinnerValueFactory.DoubleSpinnerValueFactory(10, 99999999, 10);
+		this.spnBoatFeeAmount.setValueFactory(spnFactoryPrice);
 	}
 	
 	public void onTabRacesSelected() {
@@ -167,6 +187,11 @@ public class EmployeeGuiController implements Initializable{
 	
 	public void onTabMembersSelected() {
 		this.cmbSelectedUser.setVisible(true);
+		try {
+			displayMemberBoats();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void onTabPaymentsTrackingSelected() {
@@ -211,6 +236,14 @@ public class EmployeeGuiController implements Initializable{
 		stage.show();
 	}
 	
+	public void onBtnUpdateMemberClick(ActionEvent event) {
+		
+	}
+	
+	public void onBtnAddMemberClick(ActionEvent event) {
+		
+	}
+	
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
 		out.writeObject(new Request(Constants.GET_BOAT_BY_ID, this.selectedBoat));
     	Response r = (Response)in.readObject();
@@ -225,12 +258,35 @@ public class EmployeeGuiController implements Initializable{
     	r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
-    	txtBoatName.setText("");
-    	spnBoatLength.getEditor().setText("50");
-    	dtpBoatFeeExpDate.setValue(null);
-    	spnBoatFeeAmount.getEditor().setText("50");
-    	lblSelectedBoat.setText("Select a boat");
+    	this.onBtnClearBoatClick(null);
     	displayBoats();
+	}
+	
+	private void sendNotification(User user, int notificationType) {
+		System.out.println("Send notification to: " + user.getUsername() + " of type " + notificationType);
+	}
+	
+	private void displayMemberBoats() throws Exception{
+		out.writeObject(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
+    	this.boatsModels = FXCollections.observableArrayList();
+    	
+    	for(Boat b: boats) {
+    		Button btnNotify = new Button();
+    		ImageView btnGraphic = new ImageView(new Image("sailingclub/client/gui/images/notification.png"));
+    		btnGraphic.setFitWidth(BTN_NOTIFY_MAX_W);
+    		btnGraphic.setPreserveRatio(true);
+    		btnNotify.setGraphic(btnGraphic);
+    		btnNotify.getStyleClass().add("openbutton");
+    		btnNotify.setOnAction(event -> this.sendNotification(this.userFilter, this.BOAT_NOTIFICATION));
+    		if(b.getIdMember().equals(this.userFilter.getUsername()))
+    			this.boatsModels.add(new BoatModel(b, btnNotify));
+    	}
+    	
+    	this.tblMemberBoatNotifications.setItems(boatsModels);
 	}
 	
 	private void displayBoats() throws Exception{
@@ -248,15 +304,39 @@ public class EmployeeGuiController implements Initializable{
     	this.tblBoats.setItems(boatsModels);
 	}
 	
+	public void onBtnClearRace(ActionEvent event) {
+    	this.txtRaceName.clear();
+        this.spnRacePrice.getEditor().setText("50");
+        this.dtpRaceDate.setValue(null);
+        this.lblSelectedRace.setText("");
+        this.selectedRace = null;
+	}
+	
+	public void onBtnClearMemberClick(ActionEvent event) {
+		txtUsername.setText("");
+		txtNewPassword.setText("");
+		txtName.setText("");
+		txtSurname.setText("");
+		txtAddress.setText("");
+		txtFiscalCode.setText("");
+		lblSelectedMember.setText("");
+		this.selectedMember = null;
+	}
+	
+	public void onBtnClearBoatClick(ActionEvent event) {
+    	txtBoatName.setText("");
+    	spnBoatLength.getEditor().setText("50");
+    	dtpBoatFeeExpDate.setValue(null);
+    	spnBoatFeeAmount.getEditor().setText("50");
+    	lblSelectedBoat.setText("");
+    	this.selectedBoat = null;
+	}
+	
 	public void onBtnUpdateRaceClick(ActionEvent event) throws Exception{
-		Race upRace = new Race(this.selectedRace.getId(),this.dtpRaceDateUR.getValue(), Double.parseDouble(this.spnRacePriceUR.getEditor().getText()), this.txtRaceNameUR.getText());
+		Race upRace = new Race(this.selectedRace.getId(),this.dtpRaceDate.getValue(), Double.parseDouble(this.spnRacePrice.getEditor().getText()), this.txtRaceName.getText());
 		out.writeObject(new Request(Constants.UPDATE_RACE, upRace));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
-    	this.txtRaceNameUR.clear();
-        this.spnRacePriceUR.getEditor().setText("50");
-        this.dtpRaceDateUR.setValue(null);
-        this.lblSelectedRace.setText("");
         this.displayRaces();
 	}	
 	
@@ -267,9 +347,7 @@ public class EmployeeGuiController implements Initializable{
 		out.writeObject(new Request(Constants.INSERT, new Race(rDate,rPrice,rName)));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
-    	this.txtRaceName.setText("");
-    	this.dtpRaceDate.setValue(null);
-    	this.spnRacePrice.getEditor().setText("50");
+    	this.onBtnClearRace(null);
     	this.displayRaces();
 	}
 
@@ -297,7 +375,8 @@ public class EmployeeGuiController implements Initializable{
 			out.writeObject(new Request(Constants.GET_MEMBER_BY_USERNAME, selectedUser));
 	    	Response r = (Response)in.readObject();
 	    	if(r.getStatusCode() != Constants.SUCCESS) return;
-			this.userToManage = (User)r.getPayload();
+			this.userFilter = (User)r.getPayload();
+			displayMemberBoats();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
