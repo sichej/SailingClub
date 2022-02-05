@@ -106,11 +106,7 @@ public class SQLTranslator {
 			case Constants.GET_BOATS:
 				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + this.loggedUser.getUsername() + "' ;";
 				break;
-			case Constants.GET_BOATS_EMP:
-				user = (User)model;
-				query += "SELECT * FROM boat_storage_fee bs, boat bt WHERE bt.id = bs.id_boat AND id_member = '" + user.getUsername() + "' ;";
-				break;
-			case Constants.GET_ALL_BOATS_EMP:
+			case Constants.GET_ALL_BOATS:
 				query += "SELECT * FROM boat_storage_fee bs, boat b WHERE bs.id_boat = b.id;";
 				break;
 			case Constants.LOGOUT:
@@ -129,6 +125,17 @@ public class SQLTranslator {
 				break;
 			case Constants.GET_PAYMENTS:
 				query += "SELECT * FROM payment;";
+				break;
+			case Constants.UPDATE_RACE:
+				Race race = ((Race)model);
+				query += "UPDATE race SET date='" + race.getDate().toString() + "', price = " + race.getPrice() + ", name = '" + 
+						  race.getName() + "' WHERE id = " + race.getId() + ";";
+				break;
+			case Constants.UPDATE_BOAT:
+				Boat uBoat = ((Boat)model);
+				BoatStorageFee uBsf = ((Boat)model).getBoatStorageFee();
+				query += "UPDATE boat SET name='" + uBoat.getName() + "', length = " + uBoat.getLength() + "WHERE id = " + uBoat.getId() + ";";
+				query += "UPDATE boat_storage_fee SET expiration_date='" + uBsf.getExpirationDate().toString() + "', amount = " + uBsf.getAmount() + "WHERE id = " + uBsf.getId() + ";";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -171,7 +178,7 @@ public class SQLTranslator {
 			Boat boat = new Boat(Integer.parseInt(fRes.get("id_boat")),fRes.get("name"),Double.parseDouble(fRes.get("length")),fRes.get("id_member"),fRes.get("picture"),img,fee);
 			response = new Response(Constants.SUCCESS,boat);
 			break;
-		case Constants.GET_ALL_BOATS_EMP:
+		case Constants.GET_ALL_BOATS:
 			if(queryResult.isEmpty()) {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
 				break;
@@ -196,7 +203,6 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS,boats);
 			break;
-		case Constants.GET_BOATS_EMP:
 		case Constants.GET_BOATS:
 			if(queryResult.isEmpty()) {
 				response = new Response(Constants.BAD_REQUEST, new EmptyPayload("Boat not found!"));
@@ -341,8 +347,11 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, payments);
 			break;
-	}
-		
+		case Constants.UPDATE_RACE:
+		case Constants.UPDATE_BOAT:
+			response = new Response(Constants.SUCCESS, new EmptyPayload("Updated"));
+			break;
+		}
 		if(response == null) throw new SQLToResponseException();
 		
 		return response;

@@ -20,7 +20,6 @@ public class BoatStorageFee implements Insertable, Serializable{
 		this.amount = amount;
 		this.idBoat = idBoat;
 	}
-	
 	public BoatStorageFee(LocalDate paymentDate, LocalDate expirationDate, double amount, int idBoat) {
 		this.paymentDate = paymentDate;
 		this.expirationDate = expirationDate;

@@ -125,6 +125,7 @@ public class MemberGuiController implements Initializable{
 	@FXML private ImageView imgNewBoat;
 	@FXML private ComboBox<Object> cmBoxBoatPaymentMethod;
 	@FXML private ComboBox<Object> cmBoxMemberPaymentMethod;
+	@FXML private ComboBox<Object> cmBoxRacePaymentMethod; 
 	@FXML private Button btnPayBoatStorageFee;
 	@FXML private Label lblBoatPaymentDescription;
 	@FXML private Label lblMemberPaymentDescription;
@@ -134,7 +135,7 @@ public class MemberGuiController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		raceModels =  FXCollections.observableArrayList();
-		
+		this.cmBoxRacePaymentMethod.setVisible(false);
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		this.btnTabAssoc = new HashMap<String,String>();
 		this.btnTabAssoc.put("btnProfileManagment", "tabProfileManagment");
@@ -203,7 +204,6 @@ public class MemberGuiController implements Initializable{
 	        pnlBackdrop.setVisible(true);
 			vbMenu.setVisible(true);
 		}
-		
 	}
 	
 	public void onBtnMenuClick(ActionEvent event) throws Exception {
@@ -215,12 +215,15 @@ public class MemberGuiController implements Initializable{
 		String tab = this.btnTabAssoc.get(pressedBtn);
 		
 		if (tab.toString().equals("tabBoatsManagment")) {
+			this.cmBoxRacePaymentMethod.setVisible(false);
 			displayBoats();
 			this.lblTitle.setText("Boats management");
 		}else if(tab.toString().equals("tabProfileManagment")) {
+			this.cmBoxRacePaymentMethod.setVisible(false);
 			this.lblTitle.setText("Profile management");
 			displayInfo();
 		}else if(tab.toString().equals("tabRaceManagment")){
+			this.cmBoxRacePaymentMethod.setVisible(true);
 			this.lblTitle.setText("Race management");
 			displayRaces();
 		}
@@ -237,7 +240,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void onBtnBoatsGridClick(Boat clickedBoat) throws IOException, ClassNotFoundException  {
+	private void onBtnBoatsGridClick(Boat clickedBoat) throws Exception  {
 		this.selectedBoat = clickedBoat;
 		this.tabBoatOptions.toFront();
 		String info = "Boat id: " + this.selectedBoat.getId() + "\n" +
@@ -258,28 +261,7 @@ public class MemberGuiController implements Initializable{
 											"\n------------------" + 
 											"\nTotal: " + this.selectedBoat.getBoatStorageFee().getAmount() + "$");
 		
-		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
-    	ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
-    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
-    	r = (Response)in.readObject();
-    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
-    	
-    	this.cmBoxBoatPaymentMethod.getItems().clear();
-
-    	for(CreditCard c: creditCards) {
-    		this.cmBoxBoatPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
-    	}
-    	
-    	this.cmBoxBoatPaymentMethod.getItems().add(new Separator());
-    	
-    	for(BankTransfer b: bankTransfers) {
-    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
-    		this.cmBoxBoatPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
-    	}
-    	
-    	if(!this.cmBoxBoatPaymentMethod.getItems().isEmpty())
-    		this.cmBoxBoatPaymentMethod.getSelectionModel().selectFirst();
+		this.fillCmbPayments(this.cmBoxBoatPaymentMethod);
 	}
 	
 	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
@@ -352,7 +334,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void displayInfo() throws IOException, ClassNotFoundException {
+	private void displayInfo() throws Exception {
 		String userInfo = this.loggedUser.getUsername() + "'s info:\n" + 
 						"Name:" + this.loggedUser.getName() + " Surname: " + this.loggedUser.getSurname() + 
 						"\nAddress: " + this.loggedUser.getAddress() + "\nFiscal code: " + this.loggedUser.getFiscalCode() +
@@ -365,38 +347,25 @@ public class MemberGuiController implements Initializable{
 		
 		this.lblUsername.setText(this.loggedUser.getUsername());
 		
-		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
-		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
-    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
-    	r = (Response)in.readObject();
-    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
-    	
-    	this.cmBoxMemberPaymentMethod.getItems().clear();
-
-    	for(CreditCard c: creditCards) {
-    		this.cmBoxMemberPaymentMethod.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
-    	}
-    	
-    	this.cmBoxMemberPaymentMethod.getItems().add(new Separator());
-    	
-    	for(BankTransfer b: bankTransfers) {
-    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
-    		this.cmBoxMemberPaymentMethod.getItems().add(b.getBank() + " - " + shortedIban);
-    	}
-    	
-    	if(!this.cmBoxMemberPaymentMethod.getItems().isEmpty())
-    		this.cmBoxMemberPaymentMethod.getSelectionModel().selectFirst();
+		this.fillCmbPayments(this.cmBoxMemberPaymentMethod);
 	}
 	
-	private void onBtnRaceActionClick(Button clickedBtn, ComboBox<String> cmb) {
-		int raceId = Integer.parseInt(clickedBtn.getId());
+	private void onBtnRaceActionClick(Race race, Button clickedBtn, ComboBox<String> cmb) {
+		int raceId = race.getId();
 		String raceState = clickedBtn.getText();
 		
 		try {
 			if(raceState.equals(this.NOT_REGISTERED_STATE)) {	//subscription request
 				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername(),Integer.parseInt(cmb.getValue().split(" - ")[1]));
 				out.writeObject(new Request(Constants.INSERT, subscription));
+				
+				double amount = race.getPrice();
+	    		String method = ((String)this.cmBoxRacePaymentMethod.getValue()).split(" - ")[0];
+	    		String details = ((String)this.cmBoxRacePaymentMethod.getValue()).split(" - ")[1];
+	    		
+	    		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for the subscription to:\n" + race.getName());
+	    		out.writeObject(new Request(Constants.INSERT, paymentLog));
+	    		in.readObject();
 			}
 			else if(raceState.equals(this.REGISTERED_STATE)) { 		//unsubscribe request
 				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername());
@@ -467,6 +436,8 @@ public class MemberGuiController implements Initializable{
 		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
     	ArrayList<Boat> boats = (ArrayList<Boat>)((Response)in.readObject()).getPayload();
 		
+    	fillCmbPayments(this.cmBoxRacePaymentMethod);
+    	
 		for(int i = 0; i < allRaces.size(); i++) {
 			Button btnAction = new Button();
 			ComboBox<String> cmb = new ComboBox<String>();
@@ -476,7 +447,8 @@ public class MemberGuiController implements Initializable{
 			
 			cmb.getSelectionModel().selectFirst();
 			btnAction.setText(this.NOT_REGISTERED_STATE);
-			btnAction.setOnAction(event -> onBtnRaceActionClick(btnAction, cmb));
+			final Race rAtIndex = allRaces.get(i);
+			btnAction.setOnAction(event -> onBtnRaceActionClick(rAtIndex,btnAction, cmb));
 						
 			for(int j = 0; j < userRaces.size(); j++) {
 				if(userRaces.get(j).getId() == allRaces.get(i).getId()) {  //se  sono registrato
@@ -487,7 +459,7 @@ public class MemberGuiController implements Initializable{
 						if(cmb.getItems().get(k).split(" - ")[1].equals(indexId))
 							cmb.getSelectionModel().select(k);
 					cmb.setDisable(true);
-					btnAction.setOnAction(event -> onBtnRaceActionClick(btnAction, cmb));
+					btnAction.setOnAction(event -> onBtnRaceActionClick(rAtIndex,btnAction, cmb));
 					break;
 				}
 			}
@@ -550,7 +522,7 @@ public class MemberGuiController implements Initializable{
 		    button.setOnAction(event -> {
 				try {
 					onBtnBoatsGridClick(boat);
-				} catch (ClassNotFoundException | IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
@@ -585,5 +557,30 @@ public class MemberGuiController implements Initializable{
 		this.grdBoats.add(addBtn,col, row);
 		
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
+	}
+	
+	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
+		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
+    	Response r = (Response)in.readObject();
+		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
+    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
+    	r = (Response)in.readObject();
+    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
+    	
+    	cmb.getItems().clear();
+
+    	for(CreditCard c: creditCards) {
+    		cmb.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
+    	}
+    	
+    	cmb.getItems().add(new Separator());
+    	
+    	for(BankTransfer b: bankTransfers) {
+    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
+    		cmb.getItems().add(b.getBank() + " - " + shortedIban);
+    	}
+    	
+    	if(!cmb.getItems().isEmpty())
+    		cmb.getSelectionModel().selectFirst();
 	}
 }
