@@ -32,7 +32,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
@@ -40,6 +42,8 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -88,6 +92,7 @@ public class MemberGuiController implements Initializable{
 	private double boatFeeNewPrice;
 	private double boatNewLenght;
 	private File boatNewImage;
+	private ToggleGroup toggleGroup;
 	
 	@FXML private Button btnToggleMenu;
 	@FXML private VBox vbMenu;
@@ -131,6 +136,11 @@ public class MemberGuiController implements Initializable{
 	@FXML private Label lblMemberPaymentDescription;
 	@FXML private Button btnPayMembershipFee;
 	@FXML private Label lblUsername;
+	@FXML private RadioButton radCard;
+	@FXML private RadioButton radBank;
+	@FXML private DatePicker dtpCardExpDate;
+	@FXML private TextField txtPaymentFirstAttribute;
+	@FXML private TextField txtPaymentSecondAttribute;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -173,6 +183,11 @@ public class MemberGuiController implements Initializable{
 			this.boatFeeNewPrice = boatNewLenght *  this.BOAT_FEE_MULTIPLIER;
 			this.lblFeeAmount.setText("Storage fee amount: " + this.boatFeeNewPrice);
 	    });
+		
+		toggleGroup = new ToggleGroup();
+		this.radBank.setToggleGroup(toggleGroup);
+		this.radCard.setToggleGroup(toggleGroup);
+		toggleGroup.selectedToggleProperty().addListener((event,oldv,newv) -> this.onRadPaymentMethodClick((RadioButton)newv));
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -381,6 +396,36 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	public void onRadPaymentMethodClick(RadioButton sel) {
+		this.txtPaymentFirstAttribute.setText("");
+		this.txtPaymentSecondAttribute.setText("");
+		this.dtpCardExpDate.setValue(null);
+		if(sel == this.radBank) {
+			this.dtpCardExpDate.setVisible(false);
+			this.txtPaymentFirstAttribute.setPromptText("IBAN");
+			this.txtPaymentSecondAttribute.setPromptText("Bank");
+		}else if(sel == this.radCard) {
+			this.dtpCardExpDate.setVisible(true);
+			this.txtPaymentFirstAttribute.setPromptText("Number");
+			this.txtPaymentSecondAttribute.setPromptText("CVV");
+		}
+	}
+	
+	public void onBtnAddPaymentMethod(ActionEvent evt) throws Exception{
+		if(this.radCard == (RadioButton)this.toggleGroup.getSelectedToggle()) {
+			String number = this.txtPaymentFirstAttribute.getText();
+			int cvv = Integer.parseInt(this.txtPaymentSecondAttribute.getText());
+			out.writeObject(new Request(Constants.INSERT, new CreditCard(number,cvv,this.dtpCardExpDate.getValue(),this.loggedUser.getUsername())));
+	    	in.readObject();
+		}else {
+			String iban = this.txtPaymentFirstAttribute.getText();
+			String bank = this.txtPaymentSecondAttribute.getText();
+			out.writeObject(new Request(Constants.INSERT, new BankTransfer(iban,bank,this.loggedUser.getUsername())));
+	    	in.readObject();
+		}
+		this.fillCmbPayments(cmBoxMemberPaymentMethod);
+	}
+	
 	public void onBtnLoadBoatImgClick(ActionEvent evt) {
 		FileChooser fileChooser = new FileChooser();
 		Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
@@ -434,9 +479,27 @@ public class MemberGuiController implements Initializable{
     	
 		this.raceModels = FXCollections.observableArrayList();
 		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
-    	ArrayList<Boat> boats = (ArrayList<Boat>)((Response)in.readObject()).getPayload();
+		r = (Response)in.readObject();
+		if(r.getStatusCode() != Constants.SUCCESS) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("No boats alert!");
+			alert.setHeaderText("You can't participate");
+			alert.setContentText("You can't participate to races because you haven't configured a boat yet!");
+			alert.showAndWait();
+			return;
+		}
+    	ArrayList<Boat> boats = (ArrayList<Boat>) r.getPayload();
 		
     	fillCmbPayments(this.cmBoxRacePaymentMethod);
+    	
+    	if(this.cmBoxRacePaymentMethod.getItems().size() == 0) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("No boats alert!");
+			alert.setHeaderText("You can't participate");
+			alert.setContentText("You can't participate to races because you haven't configured a payment method yet!");
+			alert.showAndWait();
+			return;
+    	}
     	
 		for(int i = 0; i < allRaces.size(); i++) {
 			Button btnAction = new Button();
@@ -548,10 +611,16 @@ public class MemberGuiController implements Initializable{
 	    AnchorPane imageLayout = new AnchorPane();
 	    imageLayout.getChildren().add(view);
 	    imageLayout.setPrefHeight(addBtn.getMinHeight());
-	    AnchorPane.setTopAnchor(view, 0.0);
-	    AnchorPane.setBottomAnchor(view, 0.0); 
+	    AnchorPane.setTopAnchor(view, 10.00);
+	    AnchorPane.setBottomAnchor(view, 50.00);
 	    AnchorPane.setLeftAnchor(view, 0.0);
 	    AnchorPane.setRightAnchor(view, 0.0);
+	    Label lbl = new Label("Add a boat");
+	    imageLayout.getChildren().add(lbl);
+	    AnchorPane.setBottomAnchor(lbl, 20.0);
+	    lbl.setPrefWidth(addBtn.getMinWidth());
+	    lbl.getStyleClass().add("lbladd");
+	    lbl.setAlignment(Pos.CENTER);
 	    addBtn.setGraphic(imageLayout);
 	    addBtn.setOnAction(event -> onBtnAddBoatClick());
 		
@@ -567,21 +636,25 @@ public class MemberGuiController implements Initializable{
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode()!= 200) return;
 		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
-    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
-    	r = (Response)in.readObject();
-    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
     	
     	cmb.getItems().clear();
 
     	for(CreditCard c: creditCards) {
-    		cmb.getItems().add("C. card - " + c.getCardNumber().substring(0, 8) + "********");
+    		cmb.getItems().add("C. card - " + c.getCardNumber());
     	}
     	
     	cmb.getItems().add(new Separator());
     	
+    	if(!cmb.getItems().isEmpty())
+    		cmb.getSelectionModel().selectFirst();
+    	
+    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
+    	r = (Response)in.readObject();
+    	if(r.getStatusCode()!= 200) return;
+    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
+    	
     	for(BankTransfer b: bankTransfers) {
-    		String shortedIban = b.getIban().substring(0,3) + "***" + b.getIban().substring(b.getIban().length() - 3);
-    		cmb.getItems().add(b.getBank() + " - " + shortedIban);
+    		cmb.getItems().add(b.getBank() + " - " + b.getIban());
     	}
     	
     	if(!cmb.getItems().isEmpty())

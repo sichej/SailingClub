@@ -53,3 +53,14 @@
 .tbAlignement {
   -fx-alignment: CENTER;
 }
+
+.radio-button:selected .radio .dot {
+    -fx-background-color:  #14274e;
+    -fx-background-insets: 0;
+}
+
+.lbladd{
+  -fx-text-fill: #fff;
+  -fx-font-weight: bold;
+  -fx-font-size: 18;
+}
