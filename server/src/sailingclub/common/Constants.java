@@ -25,6 +25,7 @@ public class Constants {
 	public static final int GET_PAYMENTS = 22;
 	public static final int UPDATE_RACE = 23;
 	public static final int UPDATE_BOAT = 24;
+	public static final int UPDATE_MEMBER = 25;
 	
 	public static final int SUCCESS = 200;
 	public static final int BAD_REQUEST = 400;

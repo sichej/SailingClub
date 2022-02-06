@@ -1,15 +1,16 @@
 ---COSE DA FARE
 
 AGGIUNTA METODO DI PAGAMENTO MEMBRO
-
 SOSTITUIRE TUTTE LE ECCEZIONI NELLA FIRMA DEL METODO DELLA GRAFICA CON DEI TRY CATCH SE NO SI BLOCCA IL PROGRAMMA
-modifica/aggiungi/rimuovi info membro - emp ------> FINIRE
 notifica pagamenti da fare + sistema notifiche.
 riordinare codice
+FIXARE ECCEZIONI NUOVO UTENTE SENZA PGAMENTI E BARCHE PER ESEMPIO PER LE GARE
+notifica utente pagamento quota annuale + aggiorna valori quota annuale
+controlli username gia esistente quando aggiungi utente e quando aggiorni utente (basta gestire i gli status code 400)
 
 ----cose da decidere
 
 CONTROLLI SU SCADENZA FEE????
 nell'update della barca update della foto????
 aggiungi rimuovi barche anche in impiegato?????
-Separare controller pannelli member gui?????
+Separare in controller pannelli?????

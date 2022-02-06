@@ -100,7 +100,7 @@
                                  </font>
                               </Label>
                               <TextField fx:id="txtUsername" prefHeight="30.0" promptText="Username" styleClass="logininput" />
-                              <PasswordField fx:id="txtNewPassword" prefHeight="30.0" promptText="New password" />
+                              <PasswordField fx:id="txtNewPassword" prefHeight="30.0" promptText="New password" styleClass="logininput" />
                               <HBox alignment="CENTER" prefHeight="30.0" prefWidth="280.0" spacing="5.0">
                                  <children>
                                     <TextField fx:id="txtName" prefHeight="30.0" prefWidth="150.0" promptText="Name" styleClass="logininput" />
@@ -123,9 +123,14 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Button>
+                                          <Button mnemonicParsing="false" onAction="#onBtnDeleteMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Delete" textFill="WHITE">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Button>
                                        </children>
                                     </HBox>
-                                    <Button mnemonicParsing="false" onAction="#onBtnClearMemberClick" prefHeight="30.0" prefWidth="295.0" style="-fx-background-color: #14274e;" text="Clear selection" textFill="WHITE">
+                                    <Button mnemonicParsing="false" onAction="#onBtnClearMemberClick" prefHeight="37.0" prefWidth="290.0" style="-fx-background-color: #14274e;" text="Clear selection" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
                                        </font>

@@ -487,52 +487,55 @@ public class MemberGuiController implements Initializable{
 		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
     	this.grdBoats.getChildren().clear();
-    	if(r.getStatusCode() != Constants.SUCCESS) return;
-    	
-    	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
+    	System.out.println(r.getStatusCode());
+    	double numRows = 0;
     	int col = 0 , row = 0;
-    	double numRows = Math.ceil(((double)boats.size()) / ((double)this.COLS_PER_ROW));
     	
-		for(int i = 0; i < boats.size(); i++) {
-			Button button = new Button();
-			button.setMinWidth(((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW) - this.GRD_PADDING);
-			button.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
-			button.getStyleClass().add("btnBoatsGrid");
-		    ImageView view = new ImageView();
-			Image boatThumbnail = SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null);
-			view.setImage(boatThumbnail);
-		    view.setPreserveRatio(true);
-		    view.setFitWidth(button.getMinWidth());
-		    AnchorPane imageLayout = new AnchorPane();
-		    imageLayout.getChildren().add(view);
-		    Label txtBoat = new Label(boats.get(i).getName());
-		    txtBoat.setAlignment(Pos.CENTER);
-		    txtBoat.getStyleClass().add("lblBoat");
-		    AnchorPane.setBottomAnchor(txtBoat, button.getMinHeight() / 10);
-		    AnchorPane.setLeftAnchor(txtBoat, 0.0);
-		    AnchorPane.setRightAnchor(txtBoat, 0.0);
-		    imageLayout.getChildren().add(txtBoat);
-		    imageLayout.setPrefHeight(button.getMinHeight());
-		    AnchorPane.setTopAnchor(view, 0.0); 
-		    AnchorPane.setLeftAnchor(view, 0.0);
-		    AnchorPane.setRightAnchor(view, 0.0);
-		    button.setGraphic(imageLayout);
-		    
-		    final Boat boat = boats.get(i);
-		    button.setOnAction(event -> {
-				try {
-					onBtnBoatsGridClick(boat);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});
-			this.grdBoats.add(button,col, row);
-			
-			if(col / (COLS_PER_ROW - 1)  == 1) {
-				row++;
-				col = 0;
-			}else col++; 
-		}
+    	if(r.getStatusCode() == Constants.SUCCESS) {
+	    	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
+	    	numRows = Math.ceil(((double)boats.size()) / ((double)this.COLS_PER_ROW));
+    	
+	    	for(int i = 0; i < boats.size(); i++) {
+				Button button = new Button();
+				button.setMinWidth(((this.scrContainer.getWidth() - SCROLL_SIZE - this.COLS_GAP * this.COLS_PER_ROW) / this.COLS_PER_ROW) - this.GRD_PADDING);
+				button.setMinHeight((this.scrContainer.getHeight() - (this.ROWS_GAP * numRows)) / N_ROWS_VISIBLE);
+				button.getStyleClass().add("btnBoatsGrid");
+			    ImageView view = new ImageView();
+				Image boatThumbnail = SwingFXUtils.toFXImage(Utils.toBufferedImage(boats.get(i).getPicture()), null);
+				view.setImage(boatThumbnail);
+			    view.setPreserveRatio(true);
+			    view.setFitWidth(button.getMinWidth());
+			    AnchorPane imageLayout = new AnchorPane();
+			    imageLayout.getChildren().add(view);
+			    Label txtBoat = new Label(boats.get(i).getName());
+			    txtBoat.setAlignment(Pos.CENTER);
+			    txtBoat.getStyleClass().add("lblBoat");
+			    AnchorPane.setBottomAnchor(txtBoat, button.getMinHeight() / 10);
+			    AnchorPane.setLeftAnchor(txtBoat, 0.0);
+			    AnchorPane.setRightAnchor(txtBoat, 0.0);
+			    imageLayout.getChildren().add(txtBoat);
+			    imageLayout.setPrefHeight(button.getMinHeight());
+			    AnchorPane.setTopAnchor(view, 0.0); 
+			    AnchorPane.setLeftAnchor(view, 0.0);
+			    AnchorPane.setRightAnchor(view, 0.0);
+			    button.setGraphic(imageLayout);
+			    
+			    final Boat boat = boats.get(i);
+			    button.setOnAction(event -> {
+					try {
+						onBtnBoatsGridClick(boat);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				this.grdBoats.add(button,col, row);
+				
+				if(col / (COLS_PER_ROW - 1)  == 1) {
+					row++;
+					col = 0;
+				}else col++; 
+			}
+    	}
 		
 		Button addBtn = new Button();
 		addBtn.getStyleClass().add("btnBoatsGrid");
@@ -562,6 +565,7 @@ public class MemberGuiController implements Initializable{
 	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
 		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
+    	if(r.getStatusCode()!= 200) return;
 		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
     	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
     	r = (Response)in.readObject();

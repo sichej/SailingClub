@@ -36,9 +36,11 @@ import sailingclub.client.gui.fxml.RaceModel;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.MembershipFee;
 import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
@@ -46,6 +48,7 @@ import sailingclub.common.structures.User;
 public class EmployeeGuiController implements Initializable{
 	private final int BOAT_NOTIFICATION = 0;
 	private final int MEMBERSHIP_NOTIFICATION = 1;
+	private final double MEMBERSHIP_FEE_FIXED_PRICE = 599.99;
 	private final double BTN_NOTIFY_MAX_W = 50;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -53,10 +56,10 @@ public class EmployeeGuiController implements Initializable{
 	private User userFilter;
 	private Race selectedRace;
 	private Boat selectedBoat;
-	private User selectedMember;
 	private ObservableList<RaceModel> raceModels;
 	private ObservableList<PaymentModel> paymentsModels;
 	private ObservableList<BoatModel> boatsModels;
+	private ObservableList<BoatModel> boatsMemberModels;
 	
 	@FXML private ComboBox<String> cmbSelectedUser;
 	@FXML private TableView<RaceModel> tblRaces;
@@ -106,10 +109,11 @@ public class EmployeeGuiController implements Initializable{
 		raceModels = FXCollections.observableArrayList();
 		paymentsModels = FXCollections.observableArrayList();
 		boatsModels = FXCollections.observableArrayList();
+		boatsMemberModels = FXCollections.observableArrayList();
 		
 		this.cmbSelectedUser.setVisible(false);
 		this.cmbSelectedUser.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-			this.onCmbSelectedUserSelectionChanged(newValue);
+			if(newValue!= null) this.onCmbSelectedUserSelectionChanged(newValue);
 		}); 
 		
 		this.colRaceId.setCellValueFactory(new PropertyValueFactory<RaceModel,Integer>("raceId"));
@@ -178,38 +182,18 @@ public class EmployeeGuiController implements Initializable{
 	public void onTabRacesSelected() {
 		if(this.cmbSelectedUser == null) return;
 		this.cmbSelectedUser.setVisible(false);
-		try {
-			this.displayRaces();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void onTabMembersSelected() {
 		this.cmbSelectedUser.setVisible(true);
-		try {
-			displayMemberBoats();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void onTabPaymentsTrackingSelected() {
 		this.cmbSelectedUser.setVisible(false);
-		try {
-			this.displayPayments();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void onTabBoatsSelected() {
 		this.cmbSelectedUser.setVisible(false);
-		try {
-			displayBoats();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -236,12 +220,40 @@ public class EmployeeGuiController implements Initializable{
 		stage.show();
 	}
 	
-	public void onBtnUpdateMemberClick(ActionEvent event) {
-		
+	public void onBtnUpdateMemberClick(ActionEvent event) throws Exception {
+		User upUser = new User(this.userFilter.getUsername() + "," + this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
+                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), null);
+		out.writeObject(new Request(Constants.UPDATE_MEMBER, upUser));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	this.onBtnClearMemberClick(null);
+    	this.fillUserCmbFilters();
+    	this.displayBoats();
+    	this.displayPayments();
 	}
 	
-	public void onBtnAddMemberClick(ActionEvent event) {
-		
+	public void onBtnDeleteMemberClick(ActionEvent event) throws Exception {
+		out.writeObject(new Request(Constants.DELETE, this.userFilter));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	this.onBtnClearMemberClick(null);
+    	this.fillUserCmbFilters();
+	}
+	
+	public void onBtnAddMemberClick(ActionEvent event) throws Exception {
+		MembershipFee fee = new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), this.MEMBERSHIP_FEE_FIXED_PRICE, this.txtUsername.getText());
+		User newUser = new User(this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
+				                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
+		out.writeObject(new Request(Constants.INSERT, newUser));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+		out.writeObject(new Request(Constants.INSERT, fee));
+    	r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	fillUserCmbFilters();
+    	this.onBtnClearMemberClick(null);
 	}
 	
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
@@ -272,7 +284,7 @@ public class EmployeeGuiController implements Initializable{
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
-    	this.boatsModels = FXCollections.observableArrayList();
+    	this.boatsMemberModels = FXCollections.observableArrayList();
     	
     	for(Boat b: boats) {
     		Button btnNotify = new Button();
@@ -283,10 +295,10 @@ public class EmployeeGuiController implements Initializable{
     		btnNotify.getStyleClass().add("openbutton");
     		btnNotify.setOnAction(event -> this.sendNotification(this.userFilter, this.BOAT_NOTIFICATION));
     		if(b.getIdMember().equals(this.userFilter.getUsername()))
-    			this.boatsModels.add(new BoatModel(b, btnNotify));
+    			this.boatsMemberModels.add(new BoatModel(b, btnNotify));
     	}
     	
-    	this.tblMemberBoatNotifications.setItems(boatsModels);
+    	this.tblMemberBoatNotifications.setItems(boatsMemberModels);
 	}
 	
 	private void displayBoats() throws Exception{
@@ -320,7 +332,9 @@ public class EmployeeGuiController implements Initializable{
 		txtAddress.setText("");
 		txtFiscalCode.setText("");
 		lblSelectedMember.setText("");
-		this.selectedMember = null;
+		this.userFilter = null;
+		this.boatsMemberModels.clear();
+		this.tblMemberBoatNotifications.setItems(boatsMemberModels);
 	}
 	
 	public void onBtnClearBoatClick(ActionEvent event) {
@@ -357,17 +371,28 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void onStageShow() throws Exception {
+	private void fillUserCmbFilters() throws Exception{
 		out.writeObject(new Request(Constants.GET_MEMBERS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
-    	if(r.getStatusCode() != Constants.SUCCESS) return;
-    	
-    	ArrayList<String> members = (ArrayList<String>)r.getPayload();
+		Response r = (Response)in.readObject();
+		if(r.getStatusCode() != Constants.SUCCESS) return;
+		
+		this.cmbSelectedUser.getItems().clear();
+		ArrayList<String> members = (ArrayList<String>)r.getPayload();
 		for(String u: members) this.cmbSelectedUser.getItems().add(u);
 		cmbSelectedUser.getSelectionModel().selectFirst();
-		this.cmbSelectedUser.setVisible(false);
-		
-		this.displayRaces();
+	}
+	
+
+	public void onStageShow() {
+		try {
+			this.displayPayments();
+			this.fillUserCmbFilters();
+			this.displayRaces();
+			this.displayMemberBoats();
+			this.displayBoats();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	private void onCmbSelectedUserSelectionChanged(String selectedUser) {
@@ -376,6 +401,13 @@ public class EmployeeGuiController implements Initializable{
 	    	Response r = (Response)in.readObject();
 	    	if(r.getStatusCode() != Constants.SUCCESS) return;
 			this.userFilter = (User)r.getPayload();
+			txtUsername.setText(this.userFilter.getUsername());
+			txtName.setText(this.userFilter.getName());
+			this.txtNewPassword.setText("");
+			txtSurname.setText(this.userFilter.getSurname());
+			txtAddress.setText(this.userFilter.getAddress());
+			txtFiscalCode.setText(this.userFilter.getFiscalCode());
+			lblSelectedMember.setText("Selected user for update: " + this.userFilter.getUsername());
 			displayMemberBoats();
 		}catch(Exception e) {
 			e.printStackTrace();

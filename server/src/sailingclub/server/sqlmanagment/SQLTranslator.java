@@ -137,6 +137,14 @@ public class SQLTranslator {
 				query += "UPDATE boat SET name='" + uBoat.getName() + "', length = " + uBoat.getLength() + "WHERE id = " + uBoat.getId() + ";";
 				query += "UPDATE boat_storage_fee SET expiration_date='" + uBsf.getExpirationDate().toString() + "', amount = " + uBsf.getAmount() + "WHERE id = " + uBsf.getId() + ";";
 				break;
+			case Constants.UPDATE_MEMBER:
+				User uMem = ((User)model);
+				String oldUsername = uMem.getUsername().split(",")[0];
+				String newUsername = uMem.getUsername().split(",")[1];
+				query += "UPDATE user SET username = '" + newUsername + "', name='" + uMem.getName() + "', surname = '" + uMem.getSurname() +
+						"' , address='" + uMem.getAddress() + "', fiscal_code='" + uMem.getFiscalCode()  + "' , password='" + uMem.getPassword() + 
+						"' WHERE username = '" + oldUsername + "';";
+				break;
 			default: throw new RequestToSQLException();
 		}	
 		return query;
@@ -347,6 +355,7 @@ public class SQLTranslator {
 			}
 			response = new Response(Constants.SUCCESS, payments);
 			break;
+		case Constants.UPDATE_MEMBER:
 		case Constants.UPDATE_RACE:
 		case Constants.UPDATE_BOAT:
 			response = new Response(Constants.SUCCESS, new EmptyPayload("Updated"));
