@@ -6,9 +6,9 @@ riordinare codice
 FIXARE ECCEZIONI NUOVO UTENTE SENZA PGAMENTI E BARCHE PER ESEMPIO PER LE GARE
 notifica utente pagamento quota annuale + aggiorna valori quota annuale
 CONTROLLO EVENTUALI ECCEZIONI TESTARE IL PROGRAMMA
-
+BOTTONI CHIUSURA PANELLI IN OVERLAY
 TEST PIU DIAGRAMMI LEGGERE BENE CONSEGNA POGGI CE MOLTA ROBA DA FARE NON DI CODICE
-
+disattiva bottoni per update se non ce selezionato user anche per gara e barca (lasciare attivate solo cose che servono)
 ----cose da decidere
 
 CONTROLLI SU SCADENZA FEE????

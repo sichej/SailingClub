@@ -31,10 +31,20 @@
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Button>
+            <Label fx:id="lblStatus" prefHeight="18.0" prefWidth="397.0" textFill="RED">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />
          </padding>
       </VBox>
+      <Label layoutX="140.0" layoutY="478.0" text="Ⓡ A. Bertogalli &amp; E.Sichelli" textFill="WHITE">
+         <font>
+            <Font name="System Italic" size="10.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

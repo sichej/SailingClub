@@ -16,6 +16,7 @@ public class Constants {
 	public static final int GET_CREDIT_CARDS = 13;
 	public static final int GET_BANK_TRANSFERS = 14;
 	public static final int GET_SUBSCRIPTED_BOAT = 15;
+	public static final int GET_NOTIFICATIONS = 26;
 	
 	// Constants for emp
 	public static final int GET_MEMBERS = 16;

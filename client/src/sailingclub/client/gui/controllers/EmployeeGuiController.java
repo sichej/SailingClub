@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -29,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sailingclub.client.gui.fxml.BoatModel;
 import sailingclub.client.gui.fxml.PaymentModel;
@@ -41,14 +43,12 @@ import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
+import sailingclub.common.structures.Notification;
 import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
 public class EmployeeGuiController implements Initializable{
-	private final int BOAT_NOTIFICATION = 0;
-	private final int MEMBERSHIP_NOTIFICATION = 1;
-	private final double MEMBERSHIP_FEE_FIXED_PRICE = 599.99;
 	private final double BTN_NOTIFY_MAX_W = 50;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -103,6 +103,8 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private TextField txtAddress;
 	@FXML private TextField txtFiscalCode;
 	@FXML private Label lblSelectedMember;
+	@FXML private DatePicker dtpMembershipFeeDate;
+	@FXML private Spinner<Double> spnMembershipFeePrice;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -170,13 +172,10 @@ public class EmployeeGuiController implements Initializable{
 		this.colMemberBoatName.setCellValueFactory(new PropertyValueFactory<BoatModel,String>("boatName"));
 		this.colMemberBoatNotify.setCellValueFactory(new PropertyValueFactory<BoatModel,Button>("btnNotify"));
 		
-		SpinnerValueFactory<Double> spnFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(50, 99999999, 10);
-		this.spnRacePrice.setValueFactory(spnFactory);
-		
-		SpinnerValueFactory<Double> spnFactoryLength = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 99999999, 10);
-		this.spnBoatLength.setValueFactory(spnFactoryLength);
-		SpinnerValueFactory<Double> spnFactoryPrice = new SpinnerValueFactory.DoubleSpinnerValueFactory(10, 99999999, 10);
-		this.spnBoatFeeAmount.setValueFactory(spnFactoryPrice);
+		this.spnRacePrice.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(50, 99999999, 10));
+		this.spnBoatLength.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 99999999, 10));
+		this.spnBoatFeeAmount.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(10, 99999999, 10));
+		this.spnMembershipFeePrice.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(10, 99999999, 10));
 	}
 	
 	public void onTabRacesSelected() {
@@ -221,8 +220,10 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnUpdateMemberClick(ActionEvent event) throws Exception {
+		MembershipFee fee = new MembershipFee(this.userFilter.getMembershipFee().getPaymentDate(),dtpMembershipFeeDate.getValue(), 
+							this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User upUser = new User(this.userFilter.getUsername() + "," + this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
-                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), null);
+                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
 		out.writeObject(new Request(Constants.UPDATE_MEMBER, upUser));
     	Response r = (Response)in.readObject();
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -241,7 +242,7 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnAddMemberClick(ActionEvent event) throws Exception {
-		MembershipFee fee = new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), this.MEMBERSHIP_FEE_FIXED_PRICE, this.txtUsername.getText());
+		MembershipFee fee = new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User newUser = new User(this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
 				                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
 		out.writeObject(new Request(Constants.INSERT, newUser));
@@ -274,8 +275,13 @@ public class EmployeeGuiController implements Initializable{
     	displayBoats();
 	}
 	
-	private void sendNotification(User user, int notificationType) {
-		System.out.println("Send notification to: " + user.getUsername() + " of type " + notificationType);
+	private void sendNotification(User user, String text) {
+		try {
+			out.writeObject(new Request(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now())));
+	    	Response r = (Response)in.readObject();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void displayMemberBoats() throws Exception{
@@ -288,17 +294,21 @@ public class EmployeeGuiController implements Initializable{
     	
     	for(Boat b: boats) {
     		Button btnNotify = new Button();
-    		ImageView btnGraphic = new ImageView(new Image("sailingclub/client/gui/images/notification.png"));
+    		ImageView btnGraphic = new ImageView(new Image("sailingclub/client/gui/images/notify.png"));
     		btnGraphic.setFitWidth(BTN_NOTIFY_MAX_W);
     		btnGraphic.setPreserveRatio(true);
     		btnNotify.setGraphic(btnGraphic);
     		btnNotify.getStyleClass().add("openbutton");
-    		btnNotify.setOnAction(event -> this.sendNotification(this.userFilter, this.BOAT_NOTIFICATION));
+    		btnNotify.setOnAction(event -> this.sendNotification(this.userFilter, "REMINDER:\nYou have to pay the storage fee for\n" + b.getName()));
     		if(b.getIdMember().equals(this.userFilter.getUsername()))
     			this.boatsMemberModels.add(new BoatModel(b, btnNotify));
     	}
     	
     	this.tblMemberBoatNotifications.setItems(boatsMemberModels);
+	}
+	
+	public void btnNotifyMemberClick(ActionEvent event) {
+		this.sendNotification(this.userFilter, "REMINDER:\nYou have to pay the annual membership fee");
 	}
 	
 	private void displayBoats() throws Exception{
@@ -332,6 +342,8 @@ public class EmployeeGuiController implements Initializable{
 		txtAddress.setText("");
 		txtFiscalCode.setText("");
 		lblSelectedMember.setText("");
+		this.spnMembershipFeePrice.getEditor().setText("50");
+		this.dtpMembershipFeeDate.setValue(null);
 		this.userFilter = null;
 		this.boatsMemberModels.clear();
 		this.tblMemberBoatNotifications.setItems(boatsMemberModels);
@@ -407,6 +419,8 @@ public class EmployeeGuiController implements Initializable{
 			txtSurname.setText(this.userFilter.getSurname());
 			txtAddress.setText(this.userFilter.getAddress());
 			txtFiscalCode.setText(this.userFilter.getFiscalCode());
+			this.spnMembershipFeePrice.getEditor().setText(Double.toString(userFilter.getMembershipFee().getPrice()));
+			this.dtpMembershipFeeDate.setValue(userFilter.getMembershipFee().getExpirationDate());
 			lblSelectedMember.setText("Selected user for update: " + this.userFilter.getUsername());
 			displayMemberBoats();
 		}catch(Exception e) {

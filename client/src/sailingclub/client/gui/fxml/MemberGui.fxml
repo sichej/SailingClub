@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -42,112 +43,6 @@
                      </columnResizePolicy>
                   </TableView>
                </children></AnchorPane>
-            <AnchorPane fx:id="tabBoatOptions" style="-fx-background-color: #fff;">
-               <children>
-                  <HBox alignment="CENTER" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                     <children>
-                        <VBox alignment="CENTER" styleClass="boatbox">
-                           <children>
-                              <ImageView fx:id="imgBoatInfo" fitHeight="284.0" fitWidth="436.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/generic.jpg" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="176.0" prefWidth="426.0">
-                                 <children>
-                                    <Label fx:id="lblBoatInfo" prefHeight="150.0" prefWidth="300.0" text="infobox">
-                                       <font>
-                                          <Font name="System Bold" size="17.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="btnDeleteBoat" contentDisplay="TOP" mnemonicParsing="false" onAction="#onBtnDeleteBoatClick" prefHeight="98.0" prefWidth="134.0" styleClass="openbutton" text="Remove" textAlignment="CENTER" textFill="RED">
-                                       <graphic>
-                                          <ImageView fitHeight="59.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../images/trash.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font size="20.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="430.0" spacing="20.0">
-                           <children>
-                              <Label text="Boat storage fee payment:" textFill="#14274e">
-                                 <font>
-                                    <Font name="System Bold" size="17.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblBoatPaymentDescription" alignment="CENTER" contentDisplay="CENTER" prefHeight="130.0" prefWidth="300.0" text="Description">
-                                 <font>
-                                    <Font size="17.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox fx:id="cmBoxBoatPaymentMethod" prefHeight="30.0" prefWidth="300.0" promptText="Select a payment metod" styleClass="cmbPay" />
-                              <Button fx:id="btnPayBoatStorageFee" mnemonicParsing="false" onAction="#onBtnPayBoatStorageFeeClick" prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: #14274e;" text="Pay" textFill="WHITE">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                              <Label alignment="CENTER" prefHeight="31.0" prefWidth="306.0" text="NOTE: you can pay in advance and one year &#10;will be added to your subscription" textFill="RED" />
-                           </children>
-                           <opaqueInsets>
-                              <Insets left="10.0" right="10.0" />
-                           </opaqueInsets>
-                           <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                     <effect>
-                        <DropShadow height="30.0" radius="14.5" spread="0.23" width="30.0" />
-                     </effect>
-                  </HBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabAddBoat" prefHeight="450.0" prefWidth="830.0" style="-fx-background-color: #fff;">
-               <children>
-                  <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" spacing="20.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="10.0">
-                     <children>
-                        <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#onBtnLoadBoatImgClick" styleClass="menubuttons">
-                           <graphic>
-                              <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/add_image.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
-                        <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="456.0" styleClass="logininput" />
-                        <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#onBtnInsertBoatClick" prefHeight="31.0" prefWidth="465.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
-                        <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="454.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-                     </padding>
-                     <effect>
-                        <DropShadow spread="0.18" />
-                     </effect>
-                  </VBox>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" styleClass="paymentForm" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -255,6 +150,130 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="tabAddBoat" prefHeight="450.0" prefWidth="830.0" styleClass="overlaypane">
+               <children>
+                  <VBox alignment="TOP_CENTER" layoutX="300.0" layoutY="117.0" prefHeight="386.0" prefWidth="460.0" spacing="20.0" styleClass="paymentForm" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="30.0">
+                     <children>
+                        <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#onBtnLoadBoatImgClick" styleClass="menubuttons">
+                           <graphic>
+                              <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/add_image.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
+                        <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="456.0" styleClass="logininput" />
+                        <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#onBtnInsertBoatClick" prefHeight="31.0" prefWidth="465.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="454.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow spread="0.18" />
+                     </effect>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabBoatOptions" styleClass="overlaypane">
+               <children>
+                  <HBox alignment="CENTER" layoutX="78.0" prefHeight="430.0" prefWidth="712.0" styleClass="paymentForm" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <VBox alignment="CENTER" styleClass="boatbox">
+                           <children>
+                              <ImageView fx:id="imgBoatInfo" fitHeight="262.0" fitWidth="409.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/generic.jpg" />
+                                 </image>
+                              </ImageView>
+                              <HBox prefHeight="176.0" prefWidth="426.0">
+                                 <children>
+                                    <Label fx:id="lblBoatInfo" prefHeight="150.0" prefWidth="300.0" text="infobox">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btnDeleteBoat" contentDisplay="TOP" mnemonicParsing="false" onAction="#onBtnDeleteBoatClick" prefHeight="98.0" prefWidth="134.0" styleClass="openbutton" text="Remove" textAlignment="CENTER" textFill="RED">
+                                       <graphic>
+                                          <ImageView fitHeight="46.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/trash.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="430.0" spacing="20.0">
+                           <children>
+                              <Label text="Boat storage fee payment:" textFill="#14274e">
+                                 <font>
+                                    <Font name="System Bold" size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblBoatPaymentDescription" alignment="CENTER" contentDisplay="CENTER" prefHeight="130.0" prefWidth="300.0" text="Description">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cmBoxBoatPaymentMethod" prefHeight="30.0" prefWidth="300.0" promptText="Select a payment metod" styleClass="cmbPay" />
+                              <Button fx:id="btnPayBoatStorageFee" mnemonicParsing="false" onAction="#onBtnPayBoatStorageFeeClick" prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: #14274e;" text="Pay" textFill="WHITE">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                              <Label alignment="CENTER" prefHeight="31.0" prefWidth="306.0" text="NOTE: you can pay in advance and one year &#10;will be added to your subscription" textFill="RED" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets left="10.0" right="10.0" />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <effect>
+                        <DropShadow height="30.0" radius="14.5" spread="0.23" width="30.0" />
+                     </effect>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabNotifications" styleClass="overlaypane">
+               <children>
+                  <TableView fx:id="tblNotifications" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+                    <columns>
+                      <TableColumn fx:id="colNotificationDateTime" prefWidth="75.0" style="-fx-background-radius: 8 0 0 0; -fx-border-radius: 8 0 0 0;" styleClass="tbAlignement" text="Received" />
+                      <TableColumn fx:id="colNotificationText" prefWidth="75.0" styleClass="tbAlignement" text="Text" />
+                        <TableColumn fx:id="colNotificationAction" prefWidth="75.0" style="-fx-background-radius: 0 8 0  0; -fx-border-radius: 0 8 0  0;" styleClass="tbAlignement" text="Action" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <styleClass>
+                        <String fx:value="paymentForm" />
+                        <String fx:value="tbAlignement" />
+                     </styleClass>
+                  </TableView>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
                   <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -319,5 +338,14 @@
       </Label>
       <AnchorPane fx:id="pnlBackdrop" prefHeight="200.0" prefWidth="200.0" styleClass="overlaypane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ComboBox fx:id="cmBoxRacePaymentMethod" layoutX="567.0" layoutY="9.0" prefHeight="30.0" prefWidth="218.0" promptText="Select a payment method" styleClass="logininput" AnchorPane.topAnchor="9.0" />
+      <Button fx:id="btnNotification" layoutX="221.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtnViewNotificationsClick" styleClass="openbutton">
+         <graphic>
+            <ImageView fx:id="imgNotification" fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/notification.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

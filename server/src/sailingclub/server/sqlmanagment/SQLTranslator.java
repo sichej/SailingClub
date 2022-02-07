@@ -3,6 +3,7 @@ package sailingclub.server.sqlmanagment;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.MembershipFee;
+import sailingclub.common.structures.Notification;
 import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.RaceParticipation;
@@ -29,11 +31,13 @@ import sailingclub.common.structures.Boat;
 public class SQLTranslator {
 	private int lastRequest;
 	private DateTimeFormatter dateFormatter;
+	private DateTimeFormatter dateTimeFormatter;
 	private User loggedUser;
 	
 	public SQLTranslator() {
 		this.lastRequest = -1;
 		this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	};
 	
 	public String requestToSql(Request request) throws RequestToSQLException, IOException {
@@ -139,11 +143,18 @@ public class SQLTranslator {
 				break;
 			case Constants.UPDATE_MEMBER:
 				User uMem = ((User)model);
+				MembershipFee uMemFee = ((User)model).getMembershipFee();
 				String oldUsername = uMem.getUsername().split(",")[0];
 				String newUsername = uMem.getUsername().split(",")[1];
 				query += "UPDATE user SET username = '" + newUsername + "', name='" + uMem.getName() + "', surname = '" + uMem.getSurname() +
 						"' , address='" + uMem.getAddress() + "', fiscal_code='" + uMem.getFiscalCode()  + "' , password='" + uMem.getPassword() + 
 						"' WHERE username = '" + oldUsername + "';";
+				
+				query += "UPDATE membership_fee SET payment_date = '" + uMemFee.getPaymentDate() + "' , expiration_date = '"
+						  + uMemFee.getExpirationDate() + "' , price=" + uMemFee.getPrice() +" WHERE id_member = '" + newUsername + "'; ";
+				break;
+			case Constants.GET_NOTIFICATIONS:
+				query += "SELECT * FROM notification n WHERE n.id_member = '" + this.loggedUser.getUsername() + "';";
 				break;
 			default: throw new RequestToSQLException();
 		}	
@@ -359,6 +370,14 @@ public class SQLTranslator {
 		case Constants.UPDATE_RACE:
 		case Constants.UPDATE_BOAT:
 			response = new Response(Constants.SUCCESS, new EmptyPayload("Updated"));
+			break;
+		case Constants.GET_NOTIFICATIONS:
+			ArrayList<Notification> notifications = new ArrayList<Notification>();
+			for(Map<String, String> m: queryResult){
+				LocalDateTime dt = LocalDateTime.parse(m.get("date_time"), dateTimeFormatter);
+				notifications.add(new Notification(Integer.parseInt(m.get("id")), m.get("member_id"), m.get("text"),dt));
+			}
+			response = new Response(Constants.SUCCESS, notifications);
 			break;
 		}
 		if(response == null) throw new SQLToResponseException();

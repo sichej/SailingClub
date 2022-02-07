@@ -7,7 +7,6 @@
 }
 
 .logininput:focused{
-
   -fx-focus-color: #14274e;
 }
 
@@ -63,4 +62,8 @@
   -fx-text-fill: #fff;
   -fx-font-weight: bold;
   -fx-font-size: 18;
+}
+
+.column-header-background, .corner{
+  -fx-background-color: transparent;
 }

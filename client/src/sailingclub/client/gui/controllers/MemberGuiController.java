@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -56,6 +58,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sailingclub.client.gui.fxml.NotificationModel;
 import sailingclub.client.gui.fxml.RaceModel;
 import sailingclub.common.Constants;
 import sailingclub.common.Request;
@@ -66,6 +69,7 @@ import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.CreditCard;
 import sailingclub.common.structures.EmptyPayload;
+import sailingclub.common.structures.Notification;
 import sailingclub.common.structures.Payment;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
@@ -76,7 +80,6 @@ public class MemberGuiController implements Initializable{
 	private final String REGISTERED_STATE = "Unsubscribe";
 	private final String NOT_REGISTERED_STATE = "Subscribe";
 	private final Double BOAT_FEE_MULTIPLIER = 20.5;
-	private final Double MEMBER_FEE_FIXED_PRICE = 599.99;
 	private final int GRD_PADDING = 10;
 	private final int COLS_PER_ROW = 4;
 	private final double SCROLL_SIZE = 19.5;
@@ -89,10 +92,13 @@ public class MemberGuiController implements Initializable{
 	private Map<String, String> btnTabAssoc;
 	private Boat selectedBoat;
 	private ObservableList<RaceModel> raceModels;
+	private ObservableList<NotificationModel> notificationsModels;
 	private double boatFeeNewPrice;
 	private double boatNewLenght;
 	private File boatNewImage;
 	private ToggleGroup toggleGroup;
+	private ColorAdjust gray;
+	private ColorAdjust norm;
 	
 	@FXML private Button btnToggleMenu;
 	@FXML private VBox vbMenu;
@@ -105,6 +111,7 @@ public class MemberGuiController implements Initializable{
 	@FXML private AnchorPane tabBoatsManagment;
 	@FXML private AnchorPane tabRaceManagment;
 	@FXML private AnchorPane tabAddBoat;
+	@FXML private AnchorPane tabNotifications;
 	@FXML private GridPane grdBoats;
 	@FXML private ScrollPane scrContainer;
 	@FXML private AnchorPane tabBoatOptions;
@@ -141,10 +148,18 @@ public class MemberGuiController implements Initializable{
 	@FXML private DatePicker dtpCardExpDate;
 	@FXML private TextField txtPaymentFirstAttribute;
 	@FXML private TextField txtPaymentSecondAttribute;
+	@FXML private ImageView imgNotification;
+	@FXML private Button btnNotification;
+	@FXML private TableView<NotificationModel> tblNotifications;
+	@FXML private TableColumn<NotificationModel, String> colNotificationDateTime;
+	@FXML private TableColumn<NotificationModel, String> colNotificationText;
+	@FXML private TableColumn<NotificationModel, Button> colNotificationAction;
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		raceModels =  FXCollections.observableArrayList();
+		raceModels = FXCollections.observableArrayList();
+		notificationsModels = FXCollections.observableArrayList();
 		this.cmBoxRacePaymentMethod.setVisible(false);
         imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		this.btnTabAssoc = new HashMap<String,String>();
@@ -188,6 +203,16 @@ public class MemberGuiController implements Initializable{
 		this.radBank.setToggleGroup(toggleGroup);
 		this.radCard.setToggleGroup(toggleGroup);
 		toggleGroup.selectedToggleProperty().addListener((event,oldv,newv) -> this.onRadPaymentMethodClick((RadioButton)newv));
+		
+		this.gray = new ColorAdjust();
+		gray.setSaturation(-0.7);
+		this.norm = new ColorAdjust();
+		norm.saturationProperty().set(1);
+		this.btnNotification.setVisible(false);
+		
+		this.colNotificationDateTime.setCellValueFactory(new PropertyValueFactory<NotificationModel,String>("dateTime"));
+		this.colNotificationText.setCellValueFactory(new PropertyValueFactory<NotificationModel,String>("text"));
+		this.colNotificationAction.setCellValueFactory(new PropertyValueFactory<NotificationModel,Button>("btnAction"));
 	}
 	
 	public void setLoggedUser(User user) throws Exception{
@@ -202,30 +227,78 @@ public class MemberGuiController implements Initializable{
 	public void onStageShow() {
 		try {
 			this.displayBoats();
-		} catch (ClassNotFoundException | IOException e) {
+			displayNotifications();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void onBtnToggleMenuClick(ActionEvent event) throws IOException {
-		
 		if(this.vbMenu.isVisible()) {
 	        imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 	        pnlBackdrop.setVisible(false);
 			vbMenu.setVisible(false);
+			this.btnNotification.setVisible(false);
 		}
 		else {
 	        imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_opened.png"));
 	        pnlBackdrop.setVisible(true);
 			vbMenu.setVisible(true);
+			this.btnNotification.setVisible(true);
 		}
+	}
+	
+	public void onBtnViewNotificationsClick(ActionEvent event) {
+		try {
+			displayNotifications();
+	        pnlBackdrop.setVisible(false);
+			vbMenu.setVisible(false);
+			this.btnNotification.setVisible(false);
+			this.tabNotifications.toFront();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void displayNotifications() throws Exception {
+		out.writeObject(new Request(Constants.GET_NOTIFICATIONS, new EmptyPayload()));
+    	Response r = (Response)in.readObject();
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	ArrayList<Notification> notifications = (ArrayList<Notification>)r.getPayload();
+    	
+    	if(notifications.size() == 0) {
+    		this.imgNotification.setEffect(gray);
+    		return;
+    	}
+    	
+    	this.imgNotification.setEffect(norm);
+    	notificationsModels = FXCollections.observableArrayList();
+    	
+    	for(Notification n: notifications) {
+    		Button btn = new Button("Mark as read");
+    		btn.setOnAction(event -> {
+    			try {
+	    			out.writeObject(new Request(Constants.DELETE, n));
+	    	    	in.readObject();
+	    	    	this.displayNotifications();
+    			}catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		});
+    		notificationsModels.add(new NotificationModel(n,btn));
+    	}
+    	
+    	this.tblNotifications.setItems(notificationsModels);
 	}
 	
 	public void onBtnMenuClick(ActionEvent event) throws Exception {
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
 		pnlBackdrop.setVisible(false);
-		
+		this.btnNotification.setVisible(false);
+	
 		String pressedBtn = ((Button) event.getSource()).getId();
 		String tab = this.btnTabAssoc.get(pressedBtn);
 		
@@ -356,7 +429,7 @@ public class MemberGuiController implements Initializable{
 						"\nMembership fee exp. date: " + this.loggedUser.getMembershipFee().getExpirationDate();
 		this.lblUserInfo.setText(userInfo);
 		
-		this.lblMemberPaymentDescription.setText("Annual fee fixed price:\n" + this.MEMBER_FEE_FIXED_PRICE + 
+		this.lblMemberPaymentDescription.setText("Annual fee fixed price:\n" + this.loggedUser.getMembershipFee().getPrice() + 
 												"\n--------------------------" + 
 												"\nTotal: " + this.loggedUser.getMembershipFee().getPrice() + "$");
 		
