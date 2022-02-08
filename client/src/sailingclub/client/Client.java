@@ -5,8 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Optional;
-import java.util.Scanner;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import sailingclub.client.gui.controllers.LoginGuiController;
@@ -19,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import javafx.fxml.*;
 
 /**
@@ -31,16 +30,27 @@ public class Client extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Socket socket = null;
-			Scanner scan = new Scanner(System.in);
+			String ip = "localhost";
+			int port = 12345;
+			
+			if(getParameters().getRaw().size() == 2) {
+				ip = getParameters().getNamed().get("ip");
+				port = Integer.parseInt(getParameters().getNamed().get("port"));
+			}
+			
+			System.out.println(ip + " : " + port);
+			
 			do {
 				try {
 					System.out.print("\nChecking connection to the server...!");
-					socket = new Socket("localhost", 12345);
+					socket = new Socket(ip, port);
 				}catch(Exception e) {
 					ButtonType btn = new ButtonType("Retry");
-					Alert alert = new Alert(AlertType.ERROR,"Check your connection and retry if the problem persist, probably the server is down!", btn, ButtonType.CANCEL);
+					Alert alert = new Alert(AlertType.ERROR,"Check your connection to (" + ip + ":" + port +") and retry if the problem persist, "
+							    + "probably the server is down!\nUse custom ip and port caling the program with --ip=yourip --port=yourport", btn, ButtonType.CANCEL);
 					alert.setHeaderText("Unable to reach the server");
 					alert.setTitle("Connection error");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 					Optional<ButtonType> result = alert.showAndWait();
 					if (result.get() == btn) {
 					    System.out.println("\nRetrying...");
@@ -50,6 +60,8 @@ public class Client extends Application {
 					}
 				}
 			}while(socket == null);
+			
+			System.out.println("Connected!");
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
@@ -83,7 +95,6 @@ public class Client extends Application {
 
 	/**
 	 * it launch the app
-	 * 
 	 * @param args cmd args
 	 */
 	public static void main(String[] args) {

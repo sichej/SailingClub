@@ -10,23 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import sailingclub.common.Constants;
-import sailingclub.common.Request;
-import sailingclub.common.Response;
-import sailingclub.common.Utils;
-import sailingclub.common.Insertable;
-import sailingclub.common.Removable;
-import sailingclub.common.structures.User;
-import sailingclub.common.structures.BoatStorageFee;
-import sailingclub.common.structures.CreditCard;
-import sailingclub.common.structures.EmptyPayload;
-import sailingclub.common.structures.MembershipFee;
-import sailingclub.common.structures.Notification;
-import sailingclub.common.structures.Payment;
-import sailingclub.common.structures.Race;
-import sailingclub.common.structures.RaceParticipation;
-import sailingclub.common.structures.BankTransfer;
-import sailingclub.common.structures.Boat;
+import sailingclub.common.*;
+import sailingclub.common.structures.*;
 
 public class SQLTranslator {
 	private int lastRequest;

@@ -16,46 +16,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sailingclub.client.gui.fxml.BoatModel;
 import sailingclub.client.gui.fxml.PaymentModel;
 import sailingclub.client.gui.fxml.RaceModel;
-import sailingclub.common.Constants;
-import sailingclub.common.Request;
-import sailingclub.common.Response;
-import sailingclub.common.Utils;
-import sailingclub.common.structures.Boat;
-import sailingclub.common.structures.BoatStorageFee;
-import sailingclub.common.structures.EmptyPayload;
-import sailingclub.common.structures.MembershipFee;
-import sailingclub.common.structures.Notification;
-import sailingclub.common.structures.Payment;
-import sailingclub.common.structures.Race;
-import sailingclub.common.structures.User;
+import sailingclub.common.*;
+import sailingclub.common.structures.*;
 
 public class EmployeeGuiController implements Initializable{
 	private final double BTN_NOTIFY_MAX_W = 50;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private User loggedUser;
 	private User userFilter;
 	private Race selectedRace;
 	private Boat selectedBoat;
+	private User loggedUser;
 	private ObservableList<RaceModel> raceModels;
 	private ObservableList<PaymentModel> paymentsModels;
 	private ObservableList<BoatModel> boatsModels;
@@ -278,12 +257,13 @@ public class EmployeeGuiController implements Initializable{
 	private void sendNotification(User user, String text) {
 		try {
 			out.writeObject(new Request(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now())));
-	    	Response r = (Response)in.readObject();
+	    	in.readObject();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void displayMemberBoats() throws Exception{
 		out.writeObject(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
@@ -311,6 +291,7 @@ public class EmployeeGuiController implements Initializable{
 		this.sendNotification(this.userFilter, "REMINDER:\nYou have to pay the annual membership fee");
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void displayBoats() throws Exception{
 		out.writeObject(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
     	Response r = (Response)in.readObject();

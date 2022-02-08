@@ -1,6 +1,5 @@
 package sailingclub.client.gui.fxml;
 
-import java.time.LocalDateTime;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
 import sailingclub.common.structures.Notification;

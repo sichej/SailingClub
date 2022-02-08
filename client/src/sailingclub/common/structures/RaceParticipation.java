@@ -1,7 +1,6 @@
 package sailingclub.common.structures;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 

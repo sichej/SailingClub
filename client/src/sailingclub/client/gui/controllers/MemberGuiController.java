@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,54 +24,19 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import sailingclub.client.gui.fxml.NotificationModel;
 import sailingclub.client.gui.fxml.RaceModel;
-import sailingclub.common.Constants;
-import sailingclub.common.Request;
-import sailingclub.common.Response;
-import sailingclub.common.Utils;
-import sailingclub.common.structures.BankTransfer;
-import sailingclub.common.structures.Boat;
-import sailingclub.common.structures.BoatStorageFee;
-import sailingclub.common.structures.CreditCard;
-import sailingclub.common.structures.EmptyPayload;
-import sailingclub.common.structures.Notification;
-import sailingclub.common.structures.Payment;
-import sailingclub.common.structures.Race;
-import sailingclub.common.structures.User;
-import sailingclub.common.structures.RaceParticipation;
+import sailingclub.common.*;
+import sailingclub.common.structures.*;
 import java.util.ArrayList;
 
 public class MemberGuiController implements Initializable{
@@ -154,7 +117,6 @@ public class MemberGuiController implements Initializable{
 	@FXML private TableColumn<NotificationModel, String> colNotificationDateTime;
 	@FXML private TableColumn<NotificationModel, String> colNotificationText;
 	@FXML private TableColumn<NotificationModel, Button> colNotificationAction;
-	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -327,7 +289,6 @@ public class MemberGuiController implements Initializable{
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void onBtnBoatsGridClick(Boat clickedBoat) throws Exception  {
 		this.selectedBoat = clickedBoat;
 		this.tabBoatOptions.toFront();
@@ -421,7 +382,6 @@ public class MemberGuiController implements Initializable{
 		stage.show();
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void displayInfo() throws Exception {
 		String userInfo = this.loggedUser.getUsername() + "'s info:\n" + 
 						"Name:" + this.loggedUser.getName() + " Surname: " + this.loggedUser.getSurname() + 
@@ -704,6 +664,11 @@ public class MemberGuiController implements Initializable{
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
 	
+	public void onBtnCloseOverlayClick(ActionEvent event) {
+		((Node)event.getSource()).getParent().getParent().toBack();
+	}
+	
+	@SuppressWarnings("unchecked")
 	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
 		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
     	Response r = (Response)in.readObject();
@@ -724,7 +689,7 @@ public class MemberGuiController implements Initializable{
     	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
     	r = (Response)in.readObject();
     	if(r.getStatusCode()!= 200) return;
-    	ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
+		ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
     	
     	for(BankTransfer b: bankTransfers) {
     		cmb.getItems().add(b.getBank() + " - " + b.getIban());

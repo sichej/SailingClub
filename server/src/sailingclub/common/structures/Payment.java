@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 
 public class Payment implements Insertable, Serializable {
-	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private double amount;
 	private String memberId;
