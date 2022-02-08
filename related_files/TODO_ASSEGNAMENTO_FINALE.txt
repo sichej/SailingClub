@@ -6,6 +6,8 @@ CONTROLLO EVENTUALI ECCEZIONI TESTARE IL PROGRAMMA + per esempio barca con stess
 TEST PIU DIAGRAMMI LEGGERE BENE CONSEGNA POGGI CE MOLTA ROBA DA FARE NON DI CODICE
 disattiva bottoni per update se non ce selezionato user anche per gara e barca (lasciare attivate solo cose che servono)
 
+->>>>MOLTO IMPORTANTE FARE UNA CLASSE WRAPPER CHE FA LE RICHIESTE DAL CLIENT SE NO NON è POSSIBILE FARE I TEST CON JUNIT!!!!!!!!!!!!!!
+
 ----cose da decidere
 
 CONTROLLI SU SCADENZA FEE????
