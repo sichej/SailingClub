@@ -382,6 +382,15 @@ public class MemberGuiController implements Initializable{
 		stage.show();
 	}
 	
+	/*
+	 * Display the full user informaition by filling the linked lables
+	 * Name
+	 * Username
+	 * Lastname
+	 * Fiscal code
+	 * Membership fee
+	 * Address
+	 */
 	private void displayInfo() throws Exception {
 		String userInfo = this.loggedUser.getUsername() + "'s info:\n" + 
 						"Name:" + this.loggedUser.getName() + " Surname: " + this.loggedUser.getSurname() + 
@@ -470,6 +479,7 @@ public class MemberGuiController implements Initializable{
 		this.imgNewBoat.setImage(new Image(boatNewImage.getAbsolutePath()));
 	}
 	
+	
 	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
 		String boatName = this.txtBoatName.getText();
 		if(boatName.equals("")) return;
@@ -496,6 +506,11 @@ public class MemberGuiController implements Initializable{
     	}
 	}
 	
+	/*
+	 * Display all the races present on the database, even the ended ones
+	 * the ended one cannot be clicked for partecipation
+	 * a combobox is filled with your boats and you have to select one to partecipate to a race
+	 */
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception{
 		out.writeObject(new Request(Constants.GET_RACES, new EmptyPayload()));
@@ -578,6 +593,9 @@ public class MemberGuiController implements Initializable{
 		this.imgNewBoat.setImage(new Image("sailingclub/client/gui/images/add_image.png"));
 	}
 	
+	/*
+	 * Display on a grid all the user's boats 
+	 */
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws IOException, ClassNotFoundException {
 		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
@@ -668,6 +686,9 @@ public class MemberGuiController implements Initializable{
 		((Node)event.getSource()).getParent().getParent().toBack();
 	}
 	
+	/*
+	 * Fill the combobox with all the user's payment information
+	 */
 	@SuppressWarnings("unchecked")
 	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
 		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
+
 public class User implements Insertable, Serializable, Removable{
 	private static final long serialVersionUID = 1L;
 	private String username;

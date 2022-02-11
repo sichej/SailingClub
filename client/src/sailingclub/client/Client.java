@@ -31,7 +31,7 @@ public class Client extends Application {
 		try {
 			Socket socket = null;
 			String ip = "localhost";
-			int port = 12345;
+			int port = 5555;
 			
 			if(getParameters().getRaw().size() == 2) {
 				ip = getParameters().getNamed().get("ip");

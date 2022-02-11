@@ -4,6 +4,9 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
+/*
+ * User class
+ */
 public class User implements Insertable, Serializable, Removable{
 	private static final long serialVersionUID = 1L;
 	private String username;
@@ -15,6 +18,16 @@ public class User implements Insertable, Serializable, Removable{
 	private String password;
 	private MembershipFee fee;
 	
+	/*
+	 * User constructor
+	 * @param username  
+	 * @param name
+	 * @param address
+	 * @param fiscalCode
+	 * @param userType  can be member or employee
+	 * @param password  should to be hashed with md5 encryption
+	 * @param fee  Membership fee
+	 */
 	public User(String username, String name, String surname, String address, String fiscalCode, String userType, String password, MembershipFee fee) {
 		this.username = username;
 		this.name = name;
@@ -25,12 +38,19 @@ public class User implements Insertable, Serializable, Removable{
 		this.password = password;
 		this.fee = fee;
 	}
-
+	/*
+	 * User constructor
+	 * @param username  	 
+	 * @param password  shuld to be hashed with md5 encription
+	 */
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
-	
+	/*
+	 * User constructor
+	 * @param username 
+	 */
 	public User(String username) {
 		this.username = username;
 	}
