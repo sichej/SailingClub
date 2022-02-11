@@ -45,7 +45,13 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = boatStorageFee;
 	}
-
+	/*
+	 * Boat constructor
+	 * @param name
+	 * @param length
+	 * @param idMember  username of the owner
+	 * @param pictureName  name of the boat's picture 
+	 */
 	public Boat(String name, double length, String idMember, String pictureName) {
 		this.name = name;
 		this.length = length;
@@ -54,6 +60,14 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.pictureName = pictureName;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param name
+	 * @param length
+	 * @param idMember  username of the owner
+	 * @param picture  
+	 * @param boatStorageFee 
+	 */
 	public Boat(int id, String name, double length, String idMember, String pictureName, byte[] picture,BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;
@@ -64,6 +78,13 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param name
+	 * @param length
+	 * @param idMember  username of the owner
+	 * @param picture  
+	 */
 	public Boat(String name, double length, String idMember, String pictureName, byte[] picture) {
 		this.name = name;
 		this.length = length;
@@ -72,6 +93,10 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param id
+	 */
 	public Boat(int id) {
 		this.id = id;
 	}
