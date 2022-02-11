@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 29, 2022 alle 13:35
+-- Creato il: Feb 11, 2022 alle 09:36
 -- Versione del server: 10.4.22-MariaDB
 -- Versione PHP: 8.1.1
 
@@ -38,6 +38,8 @@ CREATE TABLE `bank_transfer` (
 --
 
 INSERT INTO `bank_transfer` (`iban`, `bank`, `id_member`) VALUES
+('123456123', 'Monte dei paschi di siena', 'edo'),
+('1234567', 'Banca Mediolanum', 'edo'),
 ('IT69X0300203280748853977885', 'Intesa san paolo', 'edo'),
 ('IT92N0300203280851278978589', 'Credit agricole', 'edo');
 
@@ -62,14 +64,16 @@ CREATE TABLE `boat` (
 INSERT INTO `boat` (`id`, `name`, `length`, `id_member`, `picture`) VALUES
 (12, 'Luna rossa (prada)', 22, 'edo', 'lunarossa.jpg'),
 (13, 'Amerigo vespucci', 153.5, 'edo', 'amerigovespucci.jpg'),
-(14, 'asdfghjkl', 535, 'edo', 'generic.jpg'),
-(15, 'asdfghjklò', 456, 'edo', 'generic.jpg'),
-(16, 'wsdfgh66', 988, 'edo', 'generic.jpg'),
+(14, 'barca rinominata', 535.33333, 'edo', 'generic.jpg'),
+(15, 'gorilla', 455, 'Berto', 'generic.jpg'),
+(16, 'wsdfgh66', 988.2345, 'edo', 'generic.jpg'),
 (18, 'ASDFGH', 444, 'edo', 'generic.jpg'),
 (19, 'sadfghj', 32, 'edo', 'generic.jpg'),
 (21, 'jdiismdiamdismmi', 988, 'edo', 'generic.jpg'),
 (22, 'uu8888', 988, 'edo', 'generic.jpg'),
-(32, 'barca a remi', 3, 'edo', 'barcaaremi.jpg');
+(32, 'barca a remi', 3, 'edo', 'barcaaremi.jpg'),
+(43, 'dfghjk', 0, 'b', ''),
+(44, 'pippo', 12, 'edo', '');
 
 -- --------------------------------------------------------
 
@@ -90,16 +94,18 @@ CREATE TABLE `boat_storage_fee` (
 --
 
 INSERT INTO `boat_storage_fee` (`id`, `payment_date`, `expiration_date`, `amount`, `id_boat`) VALUES
-(10, '2022-01-28', '2031-01-28', 132, 12),
-(11, '2022-01-28', '2024-01-21', 88, 13),
-(12, '2022-01-03', '2022-01-28', 90, 14),
-(13, '2022-01-02', '2022-01-27', 567, 15),
-(14, '2022-01-17', '2022-01-28', 5678, 16),
-(16, '2022-01-26', '2022-01-31', 67, 18),
+(10, '2022-02-06', '2036-01-28', 132, 12),
+(11, '2022-02-04', '2027-01-21', 88, 13),
+(12, '2022-01-03', '2030-01-25', 90.444444, 14),
+(13, '2022-01-02', '2022-01-11', 567, 15),
+(14, '2022-02-06', '2023-01-28', 5678, 16),
+(16, '2022-02-05', '2024-01-31', 67, 18),
 (17, '2022-01-02', '2022-01-31', 78, 19),
 (19, '2022-01-02', '2022-01-31', 78, 21),
-(20, '2022-01-03', '2022-01-29', 9090, 22),
-(25, '2022-01-27', '2023-01-27', 19.5, 32);
+(20, '2022-02-06', '2023-01-29', 9090, 22),
+(25, '2022-01-27', '2023-01-27', 19.5, 32),
+(36, '2022-02-06', '2023-02-06', 102.5, 43),
+(37, '2022-02-08', '2023-02-08', 246, 44);
 
 -- --------------------------------------------------------
 
@@ -119,6 +125,9 @@ CREATE TABLE `credit_card` (
 --
 
 INSERT INTO `credit_card` (`card_number`, `cvv`, `expiration_date`, `id_member`) VALUES
+('123', 234, '2022-02-27', 'b'),
+('123456', 455, '2022-02-23', 'Berto'),
+('1234567', 123, '2022-02-17', 'edo'),
 ('4151839906197223', 354, '2026-01-09', 'edo'),
 ('5061997095036317', 123, '2026-01-21', 'edo');
 
@@ -142,7 +151,97 @@ CREATE TABLE `membership_fee` (
 
 INSERT INTO `membership_fee` (`id`, `payment_date`, `expiration_date`, `price`, `id_member`) VALUES
 (1, '2022-01-03', '2022-01-04', 599.99, 'Berto'),
-(2, '2022-01-29', '2037-01-17', 599.99, 'edo');
+(2, '2022-02-07', '2024-01-14', 15, 'edo'),
+(14, '2022-02-06', '2023-02-06', 599.99, 'b');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL,
+  `id_member` varchar(32) NOT NULL,
+  `text` varchar(128) NOT NULL,
+  `date_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `notification`
+--
+
+INSERT INTO `notification` (`id`, `id_member`, `text`, `date_time`) VALUES
+(20, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nLuna rossa (prada)', '2022-02-07 10:59:31'),
+(21, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-07 10:59:32'),
+(22, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nLuna rossa (prada)', '2022-02-07 10:59:32'),
+(23, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-07 10:59:32'),
+(24, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nbarca rinominata', '2022-02-07 10:59:33'),
+(25, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nASDFGH', '2022-02-07 10:59:33'),
+(26, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nASDFGH', '2022-02-07 10:59:34'),
+(27, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nsadfghj', '2022-02-07 10:59:34'),
+(28, 'edo', 'REMINDER:\nYou have to pay the storage fee for\njdiismdiamdismmi', '2022-02-07 10:59:34'),
+(29, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nuu8888', '2022-02-07 10:59:35'),
+(30, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nbarca a remi', '2022-02-07 10:59:35'),
+(31, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nuu8888', '2022-02-07 10:59:35'),
+(32, 'edo', 'REMINDER:\nYou have to pay the storage fee for\njdiismdiamdismmi', '2022-02-07 10:59:36'),
+(33, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nsadfghj', '2022-02-07 10:59:36'),
+(34, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nASDFGH', '2022-02-07 10:59:36'),
+(35, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nwsdfgh66', '2022-02-07 10:59:36'),
+(36, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nbarca rinominata', '2022-02-07 10:59:37'),
+(37, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-07 10:59:37'),
+(38, 'Berto', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:23:36'),
+(39, 'Berto', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:23:42'),
+(40, 'Berto', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:23:43'),
+(41, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:32'),
+(42, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:33'),
+(43, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:33'),
+(44, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:33'),
+(45, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:34'),
+(46, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:34'),
+(47, 'edo', 'REMINDER:\nYou have to pay the annual membership fee', '2022-02-07 11:37:34'),
+(48, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nbarca rinominata', '2022-02-07 11:37:37'),
+(49, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-07 11:37:38'),
+(50, 'b', 'REMINDER:\nYou have to pay the storage fee for\ndfghjk', '2022-02-08 10:49:00'),
+(51, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nLuna rossa (prada)', '2022-02-08 10:49:02'),
+(52, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-08 10:49:02'),
+(53, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-08 10:49:03'),
+(54, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-08 10:49:03'),
+(55, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-08 10:49:04'),
+(56, 'edo', 'REMINDER:\nYou have to pay the storage fee for\nAmerigo vespucci', '2022-02-08 10:49:04');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `payment`
+--
+
+CREATE TABLE `payment` (
+  `amount` float(23,2) NOT NULL,
+  `member_id` varchar(32) NOT NULL,
+  `method` varchar(32) NOT NULL,
+  `details` varchar(128) NOT NULL,
+  `date` date NOT NULL,
+  `purpose` varchar(256) NOT NULL,
+  `id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `payment`
+--
+
+INSERT INTO `payment` (`amount`, `member_id`, `method`, `details`, `date`, `purpose`, `id`) VALUES
+(132.00, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for storage fee of:\nLuna rossa (prada)', 1),
+(9090.00, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for storage fee of:\nuu8888', 2),
+(5678.00, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for storage fee of:\nwsdfgh66', 3),
+(50.46, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for the subscription to:\nnuovagara mod', 4),
+(1234455.00, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for the subscription to:\nnuv', 5),
+(599.99, 'edo', 'C. card', '41518399********', '2022-02-06', 'Payment for annual fee of:\nedoardo sichelli', 6),
+(599.99, 'edo', 'Banca Mediolanum', '123***567', '2022-02-06', 'Payment for annual fee of:\nedoardo sichelli', 7),
+(50.46, 'b', 'C. card', '123', '2022-02-06', 'Payment for the subscription to:\nnuovagara mod', 10),
+(15.00, 'edo', 'C. card', '1234567', '2022-02-07', 'Payment for annual fee of:\nedoardo sichelli', 11),
+(50.46, 'edo', 'C. card', '1234567', '2022-02-08', 'Payment for the subscription to:\nnuovagara mod', 12),
+(51.00, 'edo', 'C. card', '1234567', '2022-02-08', 'Payment for the subscription to:\nsss', 13);
 
 -- --------------------------------------------------------
 
@@ -163,9 +262,13 @@ CREATE TABLE `race` (
 
 INSERT INTO `race` (`id`, `date`, `price`, `name`) VALUES
 (1, '2016-06-09', 200, 'coppa del mondo'),
-(2, '2022-01-11', 200, 'coppa america'),
-(3, '2024-10-24', 200, 'coppa asia'),
-(4, '2016-01-07', 123, 'gara che è finita ');
+(5, '2022-03-13', 61, 'coppa europa mod'),
+(6, '2022-05-04', 518, 'coppa oceania'),
+(8, '2022-03-17', 50.4637, 'nuovagara mod'),
+(10, '2022-02-10', 51, 'sss'),
+(11, '2022-02-23', 50, 'dd'),
+(12, '2022-02-20', 1234455, 'nuv'),
+(13, '2022-02-17', 60, 'ciaone');
 
 -- --------------------------------------------------------
 
@@ -184,8 +287,15 @@ CREATE TABLE `race_participation` (
 --
 
 INSERT INTO `race_participation` (`id_member`, `id_race`, `id_boat`) VALUES
+('b', 5, 43),
+('b', 8, 43),
+('Berto', 1, 15),
 ('edo', 1, 14),
-('edo', 3, 13);
+('edo', 6, 13),
+('edo', 8, 44),
+('edo', 10, 18),
+('edo', 11, 12),
+('edo', 12, 12);
 
 -- --------------------------------------------------------
 
@@ -208,6 +318,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `name`, `surname`, `address`, `fiscal_code`, `user_type`, `password`) VALUES
+('b', 'g', 'g', 'g', 'g', 'member', 'd41d8cd98f00b204e9800998ecf8427e'),
 ('Berto', 'Andrea', 'Bertogalli', 'Wall street, 3', 'BRTNDR00L30G337G', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('edo', 'edoardo', 'sichelli', 'via gentileschi', 'QWERTYUIOPLKJHGF', 'member', '9dd4e461268c8034f5c8564e155c67a6'),
 ('emp', 'pippo', 'pluto', 'gardaland', 'dnwu', 'employee', '9dd4e461268c8034f5c8564e155c67a6');
@@ -220,7 +331,7 @@ INSERT INTO `user` (`username`, `name`, `surname`, `address`, `fiscal_code`, `us
 -- Indici per le tabelle `bank_transfer`
 --
 ALTER TABLE `bank_transfer`
-  ADD PRIMARY KEY (`iban`),
+  ADD PRIMARY KEY (`iban`,`id_member`) USING BTREE,
   ADD KEY `fkMemberBankTransfer` (`id_member`);
 
 --
@@ -241,7 +352,7 @@ ALTER TABLE `boat_storage_fee`
 -- Indici per le tabelle `credit_card`
 --
 ALTER TABLE `credit_card`
-  ADD PRIMARY KEY (`card_number`),
+  ADD PRIMARY KEY (`card_number`,`id_member`) USING BTREE,
   ADD KEY `fkMemberCreditCard` (`id_member`);
 
 --
@@ -250,6 +361,20 @@ ALTER TABLE `credit_card`
 ALTER TABLE `membership_fee`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fkMemberFee` (`id_member`);
+
+--
+-- Indici per le tabelle `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`,`id_member`),
+  ADD KEY `fk_notif_member` (`id_member`);
+
+--
+-- Indici per le tabelle `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`id`,`member_id`) USING BTREE,
+  ADD KEY `fk_owner` (`member_id`);
 
 --
 -- Indici per le tabelle `race`
@@ -262,7 +387,8 @@ ALTER TABLE `race`
 --
 ALTER TABLE `race_participation`
   ADD PRIMARY KEY (`id_member`,`id_race`,`id_boat`) USING BTREE,
-  ADD KEY `fk_race` (`id_race`,`id_member`,`id_boat`) USING BTREE;
+  ADD KEY `fk_race` (`id_race`,`id_member`,`id_boat`) USING BTREE,
+  ADD KEY `fk_race_boat` (`id_boat`);
 
 --
 -- Indici per le tabelle `user`
@@ -278,25 +404,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT per la tabella `boat`
 --
 ALTER TABLE `boat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT per la tabella `boat_storage_fee`
 --
 ALTER TABLE `boat_storage_fee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT per la tabella `membership_fee`
 --
 ALTER TABLE `membership_fee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT per la tabella `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT per la tabella `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT per la tabella `race`
 --
 ALTER TABLE `race`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Limiti per le tabelle scaricate
@@ -333,12 +471,24 @@ ALTER TABLE `membership_fee`
   ADD CONSTRAINT `fkMemberFee` FOREIGN KEY (`id_member`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Limiti per la tabella `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `fk_notif_member` FOREIGN KEY (`id_member`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `fk_owner` FOREIGN KEY (`member_id`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Limiti per la tabella `race_participation`
 --
 ALTER TABLE `race_participation`
-  ADD CONSTRAINT `fk_member_race` FOREIGN KEY (`id_member`) REFERENCES `user` (`username`),
-  ADD CONSTRAINT `fk_race` FOREIGN KEY (`id_race`) REFERENCES `race` (`id`),
-  ADD CONSTRAINT `fk_race_boat` FOREIGN KEY (`id_boat`) REFERENCES `boat` (`id`);
+  ADD CONSTRAINT `fk_member_race` FOREIGN KEY (`id_member`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_race` FOREIGN KEY (`id_race`) REFERENCES `race` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_race_boat` FOREIGN KEY (`id_boat`) REFERENCES `boat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
