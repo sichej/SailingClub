@@ -701,7 +701,7 @@ public class MemberGuiController implements Initializable{
 	    lbl.getStyleClass().add("lbladd");
 	    lbl.setAlignment(Pos.CENTER);
 	    addBtn.setGraphic(imageLayout);
-	    addBtn.setOnAction(event -> onBtnAddBoatClick());	    
+	    addBtn.setOnAction(event -> onBtnAddBoatClick());    
 		this.grdBoats.add(addBtn,col, row);
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
