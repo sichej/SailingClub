@@ -68,7 +68,8 @@ public class Client extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/fxml/LoginGui.fxml"));
 			Parent gui = loader.load();
 			LoginGuiController controller = loader.getController();
-			controller.setStreams(out, in);
+			RequestController requestController = new RequestController(out,in);
+			controller.setRequestController(requestController);
 			Scene scene = new Scene(gui);
 			scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
 			primaryStage.getIcons().add(new Image("sailingclub/client/gui/images/appico.png"));
@@ -76,7 +77,7 @@ public class Client extends Application {
 			final Socket fSock = socket;
 			primaryStage.setOnCloseRequest(event -> {
 				try {
-					out.writeObject(new Request(Constants.CLOSE_CONNECTION, new EmptyPayload()));
+					requestController.closeConnection();
 					fSock.close();
 				} catch (IOException e) {
 					e.printStackTrace();

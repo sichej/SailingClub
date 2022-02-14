@@ -2,8 +2,6 @@ package sailingclub.client.gui.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -33,9 +31,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sailingclub.client.RequestController;
 import sailingclub.client.gui.fxml.NotificationModel;
 import sailingclub.client.gui.fxml.RaceModel;
-import sailingclub.common.*;
+import sailingclub.common.Constants;
+import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.structures.*;
 import java.util.ArrayList;
 
@@ -49,8 +50,7 @@ public class MemberGuiController implements Initializable{
 	private final int N_ROWS_VISIBLE = 2;
 	private final int COLS_GAP = 10;
 	private final int ROWS_GAP = 10;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
+	private RequestController requestController;
 	private User loggedUser;
 	private Map<String, String> btnTabAssoc;
 	private Boat selectedBoat;
@@ -181,9 +181,8 @@ public class MemberGuiController implements Initializable{
 		this.loggedUser = user;
 	}
 	
-	public void setStreams(ObjectOutputStream out, ObjectInputStream in) {
-		this.out = out;
-		this.in = in;
+	public void setRequestController(RequestController controller) {
+		this.requestController = controller;
 	}
 	
 	public void onStageShow() {
@@ -224,8 +223,7 @@ public class MemberGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayNotifications() throws Exception {
-		out.writeObject(new Request(Constants.GET_NOTIFICATIONS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r =  this.requestController.makeRequest(Constants.GET_NOTIFICATIONS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Notification> notifications = (ArrayList<Notification>)r.getPayload();
@@ -242,8 +240,7 @@ public class MemberGuiController implements Initializable{
     		Button btn = new Button("Mark as read");
     		btn.setOnAction(event -> {
     			try {
-	    			out.writeObject(new Request(Constants.DELETE, n));
-	    	    	in.readObject();
+    				this.requestController.makeRequest(Constants.DELETE, n);
 	    	    	this.displayNotifications();
     			}catch(Exception e) {
     				e.printStackTrace();
@@ -314,8 +311,7 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat);
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
     		double amount = this.selectedBoat.getBoatStorageFee().getAmount();
@@ -323,26 +319,23 @@ public class MemberGuiController implements Initializable{
     		String details = ((String)this.cmBoxBoatPaymentMethod.getValue()).split(" - ")[1];
     		
     		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for storage fee of:\n" + this.selectedBoat.getName());
-    		out.writeObject(new Request(Constants.INSERT, paymentLog));
-    		in.readObject();
+    		this.requestController.makeRequest(Constants.INSERT, paymentLog);
     		this.btnBoatsManagment.fire();
     	}
 	}
 	
 	public void onBtnPayMembershipFee(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
     	
     	if(r.getStatusCode() == Constants.SUCCESS) {
-    		out.writeObject(new Request(Constants.LOGIN, this.loggedUser));
-        	this.loggedUser = (User)((Response)in.readObject()).getPayload();
+    		Response resp = this.requestController.makeRequest(Constants.LOGIN, this.loggedUser);
+        	this.loggedUser = (User)resp.getPayload();
         	double amount = this.loggedUser.getMembershipFee().getPrice();
     		String method = ((String)this.cmBoxMemberPaymentMethod.getValue()).split(" - ")[0];
     		String details = ((String)this.cmBoxMemberPaymentMethod.getValue()).split(" - ")[1];
     		
     		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for annual fee of:\n" + this.loggedUser.getName() + " " + this.loggedUser.getSurname());
-    		out.writeObject(new Request(Constants.INSERT, paymentLog));
-    		in.readObject();
+    		this.requestController.makeRequest(Constants.INSERT, paymentLog);
     		this.btnProfileManagment.fire();
     	}
 	}
@@ -355,16 +348,14 @@ public class MemberGuiController implements Initializable{
 		Optional<ButtonType> option = alert.showAndWait();
 		
 		if(option.get() == ButtonType.OK) {
-			out.writeObject(new Request(Constants.DELETE, this.selectedBoat));
-        	Response rs = (Response)in.readObject();
+			Response rs = this.requestController.makeRequest(Constants.DELETE, this.selectedBoat);
 			if(rs.getStatusCode() == Constants.SUCCESS)
 				this.btnBoatsManagment.fire();
 		}
 	}
 	
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.LOGOUT, new EmptyPayload()));
-    	Response rs = (Response)in.readObject();
+		Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
 		if(rs.getStatusCode() != Constants.SUCCESS) return;
 			
 		setLoggedUser(null);
@@ -372,7 +363,7 @@ public class MemberGuiController implements Initializable{
 		Parent userGui = loader.load();
 		Object controller = loader.getController();
 		((LoginGuiController)controller).setLoggedUser(null);
-		((LoginGuiController)controller).setStreams(out, in);
+		((LoginGuiController)controller).setRequestController(this.requestController);
 		Scene scene = new Scene(userGui);
 		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -410,26 +401,24 @@ public class MemberGuiController implements Initializable{
 	private void onBtnRaceActionClick(Race race, Button clickedBtn, ComboBox<String> cmb) {
 		int raceId = race.getId();
 		String raceState = clickedBtn.getText();
-		
+		Response r = null;
 		try {
 			if(raceState.equals(this.NOT_REGISTERED_STATE)) {	//subscription request
 				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername(),Integer.parseInt(cmb.getValue().split(" - ")[1]));
-				out.writeObject(new Request(Constants.INSERT, subscription));
+				r =this.requestController.makeRequest(Constants.INSERT, subscription);
 				
 				double amount = race.getPrice();
 	    		String method = ((String)this.cmBoxRacePaymentMethod.getValue()).split(" - ")[0];
 	    		String details = ((String)this.cmBoxRacePaymentMethod.getValue()).split(" - ")[1];
 	    		
 	    		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for the subscription to:\n" + race.getName());
-	    		out.writeObject(new Request(Constants.INSERT, paymentLog));
-	    		in.readObject();
+	    		this.requestController.makeRequest(Constants.INSERT, paymentLog);
 			}
 			else if(raceState.equals(this.REGISTERED_STATE)) { 		//unsubscribe request
 				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername());
-				out.writeObject(new Request(Constants.DELETE, subscription));
+				r = this.requestController.makeRequest(Constants.DELETE, subscription);
 			}
 			
-			Response r = (Response)in.readObject();
 	    	if(r.getStatusCode() != Constants.SUCCESS) return;
 	    	
 			this.displayRaces();
@@ -457,13 +446,11 @@ public class MemberGuiController implements Initializable{
 		if(this.radCard == (RadioButton)this.toggleGroup.getSelectedToggle()) {
 			String number = this.txtPaymentFirstAttribute.getText();
 			int cvv = Integer.parseInt(this.txtPaymentSecondAttribute.getText());
-			out.writeObject(new Request(Constants.INSERT, new CreditCard(number,cvv,this.dtpCardExpDate.getValue(),this.loggedUser.getUsername())));
-	    	in.readObject();
+			this.requestController.makeRequest(Constants.INSERT, new CreditCard(number,cvv,this.dtpCardExpDate.getValue(),this.loggedUser.getUsername()));
 		}else {
 			String iban = this.txtPaymentFirstAttribute.getText();
 			String bank = this.txtPaymentSecondAttribute.getText();
-			out.writeObject(new Request(Constants.INSERT, new BankTransfer(iban,bank,this.loggedUser.getUsername())));
-	    	in.readObject();
+			this.requestController.makeRequest(Constants.INSERT, new BankTransfer(iban,bank,this.loggedUser.getUsername()));
 		}
 		this.fillCmbPayments(cmBoxMemberPaymentMethod);
 	}
@@ -493,14 +480,12 @@ public class MemberGuiController implements Initializable{
 			newBoat = new Boat(boatName,this.boatNewLenght, this.loggedUser.getUsername(),"", null);
 		}
 		
-		out.writeObject(new Request(Constants.INSERT, newBoat));
-    	Response rBoat = (Response)in.readObject();
+		Response rBoat = this.requestController.makeRequest(Constants.INSERT, newBoat);
     	
     	if(rBoat.getStatusCode() == Constants.SUCCESS) {
     		int newBoatId = Integer.parseInt((String)rBoat.getPayload());
     		BoatStorageFee fee = new BoatStorageFee(LocalDate.now(), LocalDate.now().plusYears(1), this.boatFeeNewPrice, newBoatId);
-    		out.writeObject(new Request(Constants.INSERT, fee));
-        	Response rFee = (Response)in.readObject();
+        	Response rFee = this.requestController.makeRequest(Constants.INSERT, fee);
         	
         	if(rFee.getStatusCode() == 200) this.btnBoatsManagment.fire();
     	}
@@ -513,21 +498,18 @@ public class MemberGuiController implements Initializable{
 	 */
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception{
-		out.writeObject(new Request(Constants.GET_RACES, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_RACES, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Race> allRaces = (ArrayList<Race>)r.getPayload();
     	
-		out.writeObject(new Request(Constants.GET_RACES_PARTICIPATIONS, new EmptyPayload()));
-    	r = (Response)in.readObject();
+    	r = this.requestController.makeRequest(Constants.GET_RACES_PARTICIPATIONS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Race> userRaces = (ArrayList<Race>)r.getPayload();
     	
 		this.raceModels = FXCollections.observableArrayList();
-		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
-		r = (Response)in.readObject();
+		r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
 		if(r.getStatusCode() != Constants.SUCCESS) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("No boats alert!");
@@ -564,8 +546,8 @@ public class MemberGuiController implements Initializable{
 			for(int j = 0; j < userRaces.size(); j++) {
 				if(userRaces.get(j).getId() == allRaces.get(i).getId()) {  //se  sono registrato
 					btnAction.setText(this.REGISTERED_STATE);
-					out.writeObject(new Request(Constants.GET_SUBSCRIPTED_BOAT, userRaces.get(j)));
-					String indexId = Integer.toString(((Boat)((Response)in.readObject()).getPayload()).getId());
+					Response resp = this.requestController.makeRequest(Constants.GET_SUBSCRIPTED_BOAT, userRaces.get(j));
+					String indexId = Integer.toString(((Boat)resp.getPayload()).getId());
 					for(int k = 0; k < cmb.getItems().size(); k++)
 						if(cmb.getItems().get(k).split(" - ")[1].equals(indexId))
 							cmb.getSelectionModel().select(k);
@@ -598,8 +580,7 @@ public class MemberGuiController implements Initializable{
 	 */
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws IOException, ClassNotFoundException {
-		out.writeObject(new Request(Constants.GET_BOATS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
     	this.grdBoats.getChildren().clear();
     	System.out.println(r.getStatusCode());
     	double numRows = 0;
@@ -691,8 +672,7 @@ public class MemberGuiController implements Initializable{
 	 */
 	@SuppressWarnings("unchecked")
 	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
-		out.writeObject(new Request(Constants.GET_CREDIT_CARDS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_CREDIT_CARDS, new EmptyPayload());
     	if(r.getStatusCode()!= 200) return;
 		ArrayList<CreditCard> creditCards = (ArrayList<CreditCard>)r.getPayload();
     	
@@ -707,9 +687,8 @@ public class MemberGuiController implements Initializable{
     	if(!cmb.getItems().isEmpty())
     		cmb.getSelectionModel().selectFirst();
     	
-    	out.writeObject(new Request(Constants.GET_BANK_TRANSFERS, new EmptyPayload()));
-    	r = (Response)in.readObject();
-    	if(r.getStatusCode()!= 200) return;
+    	r = this.requestController.makeRequest(Constants.GET_BANK_TRANSFERS, new EmptyPayload());
+    	if(r.getStatusCode() != Constants.SUCCESS) return;
 		ArrayList<BankTransfer> bankTransfers = (ArrayList<BankTransfer>)r.getPayload();
     	
     	for(BankTransfer b: bankTransfers) {

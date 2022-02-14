@@ -1,7 +1,5 @@
 package sailingclub.client.gui.controllers;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,16 +19,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import sailingclub.client.RequestController;
 import sailingclub.client.gui.fxml.BoatModel;
 import sailingclub.client.gui.fxml.PaymentModel;
 import sailingclub.client.gui.fxml.RaceModel;
-import sailingclub.common.*;
+import sailingclub.common.Constants;
+import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.structures.*;
 
 public class EmployeeGuiController implements Initializable{
 	private final double BTN_NOTIFY_MAX_W = 50;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
+	private RequestController requestController;
 	private User userFilter;
 	private Race selectedRace;
 	private Boat selectedBoat;
@@ -179,8 +179,7 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.LOGOUT, new EmptyPayload()));
-    	Response rs = (Response)in.readObject();
+    	Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
 		if(rs.getStatusCode() != Constants.SUCCESS) return;
 			
 		setLoggedUser(null);
@@ -188,7 +187,7 @@ public class EmployeeGuiController implements Initializable{
 		Parent userGui = loader.load();
 		Object controller = loader.getController();
 		((LoginGuiController)controller).setLoggedUser(null);
-		((LoginGuiController)controller).setStreams(out, in);
+		((LoginGuiController)controller).setRequestController(this.requestController);
 		Scene scene = new Scene(userGui);
 		scene.getStylesheets().add("sailingclub/client/gui/css/custom.css");
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -203,8 +202,7 @@ public class EmployeeGuiController implements Initializable{
 							this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User upUser = new User(this.userFilter.getUsername() + "," + this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
                 this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
-		out.writeObject(new Request(Constants.UPDATE_MEMBER, upUser));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.UPDATE_MEMBER, upUser);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	this.onBtnClearMemberClick(null);
     	this.fillUserCmbFilters();
@@ -213,8 +211,7 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnDeleteMemberClick(ActionEvent event) throws Exception {
-		out.writeObject(new Request(Constants.DELETE, this.userFilter));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.DELETE, this.userFilter);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	this.onBtnClearMemberClick(null);
     	this.fillUserCmbFilters();
@@ -224,12 +221,10 @@ public class EmployeeGuiController implements Initializable{
 		MembershipFee fee = new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User newUser = new User(this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
 				                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
-		out.writeObject(new Request(Constants.INSERT, newUser));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.INSERT, newUser);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
-		out.writeObject(new Request(Constants.INSERT, fee));
-    	r = (Response)in.readObject();
+    	r = this.requestController.makeRequest(Constants.INSERT, fee);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	fillUserCmbFilters();
@@ -237,8 +232,7 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
-		out.writeObject(new Request(Constants.GET_BOAT_BY_ID, this.selectedBoat));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_BOAT_BY_ID, this.selectedBoat);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
 
     	BoatStorageFee uBsf = new BoatStorageFee(((Boat)r.getPayload()).getBoatStorageFee().getId(), 
@@ -246,8 +240,7 @@ public class EmployeeGuiController implements Initializable{
     	
 		Boat uBoat = new Boat(this.selectedBoat.getId(),this.txtBoatName.getText(), Double.parseDouble(this.spnBoatLength.getEditor().getText()), "", uBsf);
 		
-		out.writeObject(new Request(Constants.UPDATE_BOAT, uBoat));
-    	r = (Response)in.readObject();
+    	r = this.requestController.makeRequest(Constants.UPDATE_BOAT, uBoat);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	this.onBtnClearBoatClick(null);
@@ -256,8 +249,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	private void sendNotification(User user, String text) {
 		try {
-			out.writeObject(new Request(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now())));
-	    	in.readObject();
+			this.requestController.makeRequest(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now()));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -265,8 +257,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayMemberBoats() throws Exception{
-		out.writeObject(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
@@ -293,8 +284,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws Exception{
-		out.writeObject(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	
     	ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
@@ -341,8 +331,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	public void onBtnUpdateRaceClick(ActionEvent event) throws Exception{
 		Race upRace = new Race(this.selectedRace.getId(),this.dtpRaceDate.getValue(), Double.parseDouble(this.spnRacePrice.getEditor().getText()), this.txtRaceName.getText());
-		out.writeObject(new Request(Constants.UPDATE_RACE, upRace));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.UPDATE_RACE, upRace);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
         this.displayRaces();
 	}	
@@ -351,22 +340,19 @@ public class EmployeeGuiController implements Initializable{
 		String rName = this.txtRaceName.getText();
 		LocalDate rDate = this.dtpRaceDate.getValue();
 		double rPrice = Double.parseDouble(this.spnRacePrice.getEditor().getText());
-		out.writeObject(new Request(Constants.INSERT, new Race(rDate,rPrice,rName)));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.INSERT, new Race(rDate,rPrice,rName));
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	this.onBtnClearRace(null);
     	this.displayRaces();
 	}
 
-	public void setStreams(ObjectOutputStream out, ObjectInputStream in)  {
-		this.out = out;
-		this.in = in;
+	public void setRequestController(RequestController controller)  {
+		this.requestController = controller;
 	}
 	
 	@SuppressWarnings("unchecked")
 	private void fillUserCmbFilters() throws Exception{
-		out.writeObject(new Request(Constants.GET_MEMBERS, new EmptyPayload()));
-		Response r = (Response)in.readObject();
+		Response r = this.requestController.makeRequest(Constants.GET_MEMBERS, new EmptyPayload());
 		if(r.getStatusCode() != Constants.SUCCESS) return;
 		
 		this.cmbSelectedUser.getItems().clear();
@@ -390,8 +376,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	private void onCmbSelectedUserSelectionChanged(String selectedUser) {
 		try {
-			out.writeObject(new Request(Constants.GET_MEMBER_BY_USERNAME, selectedUser));
-	    	Response r = (Response)in.readObject();
+	    	Response r = this.requestController.makeRequest(Constants.GET_MEMBER_BY_USERNAME, selectedUser);
 	    	if(r.getStatusCode() != Constants.SUCCESS) return;
 			this.userFilter = (User)r.getPayload();
 			txtUsername.setText(this.userFilter.getUsername());
@@ -411,8 +396,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	private void onBtnRaceActionClick(Button btn, Race race)  {
 		try {
-			out.writeObject(new Request(Constants.DELETE, race));
-	    	Response r = (Response)in.readObject();
+	    	Response r = this.requestController.makeRequest(Constants.DELETE, race);
 	    	if(r.getStatusCode() != Constants.SUCCESS) return;
 	    	
 	    	this.displayRaces();
@@ -423,8 +407,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayPayments() throws Exception{
-		out.writeObject(new Request(Constants.GET_PAYMENTS, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_PAYMENTS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	ArrayList<Payment> payments = (ArrayList<Payment>)r.getPayload();
     	this.paymentsModels = FXCollections.observableArrayList();
@@ -438,8 +421,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception {
-		out.writeObject(new Request(Constants.GET_RACES, new EmptyPayload()));
-    	Response r = (Response)in.readObject();
+    	Response r = this.requestController.makeRequest(Constants.GET_RACES, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	ArrayList<Race> allRaces = (ArrayList<Race>)r.getPayload();
     	
@@ -456,8 +438,7 @@ public class EmployeeGuiController implements Initializable{
 				btnAction.setText("Race ended\nRemove");
 			}
 			
-			out.writeObject(new Request(Constants.GET_RACES_SUB, allRaces.get(i).getId().toString()));
-	    	r = (Response)in.readObject();
+	    	r = this.requestController.makeRequest(Constants.GET_RACES_SUB, allRaces.get(i).getId().toString());
 			
 			this.raceModels.add(new RaceModel(allRaces.get(i),btnAction,Integer.parseInt((String)r.getPayload())));
 		}
