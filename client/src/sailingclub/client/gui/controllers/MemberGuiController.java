@@ -117,6 +117,7 @@ public class MemberGuiController implements Initializable{
 	@FXML private TableColumn<NotificationModel, String> colNotificationDateTime;
 	@FXML private TableColumn<NotificationModel, String> colNotificationText;
 	@FXML private TableColumn<NotificationModel, Button> colNotificationAction;
+	@FXML private Label lblBoatNameError;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -156,7 +157,10 @@ public class MemberGuiController implements Initializable{
 		
 		spnBoatLenght.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
 			try { this.boatNewLenght = Double.parseDouble(newValue); }
-			catch(Exception e) {this.boatNewLenght = 0.1;};
+			catch(Exception e) {
+				boatNewLenght = 1;
+				return;
+			}
 			this.boatFeeNewPrice = boatNewLenght *  this.BOAT_FEE_MULTIPLIER;
 			this.lblFeeAmount.setText("Storage fee amount: " + this.boatFeeNewPrice);
 	    });
@@ -229,6 +233,7 @@ public class MemberGuiController implements Initializable{
     	ArrayList<Notification> notifications = (ArrayList<Notification>)r.getPayload();
     	
     	if(notifications.size() == 0) {
+    		this.tabNotifications.setVisible(false);
     		this.imgNotification.setEffect(gray);
     		return;
     	}
@@ -444,12 +449,25 @@ public class MemberGuiController implements Initializable{
 	
 	public void onBtnAddPaymentMethod(ActionEvent evt) throws Exception{
 		if(this.radCard == (RadioButton)this.toggleGroup.getSelectedToggle()) {
-			String number = this.txtPaymentFirstAttribute.getText();
-			int cvv = Integer.parseInt(this.txtPaymentSecondAttribute.getText());
+			String number = null;
+			int cvv = 0;
+			
+			try {
+				number = this.txtPaymentFirstAttribute.getText();
+				cvv = Integer.parseInt(this.txtPaymentSecondAttribute.getText());
+			}catch(Exception e) {
+				return;
+			}
+			
+			if(this.dtpCardExpDate.getValue() == null) return;
+			if(this.txtPaymentFirstAttribute.getText().equals("")) return;
+			
 			this.requestController.makeRequest(Constants.INSERT, new CreditCard(number,cvv,this.dtpCardExpDate.getValue(),this.loggedUser.getUsername()));
 		}else {
 			String iban = this.txtPaymentFirstAttribute.getText();
 			String bank = this.txtPaymentSecondAttribute.getText();
+			
+			if(iban.equals("") || bank.equals("")) return;
 			this.requestController.makeRequest(Constants.INSERT, new BankTransfer(iban,bank,this.loggedUser.getUsername()));
 		}
 		this.fillCmbPayments(cmBoxMemberPaymentMethod);
@@ -467,8 +485,37 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
+		Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
+		ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
+		
 		String boatName = this.txtBoatName.getText();
+		
+		for(Boat b: boats) {
+			if(b.getName().equals(boatName)) {
+				this.lblBoatNameError.setText("You have already a boat with this name!");
+				return;
+			}
+		}
+		
+		if(boatName.equals("")) {
+			this.lblBoatNameError.setText("Invalid boat name!");
+			return;
+		}
+		
+		try {
+			Double.parseDouble(this.spnBoatLenght.getEditor().getText());
+		}catch(Exception e){
+			this.lblBoatNameError.setText("Invalid boat length!");
+			return;
+		}
+		
+		if(this.spnBoatLenght.getEditor().getText().equals("")) {
+			this.lblBoatNameError.setText("Invalid boat length!");
+			return;
+		}
+		
 		if(boatName.equals("")) return;
 		byte[] img = null;
 		
@@ -573,6 +620,7 @@ public class MemberGuiController implements Initializable{
 		this.txtBoatName.setText("");
 		this.spnBoatLenght.getEditor().setText(Integer.toString(5));
 		this.imgNewBoat.setImage(new Image("sailingclub/client/gui/images/add_image.png"));
+		this.lblBoatNameError.setText("");
 	}
 	
 	/*
@@ -582,7 +630,6 @@ public class MemberGuiController implements Initializable{
 	private void displayBoats() throws IOException, ClassNotFoundException {
     	Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
     	this.grdBoats.getChildren().clear();
-    	System.out.println(r.getStatusCode());
     	double numRows = 0;
     	int col = 0 , row = 0;
     	
@@ -654,12 +701,8 @@ public class MemberGuiController implements Initializable{
 	    lbl.getStyleClass().add("lbladd");
 	    lbl.setAlignment(Pos.CENTER);
 	    addBtn.setGraphic(imageLayout);
-	    addBtn.setOnAction(event -> onBtnAddBoatClick());
-		
-	    System.out.println(col + " " + row);
-	    
+	    addBtn.setOnAction(event -> onBtnAddBoatClick());	    
 		this.grdBoats.add(addBtn,col, row);
-		
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
 	

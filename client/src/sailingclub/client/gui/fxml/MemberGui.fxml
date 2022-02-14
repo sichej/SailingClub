@@ -27,6 +27,110 @@
    <children>
       <StackPane fx:id="stckBody" layoutX="327.0" layoutY="142.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
+            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+               <children>
+                  <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="480.0" spacing="20.0" styleClass="boatbox">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="154.0" prefWidth="433.0" spacing="15.0">
+                                 <children>
+                                    <ImageView fitHeight="166.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/member_sign.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="lblUsername" prefHeight="164.0" prefWidth="183.0" text="User" textFill="#14274e">
+                                       <font>
+                                          <Font name="System Bold Italic" size="40.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="lblUserInfo" prefHeight="135.0" prefWidth="430.0" text="1&#10;2&#10;3&#10;4&#10;5">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" prefWidth="435.0" style="-fx-background-color: #14274e;" text="Logout" textFill="WHITE">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="350.0" spacing="8.0">
+                           <children>
+                              <Label text="Pay Membership Fee" textFill="#14274e">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblMemberPaymentDescription" text="1&#10;2&#10;3&#10;4">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="cmBoxMemberPaymentMethod" prefHeight="30.0" prefWidth="450.0" promptText="Select a payment method" styleClass="logininput">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </ComboBox>
+                              <Button fx:id="btnPayMembershipFee" mnemonicParsing="false" onAction="#onBtnPayMembershipFee" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Pay" textFill="WHITE">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                              <Label text="Add a payment method" textFill="#14274e">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="21.0" prefWidth="306.0" spacing="20.0">
+                                 <children>
+                                    <RadioButton fx:id="radBank" mnemonicParsing="false" styleClass="logininput" text="Bank account" />
+                                    <RadioButton fx:id="radCard" mnemonicParsing="false" selected="true" text="Credit card" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="28.0" prefWidth="306.0" spacing="10.0">
+                                 <children>
+                                    <TextField fx:id="txtPaymentFirstAttribute" prefHeight="30.0" promptText="Number" styleClass="logininput" />
+                                    <TextField fx:id="txtPaymentSecondAttribute" prefHeight="30.0" promptText="CVV" styleClass="logininput" />
+                                 </children>
+                              </HBox>
+                              <DatePicker fx:id="dtpCardExpDate" prefHeight="30.0" prefWidth="326.0" promptText="Expiration date" styleClass="logininput" />
+                              <Button mnemonicParsing="false" onAction="#onBtnAddPaymentMethod" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="11.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="tabNotifications" styleClass="overlaypane">
                <children>
                   <AnchorPane style="-fx-background-color: #fff; -fx-background-radius: 8;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
@@ -46,54 +150,6 @@
                            </styleClass>
                         </TableView>
                         <Button mnemonicParsing="false" onAction="#onBtnCloseOverlayClick" styleClass="openbutton">
-                           <graphic>
-                              <ImageView fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/close_overlay.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabAddBoat" prefHeight="450.0" prefWidth="830.0" styleClass="overlaypane">
-               <children>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="386.0" prefWidth="460.0" spacing="20.0" styleClass="paymentForm" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="30.0">
-                           <children>
-                              <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#onBtnLoadBoatImgClick" styleClass="menubuttons">
-                                 <graphic>
-                                    <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/add_image.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
-                              <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="456.0" styleClass="logininput" />
-                              <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#onBtnInsertBoatClick" prefHeight="31.0" prefWidth="465.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                              <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="454.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-                           </padding>
-                           <effect>
-                              <DropShadow spread="0.18" />
-                           </effect>
-                        </VBox>
-                        <Button layoutX="169.0" layoutY="32.0" mnemonicParsing="false" onAction="#onBtnCloseOverlayClick" styleClass="openbutton">
                            <graphic>
                               <ImageView fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -206,113 +262,62 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="tabProfileManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
+            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
                <children>
-                  <HBox alignment="CENTER" layoutX="312.0" layoutY="63.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="tabAddBoat" prefHeight="450.0" prefWidth="830.0" styleClass="overlaypane">
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="480.0" spacing="20.0" styleClass="boatbox">
+                        <VBox alignment="TOP_CENTER" prefHeight="386.0" prefWidth="460.0" spacing="20.0" styleClass="paymentForm" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="30.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="154.0" prefWidth="433.0" spacing="15.0">
-                                 <children>
-                                    <ImageView fitHeight="166.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
+                              <Button fx:id="btnLoadBoatImg" mnemonicParsing="false" onAction="#onBtnLoadBoatImgClick" styleClass="menubuttons">
+                                 <graphic>
+                                    <ImageView fx:id="imgNewBoat" fitHeight="140.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/member_sign.png" />
+                                          <Image url="@../images/add_image.png" />
                                        </image>
                                     </ImageView>
-                                    <Label fx:id="lblUsername" prefHeight="164.0" prefWidth="183.0" text="User" textFill="#14274e">
-                                       <font>
-                                          <Font name="System Bold Italic" size="40.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <Label fx:id="lblUserInfo" prefHeight="130.0" prefWidth="430.0" text="Label">
+                                 </graphic>
+                              </Button>
+                              <TextField fx:id="txtBoatName" prefHeight="30.0" promptText="Boat name" styleClass="logininput" />
+                              <Spinner fx:id="spnBoatLenght" prefHeight="30.0" prefWidth="456.0" styleClass="logininput" />
+                              <Label fx:id="lblBoatNameError" prefHeight="18.0" prefWidth="468.0" textFill="RED">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btnInsertBoat" mnemonicParsing="false" onAction="#onBtnInsertBoatClick" prefHeight="31.0" prefWidth="465.0" style="-fx-background-color: #14274e;" text="Add boat" textFill="WHITE">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="lblFeeAmount" alignment="CENTER" prefHeight="30.0" prefWidth="454.0" text="Storage fee amount: " textAlignment="CENTER" textFill="#14274e">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" prefWidth="435.0" style="-fx-background-color: #14274e;" text="Logout" textFill="WHITE">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
                            </children>
                            <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                            </padding>
+                           <effect>
+                              <DropShadow spread="0.18" />
+                           </effect>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="430.0" prefWidth="350.0" spacing="10.0">
-                           <children>
-                              <Label text="Pay Membership Fee" textFill="#14274e">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblMemberPaymentDescription" text="Description">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox fx:id="cmBoxMemberPaymentMethod" prefHeight="30.0" prefWidth="450.0" promptText="Select a payment method" styleClass="logininput">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <Button fx:id="btnPayMembershipFee" mnemonicParsing="false" onAction="#onBtnPayMembershipFee" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Pay" textFill="WHITE">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                              <Label text="Add a payment method" textFill="#14274e">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="21.0" prefWidth="306.0" spacing="20.0">
-                                 <children>
-                                    <RadioButton fx:id="radBank" mnemonicParsing="false" styleClass="logininput" text="Bank account" />
-                                    <RadioButton fx:id="radCard" mnemonicParsing="false" selected="true" text="Credit card" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="28.0" prefWidth="306.0" spacing="10.0">
-                                 <children>
-                                    <TextField fx:id="txtPaymentFirstAttribute" prefHeight="30.0" promptText="Number" styleClass="logininput" />
-                                    <TextField fx:id="txtPaymentSecondAttribute" prefHeight="30.0" promptText="CVV" styleClass="logininput" />
-                                 </children>
-                              </HBox>
-                              <DatePicker fx:id="dtpCardExpDate" prefHeight="30.0" prefWidth="326.0" promptText="Expiration date" styleClass="logininput" />
-                              <Button mnemonicParsing="false" onAction="#onBtnAddPaymentMethod" prefHeight="30.0" prefWidth="450.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <padding>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
+                        <Button layoutX="169.0" layoutY="32.0" mnemonicParsing="false" onAction="#onBtnCloseOverlayClick" styleClass="openbutton">
+                           <graphic>
+                              <ImageView fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/close_overlay.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="tabBoatsManagment" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ScrollPane fx:id="scrContainer" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </children>

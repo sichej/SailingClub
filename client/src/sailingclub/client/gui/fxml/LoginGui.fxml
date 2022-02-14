@@ -41,7 +41,7 @@
             <Insets left="20.0" right="20.0" />
          </padding>
       </VBox>
-      <Label layoutX="140.0" layoutY="478.0" text="Ⓡ A. Bertogalli &amp; E.Sichelli" textFill="WHITE">
+      <Label layoutX="140.0" layoutY="478.0" text="Ⓡ A. Bertogalli &amp; E. Sichelli" textFill="WHITE">
          <font>
             <Font name="System Italic" size="10.0" />
          </font>
