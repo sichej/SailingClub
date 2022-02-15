@@ -40,7 +40,6 @@ public class DatabaseManager {
 		if(!isResultSet) 
 			hasToBeWrapped = stmt.getMoreResults();  //se ha più risultati prende il secondo
 		
-		System.out.println(isResultSet + " " + hasToBeWrapped);
 		ResultSet rs = stmt.getResultSet();
 		
 		List<Map<String, String>> wr = null;

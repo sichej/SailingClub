@@ -46,5 +46,6 @@
             <Font name="System Italic" size="10.0" />
          </font>
       </Label>
+      <AnchorPane fx:id="tabLoading" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

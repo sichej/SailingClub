@@ -2,16 +2,8 @@
 
 SOSTITUIRE TUTTE LE ECCEZIONI NELLA FIRMA DEL METODO DELLA GRAFICA CON DEI TRY CATCH SE NO SI BLOCCA IL PROGRAMMA
 riordinare codice
-CONTROLLO EVENTUALI ECCEZIONI TESTARE IL PROGRAMMA + per esempio barca con stesso nome aggiunta utente stesso nome, fare alert di errore
 TEST PIU DIAGRAMMI LEGGERE BENE CONSEGNA POGGI CE MOLTA ROBA DA FARE NON DI CODICE
-disattiva bottoni per update se non ce selezionato user anche per gara e barca (lasciare attivate solo cose che servono)
 
 ----cose da decidere
 
-CONTROLLI SU SCADENZA FEE????
-nell'update della barca update della foto????
-aggiungi rimuovi barche anche in impiegato?????
-Separare in controller pannelli?????
-LOADER TRA PANNELLI CHE ASPETTANO???'
-grafica boat info e notifiche pannello???
-programma responsive full screen???
+CONTROLLI SU SCADENZA FEE???

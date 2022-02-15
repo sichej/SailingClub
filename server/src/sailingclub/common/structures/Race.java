@@ -24,6 +24,10 @@ public class Race implements Insertable, Removable, Serializable{
 		this.price = price;
 		this.name = name;
 	}
+	
+	public Race(int id) {
+		this.id = id;
+	}
 
 	public Integer getId() { return id; }
 	public LocalDate getDate() { return date; }

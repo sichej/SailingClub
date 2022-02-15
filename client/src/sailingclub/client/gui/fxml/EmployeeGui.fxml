@@ -52,12 +52,12 @@
                                  <children>
                                     <HBox prefHeight="30.0" spacing="5.0">
                                        <children>
-                                          <Button mnemonicParsing="false" onAction="#onBtnUpdateRaceClick" prefHeight="38.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
+                                          <Button fx:id="btnUpdateRace" disable="true" mnemonicParsing="false" onAction="#onBtnUpdateRaceClick" prefHeight="38.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </Button>
-                                          <Button mnemonicParsing="false" onAction="#onBtnAddRaceClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
+                                          <Button fx:id="btnAddRace" mnemonicParsing="false" onAction="#onBtnAddRaceClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -111,25 +111,25 @@
                               <TextField fx:id="txtFiscalCode" prefHeight="30.0" promptText="Fiscal code" styleClass="logininput" />
                               <HBox prefHeight="30.0" spacing="5.0">
                                  <children>
-                                    <Spinner fx:id="spnMembershipFeePrice" prefHeight="30.0" prefWidth="150.0" />
-                                    <DatePicker fx:id="dtpMembershipFeeDate" prefHeight="30.0" prefWidth="201.0" promptText="Membership fee date" />
+                                    <Spinner fx:id="spnMembershipFeePrice" prefHeight="30.0" prefWidth="150.0" styleClass="logininput" />
+                                    <DatePicker fx:id="dtpMembershipFeeDate" prefHeight="30.0" prefWidth="201.0" promptText="Membership fee date" styleClass="logininput" />
                                  </children>
                               </HBox>
                               <VBox spacing="5.0">
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="30.0" spacing="5.0">
                                        <children>
-                                          <Button mnemonicParsing="false" onAction="#onBtnUpdateMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
+                                          <Button fx:id="btnUpdateMember" disable="true" mnemonicParsing="false" onAction="#onBtnUpdateMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </Button>
-                                          <Button mnemonicParsing="false" onAction="#onBtnAddMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
+                                          <Button fx:id="btnAddMember" mnemonicParsing="false" onAction="#onBtnAddMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Add" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </Button>
-                                          <Button mnemonicParsing="false" onAction="#onBtnDeleteMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Delete" textFill="WHITE">
+                                          <Button fx:id="btnDeleteMember" disable="true" mnemonicParsing="false" onAction="#onBtnDeleteMemberClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Delete" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -138,7 +138,7 @@
                                     </HBox>
                                     <HBox prefHeight="30.0" spacing="5.0">
                                        <children>
-                                          <Button mnemonicParsing="false" onAction="#btnNotifyMemberClick" prefHeight="37.0" prefWidth="290.0" style="-fx-background-color: #14274e;" text="User fee notif." textFill="WHITE">
+                                          <Button fx:id="btnMemberNotification" disable="true" mnemonicParsing="false" onAction="#btnNotifyMemberClick" prefHeight="37.0" prefWidth="290.0" style="-fx-background-color: #14274e;" text="User fee notif." textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -197,7 +197,7 @@
                               <Spinner fx:id="spnBoatFeeAmount" editable="true" prefHeight="30.0" prefWidth="293.0" styleClass="logininput" />
                               <HBox spacing="5.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#onBtnUpdateBoatClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
+                                    <Button fx:id="btnUpdateBoat" disable="true" mnemonicParsing="false" onAction="#onBtnUpdateBoatClick" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #14274e;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
                                        </font>

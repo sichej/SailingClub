@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -84,6 +85,13 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private Label lblSelectedMember;
 	@FXML private DatePicker dtpMembershipFeeDate;
 	@FXML private Spinner<Double> spnMembershipFeePrice;
+	@FXML private Button btnUpdateRace;
+	@FXML private Button btnAddRace;
+	@FXML private Button btnMemberNotification;
+	@FXML private Button btnUpdateMember;
+	@FXML private Button btnAddMember;
+	@FXML private Button btnDeleteMember;
+	@FXML private Button btnUpdateBoat;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -95,6 +103,10 @@ public class EmployeeGuiController implements Initializable{
 		this.cmbSelectedUser.setVisible(false);
 		this.cmbSelectedUser.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
 			if(newValue!= null) this.onCmbSelectedUserSelectionChanged(newValue);
+    		this.btnMemberNotification.setDisable(false);
+    		this.btnUpdateMember.setDisable(false);
+    		this.btnAddMember.setDisable(true);
+            this.btnDeleteMember.setDisable(false);
 		}); 
 		
 		this.colRaceId.setCellValueFactory(new PropertyValueFactory<RaceModel,Integer>("raceId"));
@@ -113,6 +125,8 @@ public class EmployeeGuiController implements Initializable{
 		            this.dtpRaceDate.setValue(rowData.getRaceDate());
 		            this.lblSelectedRace.setText("Selected race id: " + rowData.getRaceId());
 		            this.selectedRace = new Race(rowData.getRaceId(),rowData.getRaceDate(), rowData.getRacePrice(), rowData.getRaceName());
+		            this.btnUpdateRace.setDisable(false);
+		            this.btnAddRace.setDisable(true);
 		        }
 		    });
 		    return row ;
@@ -135,6 +149,7 @@ public class EmployeeGuiController implements Initializable{
 		        	spnBoatFeeAmount.getEditor().setText(Double.toString(rowData.getBoatFeeAmount()));
 		        	lblSelectedBoat.setText("Selected boat id: " + rowData.getBoatId());
 		        	this.selectedBoat = new Boat(rowData.getBoatId());
+		        	this.btnUpdateBoat.setDisable(false);
 		        }
 		    });
 		    return row ;
@@ -198,8 +213,16 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnUpdateMemberClick(ActionEvent event) throws Exception {
-		MembershipFee fee = new MembershipFee(this.userFilter.getMembershipFee().getPaymentDate(),dtpMembershipFeeDate.getValue(), 
-							this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
+		if(this.txtUsername.getText().equals("")) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a valid username!");
+			alert.showAndWait();
+			return;
+		}
+				
+		MembershipFee fee = new MembershipFee(this.userFilter.getMembershipFee().getPaymentDate(),dtpMembershipFeeDate.getValue(), 					this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User upUser = new User(this.userFilter.getUsername() + "," + this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
                 this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
     	Response r = this.requestController.makeRequest(Constants.UPDATE_MEMBER, upUser);
@@ -218,6 +241,26 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	public void onBtnAddMemberClick(ActionEvent event) throws Exception {
+		if(this.txtUsername.getText().equals("")) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a valid username!");
+			alert.showAndWait();
+			return;
+		}
+		
+		for(String user: this.cmbSelectedUser.getItems()) {
+			if(this.userFilter.getUsername().equals(user)) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Warning alert");
+				alert.setHeaderText("Invilid values");
+				alert.setContentText("Username already exists!");
+				alert.showAndWait();
+				return;
+			}
+		}
+		
 		MembershipFee fee = new MembershipFee(LocalDate.now(), LocalDate.now().plusYears(1), this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User newUser = new User(this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
 				                this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
@@ -234,11 +277,35 @@ public class EmployeeGuiController implements Initializable{
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_BOAT_BY_ID, this.selectedBoat);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
+    	
+    	double amm = 0;
+    	double len = 0;
+    	
+    	try {
+    		amm = Double.parseDouble(this.spnBoatFeeAmount.getEditor().getText());
+    		len = Double.parseDouble(this.spnBoatLength.getEditor().getText());
+    	}catch(Exception e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a integer or a floating point into Boat length and fee price!");
+			alert.showAndWait();
+    		return;
+    	}
+    	
+    	if(this.txtBoatName.getText().equals("") || this.dtpBoatFeeExpDate.getValue() == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a boat name and a valid date!");
+			alert.showAndWait();
+    		return;
+    	}
 
     	BoatStorageFee uBsf = new BoatStorageFee(((Boat)r.getPayload()).getBoatStorageFee().getId(), 
-    						  null,this.dtpBoatFeeExpDate.getValue(),Double.parseDouble(this.spnBoatFeeAmount.getEditor().getText()),this.selectedBoat.getId());
+    						  null,this.dtpBoatFeeExpDate.getValue(),amm,this.selectedBoat.getId());
     	
-		Boat uBoat = new Boat(this.selectedBoat.getId(),this.txtBoatName.getText(), Double.parseDouble(this.spnBoatLength.getEditor().getText()), "", uBsf);
+		Boat uBoat = new Boat(this.selectedBoat.getId(),this.txtBoatName.getText(), len, "", uBsf);
 		
     	r = this.requestController.makeRequest(Constants.UPDATE_BOAT, uBoat);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -303,6 +370,8 @@ public class EmployeeGuiController implements Initializable{
         this.dtpRaceDate.setValue(null);
         this.lblSelectedRace.setText("");
         this.selectedRace = null;
+        this.btnUpdateRace.setDisable(true);
+        this.btnAddRace.setDisable(false);
 	}
 	
 	public void onBtnClearMemberClick(ActionEvent event) {
@@ -318,6 +387,10 @@ public class EmployeeGuiController implements Initializable{
 		this.userFilter = null;
 		this.boatsMemberModels.clear();
 		this.tblMemberBoatNotifications.setItems(boatsMemberModels);
+		this.btnMemberNotification.setDisable(true);
+		this.btnUpdateMember.setDisable(true);
+		this.btnDeleteMember.setDisable(true);
+		this.btnAddMember.setDisable(false);
 	}
 	
 	public void onBtnClearBoatClick(ActionEvent event) {
@@ -327,10 +400,35 @@ public class EmployeeGuiController implements Initializable{
     	spnBoatFeeAmount.getEditor().setText("50");
     	lblSelectedBoat.setText("");
     	this.selectedBoat = null;
+    	this.btnUpdateBoat.setDisable(true);
 	}
 	
 	public void onBtnUpdateRaceClick(ActionEvent event) throws Exception{
-		Race upRace = new Race(this.selectedRace.getId(),this.dtpRaceDate.getValue(), Double.parseDouble(this.spnRacePrice.getEditor().getText()), this.txtRaceName.getText());
+		LocalDate rDate = this.dtpRaceDate.getValue();
+		String rName = this.txtRaceName.getText();
+		
+		if(rName.equals("") || rDate == null){
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a date and a name!");
+			alert.showAndWait();
+			return;
+		}
+		
+		double rPrice = 0;
+		try {
+			rPrice = Double.parseDouble(this.spnRacePrice.getEditor().getText());
+		} catch(Exception e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid price");
+			alert.setContentText("You must insert an integer or a floating point value!");
+			alert.showAndWait();
+			return;
+		}
+		
+		Race upRace = new Race(this.selectedRace.getId(),rDate, rPrice, rName);
     	Response r = this.requestController.makeRequest(Constants.UPDATE_RACE, upRace);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
         this.displayRaces();
@@ -339,7 +437,27 @@ public class EmployeeGuiController implements Initializable{
 	public void onBtnAddRaceClick(ActionEvent event) throws Exception {
 		String rName = this.txtRaceName.getText();
 		LocalDate rDate = this.dtpRaceDate.getValue();
-		double rPrice = Double.parseDouble(this.spnRacePrice.getEditor().getText());
+		
+		if(rName.equals("") || rDate == null){
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid values");
+			alert.setContentText("You must insert a date and a name!");
+			alert.showAndWait();
+			return;
+		}
+		
+		double rPrice = 0;
+		try {
+			rPrice = Double.parseDouble(this.spnRacePrice.getEditor().getText());
+		} catch(Exception e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning alert");
+			alert.setHeaderText("Invilid price");
+			alert.setContentText("You must insert an integer or a floating point value!");
+			alert.showAndWait();
+			return;
+		}
     	Response r = this.requestController.makeRequest(Constants.INSERT, new Race(rDate,rPrice,rName));
     	if(r.getStatusCode() != Constants.SUCCESS) return;
     	this.onBtnClearRace(null);
