@@ -12,8 +12,11 @@ import org.junit.Test;
 import sailingclub.client.RequestController;
 import sailingclub.common.Constants;
 import sailingclub.common.Response;
+import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
+import sailingclub.common.structures.BoatStorageFee;
 import sailingclub.common.structures.Race;
+import sailingclub.common.structures.User;
 
 public class RequestControllerStandardTest {
 	private RequestController controller;
@@ -30,13 +33,18 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
-	public void testAddRemoveRace(){
+	public void testInsertDelete(){
 		Race race = new Race(LocalDate.now(), 55.6, "TestRace");
-		
 		Response r = controller.makeRequest(Constants.INSERT, race);
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
-		
 		r = controller.makeRequest(Constants.DELETE, new Race(Integer.parseInt((String)r.getPayload())));
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+	}
+	
+	@Test
+	public void testLogin() {
+		User user = new User("user_for_test", Utils.stringToDigest("x"));
+		Response r = controller.makeRequest(Constants.LOGIN, user);
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 	
