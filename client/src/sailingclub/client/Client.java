@@ -8,9 +8,6 @@ import java.util.Optional;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import sailingclub.client.gui.controllers.LoginGuiController;
-import sailingclub.common.Constants;
-import sailingclub.common.Request;
-import sailingclub.common.structures.EmptyPayload;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,26 +18,33 @@ import javafx.scene.layout.Region;
 import javafx.fxml.*;
 
 /**
- * only contains the client main
+ * The main class allows to launch the gui
+ * also checks if the connection to the server is available
+ * initialize the sockets and the streams
  * 
  * @author Andrea Bertogalli and Edoardo Sichelli
  */
 public class Client extends Application {
+	
 	@Override
+	/**
+	 * the javafx start method
+	 * @param primaryStage is the main window
+	 */
 	public void start(Stage primaryStage) {
 		try {
 			Socket socket = null;
 			String ip = "localhost";
 			int port = 5555;
 			
-			if(getParameters().getRaw().size() == 2) {
+			if(getParameters().getRaw().size() == 2) {  //set the port from cmd arg
 				ip = getParameters().getNamed().get("ip");
 				port = Integer.parseInt(getParameters().getNamed().get("port"));
 			}
 			
 			System.out.println(ip + " : " + port);
 			
-			do {
+			do {  //srv connection checking / retry
 				try {
 					System.out.print("\nChecking connection to the server...!");
 					socket = new Socket(ip, port);
@@ -75,7 +79,7 @@ public class Client extends Application {
 			primaryStage.getIcons().add(new Image("sailingclub/client/gui/images/appico.png"));
 
 			final Socket fSock = socket;
-			primaryStage.setOnCloseRequest(event -> {
+			primaryStage.setOnCloseRequest(event -> { //stage close handler
 				try {
 					requestController.closeConnection();
 					fSock.close();
@@ -95,7 +99,7 @@ public class Client extends Application {
 	}
 
 	/**
-	 * it launch the app
+	 * the main method
 	 * @param args cmd args
 	 */
 	public static void main(String[] args) {

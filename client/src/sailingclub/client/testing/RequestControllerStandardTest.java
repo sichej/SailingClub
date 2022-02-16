@@ -6,15 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import sailingclub.client.RequestController;
 import sailingclub.common.Constants;
 import sailingclub.common.Response;
@@ -24,8 +18,6 @@ import sailingclub.common.structures.Race;
 public class RequestControllerStandardTest {
 	private RequestController controller;
 	private Socket socket;
-	private Object payload;
-	private int header;
 	
 	@Before
 	public void initialize() throws Exception {

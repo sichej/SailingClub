@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * allows to make queries to the db
+ * @see sailingclub.server.sqlmanagement.SQLTranslator
+ */
 public class DatabaseManager {
-	
 	private List<Map<String, String>> wrapQueryResult(ResultSet rs) throws SQLException {
 		List<Map<String, String>> table = new ArrayList<Map<String, String>>();
 		ResultSetMetaData meta = rs.getMetaData();
@@ -28,6 +31,13 @@ public class DatabaseManager {
 		return table;
 	}
 	
+	/**
+	 * allows to execute an sql statement and return the the result wrapped in a list of maps
+	 * @param query the sql statement to execute
+	 * @return a list of maps that represent the result table
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public List<Map<String, String>> executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;

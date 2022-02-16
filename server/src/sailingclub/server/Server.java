@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * The main class allows to launch  the servers
+ * the server adopt a concurrent solution, 1 thread per client
+ * and implements a transaltor between client requests
+ * and sql query
+ * @author Andrea Bertogalli and Edoardo Sichelli
+ */
 public class Server {
 	public static void main(String[] args){
 		ServerConfiguration conf = new ServerConfiguration("config/srv_conf.json");

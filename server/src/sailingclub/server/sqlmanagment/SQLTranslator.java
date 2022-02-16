@@ -13,18 +13,36 @@ import javax.imageio.ImageIO;
 import sailingclub.common.*;
 import sailingclub.common.structures.*;
 
+/**
+ * This class represent a translator between client {@code Request} and SQL statement
+ * and also a translator between SLQ results and server {@code Response} 
+ * @see sailingclub.common.Request
+ * @see sailingclub.common.Response
+ * @see sailingclub.common.Removable
+ * @see sailingclub.common.Insertable
+ */
 public class SQLTranslator {
 	private int lastRequest;
 	private DateTimeFormatter dateFormatter;
 	private DateTimeFormatter dateTimeFormatter;
 	private User loggedUser;
 	
+	/**
+	 * the constructor
+	 */
 	public SQLTranslator() {
 		this.lastRequest = -1;
 		this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	};
 	
+	/**
+	 * allows the translation from a client {@code Request} to a SQL statement
+	 * @param request the client {@code Request}
+	 * @return the SQL statement as string
+	 * @throws RequestToSQLException
+	 * @throws IOException
+	 */
 	public String requestToSql(Request request) throws RequestToSQLException, IOException {
 		String query = "";
 		Object model = request.getPayload();
@@ -146,6 +164,13 @@ public class SQLTranslator {
 		return query;
 	}
 	
+	/**
+	 * allows the translation from a SQL result to a {@code Response}
+	 * @param queryResult the result of the last query execution
+	 * @return a {@code Response} that contains the result for the client
+	 * @throws SQLToResponseException
+	 * @throws IOException
+	 */
 	public Response sqlToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException, IOException {
 		Response response = null;
 		switch(this.lastRequest) {

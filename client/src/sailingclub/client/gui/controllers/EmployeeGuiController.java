@@ -29,6 +29,11 @@ import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.*;
 
+/**
+ * Is the controller for the Employee gui, contains all the handlers
+ * that manage all the javafx components
+ * @see sailingclub.client.gui.fxml.EmployeeGui
+ */
 public class EmployeeGuiController implements Initializable{
 	private final double BTN_NOTIFY_MAX_W = 50;
 	private RequestController requestController;
@@ -92,6 +97,7 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private Button btnAddMember;
 	@FXML private Button btnDeleteMember;
 	@FXML private Button btnUpdateBoat;
+	@FXML private Button btnLogout;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -172,32 +178,55 @@ public class EmployeeGuiController implements Initializable{
 		this.spnMembershipFeePrice.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(10, 99999999, 10));
 	}
 	
+	/**
+	 * handles the click on the races tab of the employee gui
+	 */
 	public void onTabRacesSelected() {
 		if(this.cmbSelectedUser == null) return;
 		this.cmbSelectedUser.setVisible(false);
 	}
 	
+	/**
+	 * handles the click on the Member tab of the employee gui
+	 */
 	public void onTabMembersSelected() {
 		this.cmbSelectedUser.setVisible(true);
 	}
 	
+	/**
+	 * handles the click on the payments tab of the employee gui
+	 */
 	public void onTabPaymentsTrackingSelected() {
 		this.cmbSelectedUser.setVisible(false);
 	}
 	
+	/**
+	 * handles the click on the boats tab of the employee gui
+	 */
 	public void onTabBoatsSelected() {
 		this.cmbSelectedUser.setVisible(false);
 	}
 	
+	/**
+	 * allows to pass the logged user between scenes
+	 * @param user the logged {@code User}
+	 * @throws Exception
+	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
+		this.btnLogout.setText(this.loggedUser.getUsername() + " - Logout");
 	}
 	
+	/**
+	 * handles the logout button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
     	Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
 		if(rs.getStatusCode() != Constants.SUCCESS) return;
 			
-		setLoggedUser(null);
+		this.loggedUser = null;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/LoginGui.fxml"));
 		Parent userGui = loader.load();
 		Object controller = loader.getController();
@@ -212,6 +241,11 @@ public class EmployeeGuiController implements Initializable{
 		stage.show();
 	}
 	
+	/**
+	 * handles the update member button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnUpdateMemberClick(ActionEvent event) throws Exception {
 		if(this.txtUsername.getText().equals("")) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -233,6 +267,11 @@ public class EmployeeGuiController implements Initializable{
     	this.displayPayments();
 	}
 	
+	/**
+	 * handles the delete member button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnDeleteMemberClick(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.DELETE, this.userFilter);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -240,6 +279,11 @@ public class EmployeeGuiController implements Initializable{
     	this.fillUserCmbFilters();
 	}
 	
+	/**
+	 * handles the add member button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnAddMemberClick(ActionEvent event) throws Exception {
 		if(this.txtUsername.getText().equals("")) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -274,6 +318,11 @@ public class EmployeeGuiController implements Initializable{
     	this.onBtnClearMemberClick(null);
 	}
 	
+	/**
+	 * handles the update boat button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_BOAT_BY_ID, this.selectedBoat);
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -314,6 +363,11 @@ public class EmployeeGuiController implements Initializable{
     	displayBoats();
 	}
 	
+	/**
+	 * allow to send notification to a specific user
+	 * @param user the user to be notified
+	 * @param text the notification text
+	 */
 	private void sendNotification(User user, String text) {
 		try {
 			this.requestController.makeRequest(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now()));
@@ -323,6 +377,11 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * allows to display the table that contains all the boats
+	 * for the selected member for the fee notification
+	 * @throws Exception
+	 */
 	private void displayMemberBoats() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -350,6 +409,10 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * display all the boats in the table on the tab boats management
+	 * @throws Exception
+	 */
 	private void displayBoats() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -364,6 +427,11 @@ public class EmployeeGuiController implements Initializable{
     	this.tblBoats.setItems(boatsModels);
 	}
 	
+	/**
+	 * handles the clear race button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnClearRace(ActionEvent event) {
     	this.txtRaceName.clear();
         this.spnRacePrice.getEditor().setText("50");
@@ -374,6 +442,11 @@ public class EmployeeGuiController implements Initializable{
         this.btnAddRace.setDisable(false);
 	}
 	
+	/**
+	 * handles the clear member button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnClearMemberClick(ActionEvent event) {
 		txtUsername.setText("");
 		txtNewPassword.setText("");
@@ -393,6 +466,11 @@ public class EmployeeGuiController implements Initializable{
 		this.btnAddMember.setDisable(false);
 	}
 	
+	/**
+	 * handles the clear boat button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnClearBoatClick(ActionEvent event) {
     	txtBoatName.setText("");
     	spnBoatLength.getEditor().setText("50");
@@ -403,6 +481,11 @@ public class EmployeeGuiController implements Initializable{
     	this.btnUpdateBoat.setDisable(true);
 	}
 	
+	/**
+	 * handles the update race button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnUpdateRaceClick(ActionEvent event) throws Exception{
 		LocalDate rDate = this.dtpRaceDate.getValue();
 		String rName = this.txtRaceName.getText();
@@ -434,6 +517,11 @@ public class EmployeeGuiController implements Initializable{
         this.displayRaces();
 	}	
 	
+	/**
+	 * handles the add race button click
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnAddRaceClick(ActionEvent event) throws Exception {
 		String rName = this.txtRaceName.getText();
 		LocalDate rDate = this.dtpRaceDate.getValue();
@@ -464,11 +552,20 @@ public class EmployeeGuiController implements Initializable{
     	this.displayRaces();
 	}
 
+	/**
+	 * allow to set pass the request controller between scenes
+	 * @param controller the request controller
+	 * @see sailingclub.client.RequestController
+	 */
 	public void setRequestController(RequestController controller)  {
 		this.requestController = controller;
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * allows to fill the combo box that allows the member selection and filtering
+	 * @throws Exception
+	 */
 	private void fillUserCmbFilters() throws Exception{
 		Response r = this.requestController.makeRequest(Constants.GET_MEMBERS, new EmptyPayload());
 		if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -479,7 +576,10 @@ public class EmployeeGuiController implements Initializable{
 		cmbSelectedUser.getSelectionModel().selectFirst();
 	}
 	
-
+	/**
+	 * method called on the stage show
+	 * it calls all the method that downloadA all the info
+	 */
 	public void onStageShow() {
 		try {
 			this.displayPayments();
@@ -492,6 +592,10 @@ public class EmployeeGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the change of the user selection in the combobox
+	 * @param selectedUser the new user selected
+	 */
 	private void onCmbSelectedUserSelectionChanged(String selectedUser) {
 		try {
 	    	Response r = this.requestController.makeRequest(Constants.GET_MEMBER_BY_USERNAME, selectedUser);
@@ -512,6 +616,11 @@ public class EmployeeGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the click of the table race button click
+	 * @param btn the button in a specific row
+	 * @param race the race selected
+	 */
 	private void onBtnRaceActionClick(Button btn, Race race)  {
 		try {
 	    	Response r = this.requestController.makeRequest(Constants.DELETE, race);
@@ -524,6 +633,10 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * it displays the payments list on the payments tab
+	 * @throws Exception
+	 */
 	private void displayPayments() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_PAYMENTS, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;
@@ -538,6 +651,10 @@ public class EmployeeGuiController implements Initializable{
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * it displays the races table on the race tab
+	 * @throws Exception
+	 */
 	private void displayRaces() throws Exception {
     	Response r = this.requestController.makeRequest(Constants.GET_RACES, new EmptyPayload());
     	if(r.getStatusCode() != Constants.SUCCESS) return;

@@ -16,17 +16,27 @@ import sailingclub.server.sqlmanagment.SQLToResponseException;
 import sailingclub.common.Request;
 import sailingclub.common.Response;
 
+/**
+ * is the handler for each client
+ */
 public class ClientHandler implements Runnable {
 	private Socket socket;
 	private SQLTranslator translator;
 	private DatabaseManager dbManager;
 
+	/**
+	 * the contructor
+	 * @param socket the socket on which a client is connected
+	 */
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
 		this.translator = new SQLTranslator();
 		this.dbManager = new DatabaseManager();
 	}
 
+	/**
+	 * the run method, it's executed on handling
+	 */
 	public void run() {
 		ObjectInputStream in;
 		ObjectOutputStream out;

@@ -262,6 +262,6 @@
          </font>
       </Label>
       <ComboBox fx:id="cmbSelectedUser" layoutX="635.0" layoutY="10.0" prefHeight="30.0" prefWidth="150.0" styleClass="logininput" AnchorPane.rightAnchor="14.600000000000023" AnchorPane.topAnchor="10.0" />
-      <Button layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" text="Logout" />
+      <Button fx:id="btnLogout" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtnLogoutClick" prefHeight="30.0" text="Logout" />
    </children>
 </AnchorPane>
