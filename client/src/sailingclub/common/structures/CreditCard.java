@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
+/*
+ * CreditCard class
+ */
 public class CreditCard implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private String cardNumber;
@@ -13,6 +16,14 @@ public class CreditCard implements Insertable, Removable, Serializable{
 	private LocalDate expDate;
 	private String idMember;
 	
+	/*
+	 * CreditCard constructor
+	 * 
+	 * @param cardNumber  number of the credit card
+	 * @param cvv  cvv of the credit card
+	 * @param expDate expiration date of the credit card
+	 * @param idMember  username of the owner
+	 */
 	public CreditCard(String cardNumber, int cvv, LocalDate expDate, String idMember) {
 		this.cardNumber = cardNumber;
 		this.cvv = cvv;
