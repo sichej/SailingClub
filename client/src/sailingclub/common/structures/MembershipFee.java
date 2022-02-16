@@ -5,6 +5,9 @@ import java.time.LocalDate;
 
 import sailingclub.common.Insertable;
 
+/*
+ * MembershipFee class
+ */
 public class MembershipFee implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
@@ -13,6 +16,15 @@ public class MembershipFee implements Insertable, Serializable{
 	private double price;
 	private String idMember;
 	
+	/*
+	 * MembershipFee constructor
+	 * 
+	 * @param id  MembershipFee id
+	 * @param paymentDate  date of the Membership fee payment
+	 * @param expirationDate  date of the Membership fee payment expiration
+	 * @param price  MembershipFee price
+	 * @param idMember user paying
+	 */
 	public MembershipFee(int id, LocalDate paymentDate, LocalDate expirationDate, double price, String idMember) {
 		this.id = id;
 		this.paymentDate = paymentDate;
@@ -21,6 +33,14 @@ public class MembershipFee implements Insertable, Serializable{
 		this.idMember = idMember;
 	}
 	
+	/*
+	 * MembershipFee constructor
+	 * 
+	 * @param paymentDate  date of the Membership fee payment
+	 * @param expirationDate  date of the Membership fee payment expiration
+	 * @param amount  MembershipFee price
+	 * @param idMember user paying
+	 */
 	public MembershipFee(LocalDate paymentDate, LocalDate expirationDate, double amount, String idMember) {
 		this.paymentDate = paymentDate;
 		this.expirationDate = expirationDate;
