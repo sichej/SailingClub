@@ -4,6 +4,9 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
+/*
+ * Boat class
+ */
 public class Boat implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
@@ -14,13 +17,27 @@ public class Boat implements Insertable, Removable, Serializable{
 	private String pictureName;
 	private byte[] picture;
 	
+	/*
+	 * Boat constructor
+	 * @param name
+	 * @param length
+	 * @param idMember  username of the owner
+	 */
 	public Boat(String name, double length, String idMember) {
 		this.name = name;
 		this.length = length;
 		this.idMember = idMember;
 		this.boatStorageFee = null;
 	}
-
+	
+	/*
+	 * Boat constructor
+	 * @param id  boat's id
+	 * @param name  boat's name
+	 * @param length  boat's length
+	 * @param idMember  username of the owner
+	 * @param boatStorageFee  boat's storage fee
+	 */
 	public Boat(int id, String name, double length, String idMember, BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;
@@ -28,7 +45,13 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = boatStorageFee;
 	}
-
+	/*
+	 * Boat constructor
+	 * @param name  boat's name
+	 * @param length  boat's length
+	 * @param idMember  username of the owner
+	 * @param pictureName  name of the boat's picture 
+	 */
 	public Boat(String name, double length, String idMember, String pictureName) {
 		this.name = name;
 		this.length = length;
@@ -37,6 +60,14 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.pictureName = pictureName;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param name  boat's name
+	 * @param length  boat's length
+	 * @param idMember  username of the owner
+	 * @param picture  name of the boat's picture 
+	 * @param boatStorageFee  boat's storage fee
+	 */
 	public Boat(int id, String name, double length, String idMember, String pictureName, byte[] picture,BoatStorageFee boatStorageFee) {
 		this.id = id;
 		this.name = name;
@@ -47,6 +78,13 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param name  boat's name
+	 * @param length  boat's length
+	 * @param idMember  username of the owner
+	 * @param picture  name of the boat's picture 
+	 */
 	public Boat(String name, double length, String idMember, String pictureName, byte[] picture) {
 		this.name = name;
 		this.length = length;
@@ -55,6 +93,10 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
+	/*
+	 * Boat constructor
+	 * @param id boat's id
+	 */
 	public Boat(int id) {
 		this.id = id;
 	}

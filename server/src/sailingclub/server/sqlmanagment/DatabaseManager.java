@@ -16,6 +16,14 @@ import java.util.Map;
  * @see sailingclub.server.sqlmanagement.SQLTranslator
  */
 public class DatabaseManager {
+	private String user;
+	private String psw;
+	
+	public DatabaseManager(String user, String psw) {
+		this.user = user;
+		this.psw = psw;
+	}
+	
 	private List<Map<String, String>> wrapQueryResult(ResultSet rs) throws SQLException {
 		List<Map<String, String>> table = new ArrayList<Map<String, String>>();
 		ResultSetMetaData meta = rs.getMetaData();
@@ -41,7 +49,7 @@ public class DatabaseManager {
 	public List<Map<String, String>> executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club?allowMultiQueries=true", "root", "");
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/sailing_club?allowMultiQueries=true",this.user,this.psw );
 		System.out.println("Database is connected !\n");
 		Statement stmt = conn.createStatement();
 		boolean isResultSet = stmt.execute(query);

@@ -28,10 +28,10 @@ public class ClientHandler implements Runnable {
 	 * the contructor
 	 * @param socket the socket on which a client is connected
 	 */
-	public ClientHandler(Socket socket) {
+	public ClientHandler(Socket socket, ServerConfiguration conf) {
 		this.socket = socket;
 		this.translator = new SQLTranslator();
-		this.dbManager = new DatabaseManager();
+		this.dbManager = new DatabaseManager(conf.getDbUser(), conf.getDbPassword());
 	}
 
 	/**

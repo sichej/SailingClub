@@ -116,13 +116,17 @@ public class RequestControllerStandardTest {
 	
 	@Test
 	public void testUpdateRequests() {
+		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
+		User u = (User)r.getPayload();
+		
 		int randomNum = ThreadLocalRandom.current().nextInt(10, 21);
-		Response r = controller.makeRequest(Constants.UPDATE_RACE, new Race(16, LocalDate.now(), randomNum , "TestRace"));
+		r = controller.makeRequest(Constants.UPDATE_RACE, new Race(16, LocalDate.now(), randomNum , "TestRace"));
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 		
 		r = controller.makeRequest(Constants.GET_RACES, new EmptyPayload());
-		ArrayList<Race> races = new ArrayList<Race>();
-		
+		@SuppressWarnings("unchecked")
+		ArrayList<Race> races = (ArrayList<Race>)r.getPayload();
+		System.out.print(races.size());
 		for(Race rac: races) {
 			if(rac.getId() == 16) {
 				assertEquals((int)rac.getPrice(), randomNum);
@@ -136,8 +140,6 @@ public class RequestControllerStandardTest {
 		Boat vb = (Boat)((Response)controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1))).getPayload();
 		assertEquals((int)vb.getLength(), randomNum);
 		
-		r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
-		User u = (User)r.getPayload();
 		r = controller.makeRequest(Constants.UPDATE_MEMBER, new User(u.getUsername() + "," + u.getUsername(),
 					u.getName() + Integer.toString(randomNum), u.getSurname(), u.getAddress(), u.getFiscalCode(), u.getUserType(),
 					u.getPassword(), u.getMembershipFee()));

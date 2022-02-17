@@ -23,7 +23,7 @@ public class Server {
             System.out.println("SERVER LISTENING ON PORT: " + conf.getServerPort());
             while (true) {
                 Socket client = server.accept();
-                new Thread(new ClientHandler(client)).start();
+                new Thread(new ClientHandler(client,conf)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
