@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +16,7 @@ import sailingclub.common.Constants;
 import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.Boat;
-import sailingclub.common.structures.BoatStorageFee;
+import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
@@ -46,6 +48,104 @@ public class RequestControllerStandardTest {
 		User user = new User("user_for_test", Utils.stringToDigest("x"));
 		Response r = controller.makeRequest(Constants.LOGIN, user);
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+	}
+		
+	@Test
+	public void testPayBoatStorageFee() {
+		Response r = controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1));
+		Boat b = (Boat)r.getPayload();
+		r = controller.makeRequest(Constants.PAY_BOAT_STORAGE_FEE, b);
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+	}
+	
+	@Test
+	public void testPayMembershipFee() {
+		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
+		r = controller.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+	}
+	
+	@Test
+	public void testGetRequests() {
+		controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
+		
+		Response r = controller.makeRequest(Constants.GET_BOATS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_RACES, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_RACES_PARTICIPATIONS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_CREDIT_CARDS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_BANK_TRANSFERS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_SUBSCRIPTED_BOAT, new Race(16));
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_NOTIFICATIONS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_MEMBERS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_MEMBERS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1));
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		assertEquals(((Boat)r.getPayload()).getId(), 1);
+		
+		r = controller.makeRequest(Constants.GET_MEMBER_BY_USERNAME, "user_for_test");
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		assertEquals(((User)r.getPayload()).getUsername(), "user_for_test");
+		
+		r = controller.makeRequest(Constants.GET_RACES_SUB, "16");
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_PAYMENTS, new EmptyPayload());
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+	}
+	
+	@Test
+	public void testUpdateRequests() {
+		int randomNum = ThreadLocalRandom.current().nextInt(10, 21);
+		Response r = controller.makeRequest(Constants.UPDATE_RACE, new Race(16, LocalDate.now(), randomNum , "TestRace"));
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		
+		r = controller.makeRequest(Constants.GET_RACES, new EmptyPayload());
+		ArrayList<Race> races = new ArrayList<Race>();
+		
+		for(Race rac: races) {
+			if(rac.getId() == 16) {
+				assertEquals((int)rac.getPrice(), randomNum);
+			}
+		}
+		
+		Boat ob = (Boat)((Response)controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1))).getPayload();
+		Boat nb = new Boat(ob.getId(),ob.getName(), randomNum , "", ob.getBoatStorageFee());
+		r = controller.makeRequest(Constants.UPDATE_BOAT, nb);
+		assertEquals(r.getStatusCode(), Constants.SUCCESS);
+		Boat vb = (Boat)((Response)controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1))).getPayload();
+		assertEquals((int)vb.getLength(), randomNum);
+		
+		r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
+		User u = (User)r.getPayload();
+		r = controller.makeRequest(Constants.UPDATE_MEMBER, new User(u.getUsername() + "," + u.getUsername(),
+					u.getName() + Integer.toString(randomNum), u.getSurname(), u.getAddress(), u.getFiscalCode(), u.getUserType(),
+					u.getPassword(), u.getMembershipFee()));
+		
+		
+		r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
+		User nu = (User)r.getPayload();
+		assertEquals(u.getName() + Integer.toString(randomNum), nu.getName());
 	}
 	
 	@After
