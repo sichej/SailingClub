@@ -2,12 +2,20 @@ package sailingclub.common;
 
 import java.io.Serializable;
 
+/*
+ * Responde class
+ */
 public class Response implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int stausCode;
 	private Class<?> payloadType;
 	private Object payload;
 	
+	/*
+	 * Response constructor
+	 * @param statusCode  Response code
+	 * @param payload  Response payload
+	 */
 	public Response(int stausCode, Object payload) {
 		this.stausCode = stausCode;
 		this.payloadType = payload.getClass();
