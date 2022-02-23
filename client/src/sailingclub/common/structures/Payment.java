@@ -19,7 +19,7 @@ public class Payment implements Insertable, Serializable {
 	private String purpose;
 	
 	/*
-	 * Paymet constructor
+	 * Payment constructor
 	 * 
 	 * @param id  id of the payment
 	 * @param amount Payment amount 
@@ -40,7 +40,7 @@ public class Payment implements Insertable, Serializable {
 	}
 	
 	/*
-	 * Paymet constructor
+	 * Payment constructor
 	 * 
 	 * @param amount Payment amount 
 	 * @param memberId user paying

@@ -4,18 +4,32 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
+/*
+ * RaceParticipation class
+ */
 public class RaceParticipation implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
 	private int idRace;
 	private String idMember;
 	private Integer idBoat;
 	
+	/*
+	 * RaceParticipation constructor
+	 * @param idRace  race's id
+	 * @param idMember  member's id
+	 * @param idBoat  boat's id
+	 */
 	public RaceParticipation(int idRace, String idMember, int idBoat) {
 		this.idRace = idRace;
 		this.idMember = idMember;
 		this.idBoat = idBoat;
 	}
 	
+	/*
+	 * RaceParticipation constructor
+	 * @param idRace  race's id
+	 * @param idMember  member's id
+	 */
 	public RaceParticipation(int idRace, String idMember) {
 		this.idRace = idRace;
 		this.idMember = idMember;
