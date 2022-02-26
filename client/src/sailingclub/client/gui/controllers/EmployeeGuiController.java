@@ -99,7 +99,10 @@ public class EmployeeGuiController implements Initializable{
 	@FXML private Button btnUpdateBoat;
 	@FXML private Button btnLogout;
 	
-	@Override
+	/**
+	 * the initialization method of the class
+	 * @Override
+	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		raceModels = FXCollections.observableArrayList();
 		paymentsModels = FXCollections.observableArrayList();
@@ -256,7 +259,8 @@ public class EmployeeGuiController implements Initializable{
 			return;
 		}
 				
-		MembershipFee fee = new MembershipFee(this.userFilter.getMembershipFee().getPaymentDate(),dtpMembershipFeeDate.getValue(), 					this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
+		MembershipFee fee = new MembershipFee(this.userFilter.getMembershipFee().getPaymentDate(),dtpMembershipFeeDate.getValue(),
+				this.spnMembershipFeePrice.getValue(), this.txtUsername.getText());
 		User upUser = new User(this.userFilter.getUsername() + "," + this.txtUsername.getText(), this.txtName.getText(), this.txtSurname.getText(), 
                 this.txtAddress.getText(), this.txtFiscalCode.getText(), "member", Utils.stringToDigest(this.txtNewPassword.getText()), fee);
     	Response r = this.requestController.makeRequest(Constants.UPDATE_MEMBER, upUser);

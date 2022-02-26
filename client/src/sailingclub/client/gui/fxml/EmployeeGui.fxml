@@ -114,7 +114,7 @@
                               <HBox prefHeight="30.0" spacing="5.0">
                                  <children>
                                     <Spinner fx:id="spnMembershipFeePrice" prefHeight="30.0" prefWidth="150.0" styleClass="logininput" />
-                                    <DatePicker fx:id="dtpMembershipFeeDate" prefHeight="30.0" prefWidth="201.0" promptText="Membership fee date" styleClass="logininput" />
+                                    <DatePicker fx:id="dtpMembershipFeeDate" editable="false" prefHeight="30.0" prefWidth="201.0" promptText="Membership fee date" styleClass="logininput" />
                                  </children>
                               </HBox>
                               <VBox spacing="5.0">

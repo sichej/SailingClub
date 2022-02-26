@@ -12,6 +12,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * this class contains some methods usefull for 
+ *activities on both client and server
+ */
 public class Utils {
 	/**
 	 * calculate the MD5 hash of a given string
@@ -33,6 +37,13 @@ public class Utils {
         }
     }
 	
+	/**
+	 * convert an image to a bytes array
+	 * @param bi the image
+	 * @param format the image format (jpg,png,webp ...)
+	 * @return the array of byte of the image
+	 * @throws IOException
+	 */
 	public static byte[] toByteArray(BufferedImage bi, String format)
 	        throws IOException {
 
@@ -41,14 +52,19 @@ public class Utils {
 	        byte[] bytes = baos.toByteArray();
 	        return bytes;
 
-	    }
+	}
 
-	    public static BufferedImage toBufferedImage(byte[] bytes)
-	        throws IOException {
+	/**
+	 * converts byte array to an image
+	 * @param bytes the array of byte of the image
+	 * @return an image converted from an array of bytes
+	 * @throws IOException
+	 */
+    public static BufferedImage toBufferedImage(byte[] bytes)
+        throws IOException {
 
-	        InputStream is = new ByteArrayInputStream(bytes);
-	        BufferedImage bi = ImageIO.read(is);
-	        return bi;
-
-	    }
+        InputStream is = new ByteArrayInputStream(bytes);
+        BufferedImage bi = ImageIO.read(is);
+        return bi;
+    }
 }

@@ -20,11 +20,19 @@ import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
+/**
+ * this class test the client
+ * more specificately tests all the request that the client can make to the server
+ */
 public class RequestControllerStandardTest {
 	private RequestController controller;
 	private Socket socket;
 	
 	@Before
+	/**
+	 * initializes the tests
+	 * @throws Exception
+	 */
 	public void initialize() throws Exception {
 		String ip = "localhost";
 		int port = 5555;
@@ -35,6 +43,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
+	/**
+	 * tests the insertion and the deletion
+	 */
 	public void testInsertDelete(){
 		Race race = new Race(LocalDate.now(), 55.6, "TestRace");
 		Response r = controller.makeRequest(Constants.INSERT, race);
@@ -44,6 +55,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
+	/**
+	 * tests the login
+	 */
 	public void testLogin() {
 		User user = new User("user_for_test", Utils.stringToDigest("x"));
 		Response r = controller.makeRequest(Constants.LOGIN, user);
@@ -51,6 +65,9 @@ public class RequestControllerStandardTest {
 	}
 		
 	@Test
+	/**
+	 * tests the boat fee payments
+	 */
 	public void testPayBoatStorageFee() {
 		Response r = controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1));
 		Boat b = (Boat)r.getPayload();
@@ -59,6 +76,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
+	/**
+	 * tests the member fee payments
+	 */
 	public void testPayMembershipFee() {
 		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		r = controller.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
@@ -66,6 +86,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
+	/**
+	 * tests all the gets requests
+	 */
 	public void testGetRequests() {
 		controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		
@@ -115,6 +138,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@Test
+	/**
+	 * tests all the updates request
+	 */
 	public void testUpdateRequests() {
 		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		User u = (User)r.getPayload();
@@ -151,6 +177,9 @@ public class RequestControllerStandardTest {
 	}
 	
 	@After
+	/**
+	 * finalize the tests execution
+	 */
 	public void finalize() throws Exception {
 		controller.closeConnection();
 		this.socket.close();

@@ -40,6 +40,11 @@ import sailingclub.common.Utils;
 import sailingclub.common.structures.*;
 import java.util.ArrayList;
 
+/**
+ * Is the controller for the Member gui, contains all the handlers
+ * that manage all the javafx components
+ * @see sailingclub.client.gui.fxml.MemberGui
+ */
 public class MemberGuiController implements Initializable{
 	private final String REGISTERED_STATE = "Unsubscribe";
 	private final String NOT_REGISTERED_STATE = "Subscribe";
@@ -119,7 +124,10 @@ public class MemberGuiController implements Initializable{
 	@FXML private TableColumn<NotificationModel, Button> colNotificationAction;
 	@FXML private Label lblBoatNameError;
 	
-	@Override
+	/**
+	 * the initialization method of the class
+	 * 	@Override
+	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		raceModels = FXCollections.observableArrayList();
 		notificationsModels = FXCollections.observableArrayList();
@@ -181,14 +189,26 @@ public class MemberGuiController implements Initializable{
 		this.colNotificationAction.setCellValueFactory(new PropertyValueFactory<NotificationModel,Button>("btnAction"));
 	}
 	
+	/**
+	 * it sets the logged user refernce
+	 * @param user the logged user
+	 * @throws Exception
+	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
 	}
 	
+	/**
+	 * it sets the reference for the request controller
+	 * @param controller the request controller reference
+	 */
 	public void setRequestController(RequestController controller) {
 		this.requestController = controller;
 	}
 	
+	/**
+	 * method called on stage show, initialize the gui and gets the data
+	 */
 	public void onStageShow() {
 		try {
 			this.displayBoats();
@@ -198,6 +218,11 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the click of the toggle of the menu
+	 * @param event the click event
+	 * @throws IOException
+	 */
 	public void onBtnToggleMenuClick(ActionEvent event) throws IOException {
 		if(this.vbMenu.isVisible()) {
 	        imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
@@ -213,6 +238,11 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the click of the notification button
+	 * @param event the click event
+	 * @throws IOException
+	 */
 	public void onBtnViewNotificationsClick(ActionEvent event) {
 		try {
 			displayNotifications();
@@ -257,6 +287,11 @@ public class MemberGuiController implements Initializable{
     	this.tblNotifications.setItems(notificationsModels);
 	}
 	
+	/**
+	 * handles the click of a menu list button
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnMenuClick(ActionEvent event) throws Exception {
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 		vbMenu.setVisible(false);
@@ -315,6 +350,11 @@ public class MemberGuiController implements Initializable{
 		this.fillCmbPayments(this.cmBoxBoatPaymentMethod);
 	}
 	
+	/**
+	 * handles the click of the button for the boat payments
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat);
     	
@@ -329,6 +369,11 @@ public class MemberGuiController implements Initializable{
     	}
 	}
 	
+	/**
+	 * handles the click of the button for the member payments
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnPayMembershipFee(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
     	
@@ -345,6 +390,11 @@ public class MemberGuiController implements Initializable{
     	}
 	}
 	
+	/**
+	 * handles the click of the button for the deletion of a boat
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Risk alert!");
@@ -359,6 +409,11 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the click of the button for the logout
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
 		Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
 		if(rs.getStatusCode() != Constants.SUCCESS) return;
@@ -378,15 +433,6 @@ public class MemberGuiController implements Initializable{
 		stage.show();
 	}
 	
-	/*
-	 * Display the full user informaition by filling the linked lables
-	 * Name
-	 * Username
-	 * Lastname
-	 * Fiscal code
-	 * Membership fee
-	 * Address
-	 */
 	private void displayInfo() throws Exception {
 		String userInfo = this.loggedUser.getUsername() + "'s info:\n" + 
 						"Name:" + this.loggedUser.getName() + " Surname: " + this.loggedUser.getSurname() + 
@@ -432,6 +478,11 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the radio buttons changes for the 
+	 * payment method insert selection
+	 * @param sel the selected radio button
+	 */
 	public void onRadPaymentMethodClick(RadioButton sel) {
 		this.txtPaymentFirstAttribute.setText("");
 		this.txtPaymentSecondAttribute.setText("");
@@ -447,6 +498,12 @@ public class MemberGuiController implements Initializable{
 		}
 	}
 	
+	/**
+	 * handles the click event for the button that enables
+	 * to add a payment method
+	 * @param evt the click event
+	 * @throws Exception
+	 */
 	public void onBtnAddPaymentMethod(ActionEvent evt) throws Exception{
 		if(this.radCard == (RadioButton)this.toggleGroup.getSelectedToggle()) {
 			String number = null;
@@ -473,6 +530,12 @@ public class MemberGuiController implements Initializable{
 		this.fillCmbPayments(cmBoxMemberPaymentMethod);
 	}
 	
+	/**
+	 * handles the click event for the button that enables
+	 * to add an image for the boat
+	 * @param evt the click event
+	 * @throws Exception
+	 */
 	public void onBtnLoadBoatImgClick(ActionEvent evt) {
 		FileChooser fileChooser = new FileChooser();
 		Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
@@ -486,6 +549,12 @@ public class MemberGuiController implements Initializable{
 	
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * handles the click event for the button that enables
+	 * to insert a new boat
+	 * @param evt the click event
+	 * @throws Exception
+	 */
 	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
 		Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
 		ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
@@ -538,11 +607,6 @@ public class MemberGuiController implements Initializable{
     	}
 	}
 	
-	/*
-	 * Display all the races present on the database, even the ended ones
-	 * the ended one cannot be clicked for partecipation
-	 * a combobox is filled with your boats and you have to select one to partecipate to a race
-	 */
 	@SuppressWarnings("unchecked")
 	private void displayRaces() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_RACES, new EmptyPayload());
@@ -623,9 +687,6 @@ public class MemberGuiController implements Initializable{
 		this.lblBoatNameError.setText("");
 	}
 	
-	/*
-	 * Display on a grid all the user's boats 
-	 */
 	@SuppressWarnings("unchecked")
 	private void displayBoats() throws IOException, ClassNotFoundException {
     	Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
@@ -706,13 +767,16 @@ public class MemberGuiController implements Initializable{
 		this.grdBoats.setPadding(new Insets(10, 10, 10, 10));
 	}
 	
+	/**
+	 * handles the click event for the button that enables
+	 * to close the overlays panels that can appear
+	 * @param evt the click event
+	 * @throws Exception
+	 */
 	public void onBtnCloseOverlayClick(ActionEvent event) {
 		((Node)event.getSource()).getParent().getParent().toBack();
 	}
-	
-	/*
-	 * Fill the combobox with all the user's payment information
-	 */
+
 	@SuppressWarnings("unchecked")
 	private void fillCmbPayments(ComboBox<Object> cmb) throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_CREDIT_CARDS, new EmptyPayload());

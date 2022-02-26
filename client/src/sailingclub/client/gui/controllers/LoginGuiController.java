@@ -17,6 +17,11 @@ import sailingclub.common.Response;
 import sailingclub.common.Utils;
 import sailingclub.common.structures.User;
 
+/**
+ * Is the controller for the Login gui, contains all the handlers
+ * that manage all the javafx components
+ * @see sailingclub.client.gui.fxml.LoginGui
+ */
 public class LoginGuiController{
 	private RequestController requestController;
 	private User loggedUser;
@@ -26,14 +31,28 @@ public class LoginGuiController{
 	@FXML private PasswordField txtPassword;
 	@FXML private Label lblStatus;
 	
+	/**
+	 * it sets the request controller
+	 * @param controller the request controller reference
+	 */
 	public void setRequestController(RequestController controller) {
 		this.requestController = controller;
 	}
 	
+	/**
+	 * it sets the logged user
+	 * @param user the user that is logged
+	 * @throws Exception
+	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
 	}
-		
+	
+	/**
+	 * Handles the click of the login button
+	 * @param event the click event
+	 * @throws Exception
+	 */
 	public void OnBtnLoginClick(ActionEvent event) throws Exception {
 		String username = this.txtUsername.getText();
 		String password = this.txtPassword.getText();

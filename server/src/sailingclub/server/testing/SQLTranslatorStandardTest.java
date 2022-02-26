@@ -2,13 +2,8 @@ package sailingclub.server.testing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.junit.Before;
@@ -21,18 +16,29 @@ import sailingclub.common.structures.Boat;
 import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.server.sqlmanagment.DatabaseManager;
-import sailingclub.server.sqlmanagment.RequestToSQLException;
 import sailingclub.server.sqlmanagment.SQLTranslator;
 
+/**
+ * this class tests the server, the test consist
+ * on the validation of the translation of the requests and responses
+ * form/to SQL
+ */
 public class SQLTranslatorStandardTest {
 	private SQLTranslator translator;
 	
 	@Before
+	/**
+	 * initialize the test suite
+	 * @throws Exception
+	 */
 	public void initialize() throws Exception {
 		this.translator = new SQLTranslator();
 	}
 	
 	@Test
+	/**
+	 * tests all the sql conversion from requests
+	 */
 	public void testSQLConversion() {
 		Request selectReq = new Request(Constants.GET_ALL_BOATS, new EmptyPayload());
 		Request insertReq = new Request(Constants.INSERT, new BankTransfer("12345", "intesa", "usertest"));
@@ -71,7 +77,10 @@ public class SQLTranslatorStandardTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testRequestConversion() {
+	/**
+	 * test the response conversion to object
+	 */
+	public void testResponseConversion() {
 		try {
 			String sql = this.translator.requestToSql(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));
 			DatabaseManager dbm = new DatabaseManager("root", "");
