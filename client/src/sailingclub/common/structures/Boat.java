@@ -45,6 +45,7 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = boatStorageFee;
 	}
+	
 	/*
 	 * Boat constructor
 	 * @param name  boat's name
