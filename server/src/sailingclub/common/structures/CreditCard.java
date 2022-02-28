@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
-/*
+/**
  * CreditCard class
  */
 public class CreditCard implements Insertable, Removable, Serializable{
@@ -16,7 +16,7 @@ public class CreditCard implements Insertable, Removable, Serializable{
 	private LocalDate expDate;
 	private String idMember;
 	
-	/*
+	/**
 	 * CreditCard constructor
 	 * 
 	 * @param cardNumber  number of the credit card

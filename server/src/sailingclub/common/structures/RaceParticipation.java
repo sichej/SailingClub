@@ -4,7 +4,7 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
-/*
+/**
  * RaceParticipation class
  */
 public class RaceParticipation implements Insertable, Removable, Serializable{
@@ -13,7 +13,7 @@ public class RaceParticipation implements Insertable, Removable, Serializable{
 	private String idMember;
 	private Integer idBoat;
 	
-	/*
+	/**
 	 * RaceParticipation constructor
 	 * @param idRace  race's id
 	 * @param idMember  member's id
@@ -25,7 +25,7 @@ public class RaceParticipation implements Insertable, Removable, Serializable{
 		this.idBoat = idBoat;
 	}
 	
-	/*
+	/**
 	 * RaceParticipation constructor
 	 * @param idRace  race's id
 	 * @param idMember  member's id

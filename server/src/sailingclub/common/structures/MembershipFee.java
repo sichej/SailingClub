@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import sailingclub.common.Insertable;
 
-/*
+/**
  * MembershipFee class
  */
 public class MembershipFee implements Insertable, Serializable{
@@ -16,7 +16,7 @@ public class MembershipFee implements Insertable, Serializable{
 	private double price;
 	private String idMember;
 	
-	/*
+	/**
 	 * MembershipFee constructor
 	 * 
 	 * @param id  MembershipFee id
@@ -33,7 +33,7 @@ public class MembershipFee implements Insertable, Serializable{
 		this.idMember = idMember;
 	}
 	
-	/*
+	/**
 	 * MembershipFee constructor
 	 * 
 	 * @param paymentDate  date of the Membership fee payment

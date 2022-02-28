@@ -4,7 +4,7 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
-/*
+/**
  * Boat class
  */
 public class Boat implements Insertable, Removable, Serializable{
@@ -17,7 +17,7 @@ public class Boat implements Insertable, Removable, Serializable{
 	private String pictureName;
 	private byte[] picture;
 	
-	/*
+	/**
 	 * Boat constructor
 	 * @param name
 	 * @param length
@@ -30,7 +30,7 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.boatStorageFee = null;
 	}
 	
-	/*
+	/**
 	 * Boat constructor
 	 * @param id  boat's id
 	 * @param name  boat's name
@@ -45,7 +45,8 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 		this.boatStorageFee = boatStorageFee;
 	}
-	/*
+	
+	/**
 	 * Boat constructor
 	 * @param name  boat's name
 	 * @param length  boat's length
@@ -60,7 +61,7 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.pictureName = pictureName;
 	}
 	
-	/*
+	/**
 	 * Boat constructor
 	 * @param name  boat's name
 	 * @param length  boat's length
@@ -78,7 +79,7 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
-	/*
+	/**
 	 * Boat constructor
 	 * @param name  boat's name
 	 * @param length  boat's length
@@ -93,7 +94,7 @@ public class Boat implements Insertable, Removable, Serializable{
 		this.picture = picture;
 	}
 	
-	/*
+	/**
 	 * Boat constructor
 	 * @param id boat's id
 	 */
