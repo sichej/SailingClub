@@ -64,26 +64,46 @@ public class User implements Insertable, Serializable, Removable{
 	public String getPassword() { return password; }
 	public MembershipFee getMembershipFee() { return fee; }
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"username", "name", "surname", "address", "fiscal_code", "user_type", "password"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "user";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'"+this.username+"'", "'" + this.name + "'", "'"+this.surname+"'", "'" + this.address + "'", "'" + this.fiscalCode + "'", "'" + this.userType + "'", "'" + this.password + "'"};
 	}
 	
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return "username";
 	}
 
+	/**
+	 * Get the Primary Key value
+	 * @return String  Primary Key value
+	 */
 	@Override
 	public String getPkValue() {
 		return "'" + this.getUsername() + "'";

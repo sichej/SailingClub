@@ -16,10 +16,17 @@ public class EmptyPayload implements Serializable{
 		this.message = "";
 	}
 	
+	/**
+	 * EmptyPayload constructor
+	 * @param message  message to send
+	 */
 	public EmptyPayload(String message) {
 		this.message = message;
 	}
 	
+	/**
+	 * @return String  the message 
+	 */
 	@Override
 	public String toString() {
 		return "SRV_MESSAGE: " + message;

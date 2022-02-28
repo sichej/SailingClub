@@ -47,26 +47,46 @@ public class CreditCard implements Insertable, Removable, Serializable{
 		return expDate;
 	}
 
+	/**
+	 * Get the Primary Key value
+	 * @return String  Primary Key value
+	 */
 	@Override
 	public String getPkValue() {
 		return this.getCardNumber();
 	}
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"card_number", "cvv", "expiration_date", "id_member"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "credit_card";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'" + this.cardNumber + "'", Integer.toString(this.cvv) , "'" + this.expDate.toString() + "'", "'" + this.idMember + "'" };
 	}
 
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return this.getCardNumber();

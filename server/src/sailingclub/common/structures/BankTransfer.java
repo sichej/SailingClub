@@ -43,21 +43,37 @@ public class BankTransfer implements Insertable, Serializable{
 	 */
 	public String getIdMember() { return idMember; }
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"iban", "bank", "id_member"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "bank_transfer";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'" + this.iban + "'", "'" + this.bank + "'", "'" + this.idMember + "'"};
 	}
 	
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return "iban";
