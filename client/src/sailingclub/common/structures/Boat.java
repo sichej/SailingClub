@@ -113,16 +113,28 @@ public class Boat implements Insertable, Removable, Serializable{
 
 	public void setBoatStorageFee(BoatStorageFee boatStorageFee) { this.boatStorageFee = boatStorageFee; }
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"name", "length", "id_member", "picture"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "boat";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'" + this.name + "'", Double.toString(this.length), "'" + this.idMember + "'",  "'" + this.pictureName +"'"};
@@ -133,6 +145,10 @@ public class Boat implements Insertable, Removable, Serializable{
 		return "id";
 	}
 
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPkValue() {
 		return Integer.toString(this.id);

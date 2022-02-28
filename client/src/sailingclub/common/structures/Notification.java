@@ -58,26 +58,46 @@ public class Notification implements Serializable, Removable, Insertable{
 		return dateTime;
 	}
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"id_member", "text", "date_time"};
 	}
 	
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "notification";
 	}
 	
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'" + this.idMember + "'", "'" + this.text + "'", "'" + this.dateTime.toString() + "'"};
 	}
 	
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return "id";
 	}
 	
+	/**
+	 * Get the Primary Key value
+	 * @return String  Primary Key value
+	 */
 	@Override
 	public String getPkValue() {
 		return Integer.toString(this.id);

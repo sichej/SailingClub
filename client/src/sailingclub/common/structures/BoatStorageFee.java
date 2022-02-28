@@ -56,21 +56,37 @@ public class BoatStorageFee implements Insertable, Serializable{
 	public double getAmount() { return amount; }
 	public int getIdBoat() { return idBoat; }
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"payment_date", "expiration_date", "amount","id_boat"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "boat_storage_fee";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{"'"+this.paymentDate+"'", "'"+this.expirationDate+"'", Double.toString(this.amount), "'" + this.idBoat + "'"};
 	}
 	
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return "id";

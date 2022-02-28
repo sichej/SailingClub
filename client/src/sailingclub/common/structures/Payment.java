@@ -66,21 +66,37 @@ public class Payment implements Insertable, Serializable {
 	public LocalDate getDate() { return date; }
 	public String getPurpose() { return purpose; }
 
+	/**
+	 * Get the attributes of the class
+	 * @return String  Array String with params
+	 */
 	@Override
 	public String[] getAttributes() {
 		return new String[]{"amount", "member_id", "method", "details", "date", "purpose"};
 	}
 
+	/**
+	 * Get the database table name
+	 * @return String  database table name
+	 */
 	@Override
 	public String getInstanceName() {
 		return "payment";
 	}
 
+	/**
+	 * Get printable String with value of the class elements
+	 * @return String  value of the class elements
+	 */
 	@Override
 	public String[] getValues() {
 		return new String[]{Double.toString(this.amount), "'" + this.memberId + "'", "'" + this.method + "'", "'" + this.details + "'","'" +  date.toString() + "'", "'" + this.purpose + "'"};
 	}
 
+	/**
+	 * Get primary key of the table
+	 * @return String  Primary key
+	 */
 	@Override
 	public String getPk() {
 		return "id";
