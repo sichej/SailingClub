@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import sailingclub.common.Insertable;
 
-/*
+/**
  * Payment class
  */
 public class Payment implements Insertable, Serializable {
@@ -18,7 +18,7 @@ public class Payment implements Insertable, Serializable {
 	private LocalDate date;
 	private String purpose;
 	
-	/*
+	/**
 	 * Payment constructor
 	 * 
 	 * @param id  id of the payment
@@ -39,7 +39,7 @@ public class Payment implements Insertable, Serializable {
 		this.purpose = purpose;
 	}
 	
-	/*
+	/**
 	 * Payment constructor
 	 * 
 	 * @param amount Payment amount 

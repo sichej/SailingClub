@@ -3,7 +3,7 @@ package sailingclub.common.structures;
 import java.io.Serializable;
 import sailingclub.common.Insertable;
 
-/*
+/**
  * BankTransfer class
  */
 public class BankTransfer implements Insertable, Serializable{
@@ -12,7 +12,7 @@ public class BankTransfer implements Insertable, Serializable{
 	private String bank;
 	private String idMember;
 	
-	/*
+	/**
 	 * BankTransfer constructor
 	 * @param iban  iban
 	 * @param bank  bank
@@ -25,17 +25,19 @@ public class BankTransfer implements Insertable, Serializable{
 		this.iban = iban;
 	}
 	
-	/*
+	/**
 	 * Get iban
 	 * @return iban
 	 */
 	public String getIban() { return iban; }
-	/*
+	
+	/**
 	 * Get bank 
 	 * @return bank
 	 */
 	public String getBank() { return bank; }
-	/*
+	
+	/**
 	 * Get idMember
 	 * @return idMember
 	 */

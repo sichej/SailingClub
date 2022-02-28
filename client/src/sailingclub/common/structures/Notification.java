@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
-/*
+/**
  * Notification class
  */
 public class Notification implements Serializable, Removable, Insertable{
@@ -15,7 +15,7 @@ public class Notification implements Serializable, Removable, Insertable{
 	private String text;
 	private LocalDateTime dateTime;
 	
-	/*
+	/**
 	 * Notification constructor
 	 * @param id  id notifcation
 	 * @param idMemer  member's id
@@ -29,7 +29,7 @@ public class Notification implements Serializable, Removable, Insertable{
 		this.text = text;
 		this.dateTime = dateTime;
 	}
-	/*
+	/**
 	 * Notification constructor
 	 * @param idMemer  member's id
 	 * @param text  notification's text

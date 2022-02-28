@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
-/*
+/**
  * Race class
  */
 public class Race implements Insertable, Removable, Serializable{
@@ -15,7 +15,7 @@ public class Race implements Insertable, Removable, Serializable{
 	private double price;
 	private String name;
 	
-	/*
+	/**
 	 * Race constructor
 	 * 
 	 * @param date  day of the race
@@ -28,7 +28,7 @@ public class Race implements Insertable, Removable, Serializable{
 		this.name = name;
 	}
 	
-	/*
+	/**
 	 * Race constructor
 	 * 
 	 * @param id  race id
@@ -43,7 +43,7 @@ public class Race implements Insertable, Removable, Serializable{
 		this.name = name;
 	}
 	
-	/*
+	/**
 	 * Race constructor
 	 * 
 	 * @param id  race id
