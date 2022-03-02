@@ -50,10 +50,26 @@ public class BoatStorageFee implements Insertable, Serializable{
 		this.idBoat = idBoat;
 	}
 	
+	/**
+	 * Get id
+	 * @return id  boat's id
+	 */
 	public int getId() { return id; }
+	/**
+	 * Get payment date
+	 * @return paymentDate  Date of the payment
+	 */
 	public LocalDate getPaymentDate() { return paymentDate; }
+	/**
+	 * Get expiration date
+	 * @return expirationDate  Expiration date
+	 */
 	public LocalDate getExpirationDate() { return expirationDate; }
 	public double getAmount() { return amount; }
+	/**
+	 * Get id boat
+	 * @return idBoat  boat's id
+	 */
 	public int getIdBoat() { return idBoat; }
 
 	/**
