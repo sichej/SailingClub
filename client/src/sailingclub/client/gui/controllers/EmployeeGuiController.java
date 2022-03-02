@@ -223,7 +223,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the logout button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
     	Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
@@ -247,7 +247,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the update member button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnUpdateMemberClick(ActionEvent event) throws Exception {
 		if(this.txtUsername.getText().equals("")) {
@@ -274,7 +274,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the delete member button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnDeleteMemberClick(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.DELETE, this.userFilter);
@@ -286,7 +286,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the add member button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnAddMemberClick(ActionEvent event) throws Exception {
 		if(this.txtUsername.getText().equals("")) {
@@ -325,7 +325,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the update boat button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnUpdateBoatClick(ActionEvent event) throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_BOAT_BY_ID, this.selectedBoat);
@@ -384,7 +384,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * allows to display the table that contains all the boats
 	 * for the selected member for the fee notification
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	private void displayMemberBoats() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
@@ -407,7 +407,10 @@ public class EmployeeGuiController implements Initializable{
     	
     	this.tblMemberBoatNotifications.setItems(boatsMemberModels);
 	}
-	
+	/**
+	 * handles the clear notification button click
+	 * @param event the click event
+	 */
 	public void btnNotifyMemberClick(ActionEvent event) {
 		this.sendNotification(this.userFilter, "REMINDER:\nYou have to pay the annual membership fee");
 	}
@@ -415,7 +418,7 @@ public class EmployeeGuiController implements Initializable{
 	@SuppressWarnings("unchecked")
 	/**
 	 * display all the boats in the table on the tab boats management
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	private void displayBoats() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_ALL_BOATS, new EmptyPayload());
@@ -434,7 +437,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear race button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnClearRace(ActionEvent event) {
     	this.txtRaceName.clear();
@@ -449,7 +452,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear member button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnClearMemberClick(ActionEvent event) {
 		txtUsername.setText("");
@@ -473,7 +476,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear boat button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnClearBoatClick(ActionEvent event) {
     	txtBoatName.setText("");
@@ -488,7 +491,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the update race button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnUpdateRaceClick(ActionEvent event) throws Exception{
 		LocalDate rDate = this.dtpRaceDate.getValue();
@@ -524,7 +527,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the add race button click
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnAddRaceClick(ActionEvent event) throws Exception {
 		String rName = this.txtRaceName.getText();
@@ -582,7 +585,7 @@ public class EmployeeGuiController implements Initializable{
 	
 	/**
 	 * method called on the stage show
-	 * it calls all the method that downloadA all the info
+	 * it calls all the method that downloads all the info
 	 */
 	public void onStageShow() {
 		try {
@@ -639,7 +642,7 @@ public class EmployeeGuiController implements Initializable{
 	@SuppressWarnings("unchecked")
 	/**
 	 * it displays the payments list on the payments tab
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	private void displayPayments() throws Exception{
     	Response r = this.requestController.makeRequest(Constants.GET_PAYMENTS, new EmptyPayload());
@@ -657,7 +660,7 @@ public class EmployeeGuiController implements Initializable{
 	@SuppressWarnings("unchecked")
 	/**
 	 * it displays the races table on the race tab
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	private void displayRaces() throws Exception {
     	Response r = this.requestController.makeRequest(Constants.GET_RACES, new EmptyPayload());

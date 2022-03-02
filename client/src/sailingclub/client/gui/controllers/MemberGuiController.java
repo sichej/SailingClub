@@ -192,7 +192,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * it sets the logged user refernce
 	 * @param user the logged user
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
@@ -221,7 +221,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the toggle of the menu
 	 * @param event the click event
-	 * @throws IOException
+	 * @throws IOException  exeption
 	 */
 	public void onBtnToggleMenuClick(ActionEvent event) throws IOException {
 		if(this.vbMenu.isVisible()) {
@@ -241,7 +241,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the notification button
 	 * @param event the click event
-	 * @throws IOException
+	 * @throws IOException  exeption
 	 */
 	public void onBtnViewNotificationsClick(ActionEvent event) {
 		try {
@@ -290,7 +290,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of a menu list button
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnMenuClick(ActionEvent event) throws Exception {
 		imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
@@ -353,7 +353,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the button for the boat payments
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnPayBoatStorageFeeClick(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.PAY_BOAT_STORAGE_FEE, this.selectedBoat);
@@ -372,7 +372,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the button for the member payments
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnPayMembershipFee(ActionEvent event) throws Exception {
     	Response r = this.requestController.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
@@ -393,7 +393,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the button for the deletion of a boat
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -412,7 +412,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the button for the logout
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnLogoutClick(ActionEvent event) throws Exception {
 		Response rs = this.requestController.makeRequest(Constants.LOGOUT, new EmptyPayload());
@@ -502,7 +502,7 @@ public class MemberGuiController implements Initializable{
 	 * handles the click event for the button that enables
 	 * to add a payment method
 	 * @param evt the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnAddPaymentMethod(ActionEvent evt) throws Exception{
 		if(this.radCard == (RadioButton)this.toggleGroup.getSelectedToggle()) {
@@ -534,7 +534,7 @@ public class MemberGuiController implements Initializable{
 	 * handles the click event for the button that enables
 	 * to add an image for the boat
 	 * @param evt the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnLoadBoatImgClick(ActionEvent evt) {
 		FileChooser fileChooser = new FileChooser();
@@ -553,7 +553,7 @@ public class MemberGuiController implements Initializable{
 	 * handles the click event for the button that enables
 	 * to insert a new boat
 	 * @param evt the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
 		Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
@@ -771,7 +771,7 @@ public class MemberGuiController implements Initializable{
 	 * handles the click event for the button that enables
 	 * to close the overlays panels that can appear
 	 * @param evt the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void onBtnCloseOverlayClick(ActionEvent event) {
 		((Node)event.getSource()).getParent().getParent().toBack();

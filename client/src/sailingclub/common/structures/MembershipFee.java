@@ -47,11 +47,30 @@ public class MembershipFee implements Insertable, Serializable{
 		this.price = amount;
 		this.idMember = idMember;
 	}
-	
+	/**
+	 * Get id
+	 * @return id  MembershipFee id
+	 */
 	public int getId() { return id; }
+	/**
+	 * Get payment date 
+	 * @return paymentDate  MembershipFee payment date
+	 */
 	public LocalDate getPaymentDate() { return paymentDate; }
+	/**
+	 * Get expiration date 
+	 * @return expirationDate  MembershipFee expiration date
+	 */
 	public LocalDate getExpirationDate() { return expirationDate; }
+	/**
+	 * Get price
+	 * @return price  MembershipFee price
+	 */
 	public double getPrice() { return price; }
+	/**
+	 * Get member id
+	 * @return idMember  MembershipFee owner
+	 */
 	public String getIdMember() { return idMember; }
 
 	/**

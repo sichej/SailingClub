@@ -1,0 +1,8 @@
+sailingclub.client
+sailingclub.client.gui.controllers
+sailingclub.client.gui.css
+sailingclub.client.gui.fxml
+sailingclub.client.gui.images
+sailingclub.client.testing
+sailingclub.common
+sailingclub.common.structures

@@ -1,5 +1,10 @@
 package sailingclub.common;
 
+/**
+ * Class with all the constant for the query 
+ * @author Andrea Bertogalli e Edoardo Sichelli
+ *
+ */
 public class Constants {
 	/**make an insert request*/
 	public static final int INSERT = 0; 

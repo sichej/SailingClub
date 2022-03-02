@@ -65,6 +65,10 @@ public class BoatStorageFee implements Insertable, Serializable{
 	 * @return expirationDate  Expiration date
 	 */
 	public LocalDate getExpirationDate() { return expirationDate; }
+	/**
+	 * Get amount
+	 * @return amount  price for one year of storage
+	 */
 	public double getAmount() { return amount; }
 	/**
 	 * Get id boat

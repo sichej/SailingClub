@@ -42,7 +42,7 @@ public class LoginGuiController{
 	/**
 	 * it sets the logged user
 	 * @param user the user that is logged
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
@@ -51,7 +51,7 @@ public class LoginGuiController{
 	/**
 	 * Handles the click of the login button
 	 * @param event the click event
-	 * @throws Exception
+	 * @throws Exception  exeption
 	 */
 	public void OnBtnLoginClick(ActionEvent event) throws Exception {
 		String username = this.txtUsername.getText();
