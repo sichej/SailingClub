@@ -55,13 +55,45 @@ public class User implements Insertable, Serializable, Removable{
 		this.username = username;
 	}
 	
+	/**
+	 * Get Username
+	 * @return username  Member's username
+	 */
 	public String getUsername() { return username; }
+	/**
+	 * Get name
+	 * @return name  get Member's name
+	 */
 	public String getName() { return name; }
+	/**
+	 * Get lastname
+	 * @return surname  member's lastname
+	 */
 	public String getSurname() { return surname; }
+	/**
+	 * Get address
+	 * @return address  member's address
+	 */
 	public String getAddress() { return address; }
+	/**
+	 * Get fiscal code
+	 * @return fiscalCode  member's fiscal code
+	 */
 	public String getFiscalCode() { return fiscalCode; }
+	/**
+	 * Get user type
+	 * @return userType  type of user
+	 */
 	public String getUserType() { return userType; }
+	/**
+	 * Get password
+	 * @return password  member's password
+	 */
 	public String getPassword() { return password; }
+	/**
+	 * Get fee
+	 * @return fee  member fee
+	 */
 	public MembershipFee getMembershipFee() { return fee; }
 
 	/**

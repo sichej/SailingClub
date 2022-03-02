@@ -126,7 +126,6 @@ public class MemberGuiController implements Initializable{
 	
 	/**
 	 * the initialization method of the class
-	 * 	@Override
 	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		raceModels = FXCollections.observableArrayList();
@@ -241,7 +240,6 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the notification button
 	 * @param event the click event
-	 * @throws IOException  exeption
 	 */
 	public void onBtnViewNotificationsClick(ActionEvent event) {
 		try {
@@ -393,7 +391,8 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click of the button for the deletion of a boat
 	 * @param event the click event
-	 * @throws Exception  exeption
+	 * @throws IOException  exeption
+	 * @throws ClassNotFoundException  exeption
 	 */
 	public void onBtnDeleteBoatClick(ActionEvent event) throws IOException, ClassNotFoundException {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -534,7 +533,6 @@ public class MemberGuiController implements Initializable{
 	 * handles the click event for the button that enables
 	 * to add an image for the boat
 	 * @param evt the click event
-	 * @throws Exception  exeption
 	 */
 	public void onBtnLoadBoatImgClick(ActionEvent evt) {
 		FileChooser fileChooser = new FileChooser();
@@ -548,13 +546,15 @@ public class MemberGuiController implements Initializable{
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	/**
 	 * handles the click event for the button that enables
 	 * to insert a new boat
-	 * @param evt the click event
-	 * @throws Exception  exeption
+	 * @param evt  the click event
+	 * @throws IOException  exeption
+	 * @throws ClassNotFoundException  exeption
 	 */
+	@SuppressWarnings("unchecked")
 	public void onBtnInsertBoatClick(ActionEvent evt) throws IOException, ClassNotFoundException {
 		Response r = this.requestController.makeRequest(Constants.GET_BOATS, new EmptyPayload());
 		ArrayList<Boat> boats = (ArrayList<Boat>)r.getPayload();
@@ -770,8 +770,7 @@ public class MemberGuiController implements Initializable{
 	/**
 	 * handles the click event for the button that enables
 	 * to close the overlays panels that can appear
-	 * @param evt the click event
-	 * @throws Exception  exeption
+	 * @param event the click event
 	 */
 	public void onBtnCloseOverlayClick(ActionEvent event) {
 		((Node)event.getSource()).getParent().getParent().toBack();

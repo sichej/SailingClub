@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"sailingclub.client"},{"l":"sailingclub.client.gui.controllers"},{"l":"sailingclub.client.gui.css"},{"l":"sailingclub.client.gui.fxml"},{"l":"sailingclub.client.gui.images"},{"l":"sailingclub.client.testing"},{"l":"sailingclub.common"},{"l":"sailingclub.common.structures"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"sailingclub.client.gui.controllers"}];updateSearchResults();
