@@ -87,6 +87,7 @@ public class Boat implements Insertable, Removable, Serializable{
 	 * @param length  boat's length
 	 * @param idMember  username of the owner
 	 * @param picture  name of the boat's picture 
+	 * @param pictureName  name of the boat's picture 
 	 */
 	public Boat(String name, double length, String idMember, String pictureName, byte[] picture) {
 		this.name = name;

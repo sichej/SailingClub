@@ -213,7 +213,7 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * allows to pass the logged user between scenes
 	 * @param user the logged {@code User}
-	 * @throws Exception
+	 * @throws Exception  exption
 	 */
 	public void setLoggedUser(User user) throws Exception{
 		this.loggedUser = user;
@@ -437,7 +437,6 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear race button click
 	 * @param event the click event
-	 * @throws Exception  exeption
 	 */
 	public void onBtnClearRace(ActionEvent event) {
     	this.txtRaceName.clear();
@@ -452,7 +451,6 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear member button click
 	 * @param event the click event
-	 * @throws Exception  exeption
 	 */
 	public void onBtnClearMemberClick(ActionEvent event) {
 		txtUsername.setText("");
@@ -476,7 +474,6 @@ public class EmployeeGuiController implements Initializable{
 	/**
 	 * handles the clear boat button click
 	 * @param event the click event
-	 * @throws Exception  exeption
 	 */
 	public void onBtnClearBoatClick(ActionEvent event) {
     	txtBoatName.setText("");
