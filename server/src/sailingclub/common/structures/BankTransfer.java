@@ -14,9 +14,9 @@ public class BankTransfer implements Insertable, Serializable{
 	
 	/**
 	 * BankTransfer constructor
-	 * @param iban  iban
-	 * @param bank  bank
-	 * @param idMember  user id
+	 * @param iban  the iban of the customer
+	 * @param bank  the bank of the customer
+	 * @param idMember  user id of the customer
 	 * 
 	 */
 	public BankTransfer(String iban, String bank, String idMember) {
@@ -62,7 +62,7 @@ public class BankTransfer implements Insertable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

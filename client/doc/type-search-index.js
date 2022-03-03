@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"sailingclub.client.gui.controllers","l":"MemberGuiController"}];updateSearchResults();

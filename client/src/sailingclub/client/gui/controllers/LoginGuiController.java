@@ -20,7 +20,6 @@ import sailingclub.common.structures.User;
 /**
  * Is the controller for the Login gui, contains all the handlers
  * that manage all the javafx components
- * @see sailingclub.client.gui.fxml.LoginGui
  */
 public class LoginGuiController{
 	private RequestController requestController;

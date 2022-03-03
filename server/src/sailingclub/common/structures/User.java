@@ -20,13 +20,14 @@ public class User implements Insertable, Serializable, Removable{
 	
 	/**
 	 * User constructor
-	 * @param username  
-	 * @param name
-	 * @param address
-	 * @param fiscalCode
+	 * @param username the user's username
+	 * @param name the user's name
+	 * @param address the user's address
+	 * @param fiscalCode the user's fiscal code
 	 * @param userType  can be member or employee
 	 * @param password  should to be hashed with md5 encryption
 	 * @param fee  Membership fee
+	 * @param surname the user's surname 
 	 */
 	public User(String username, String name, String surname, String address, String fiscalCode, String userType, String password, MembershipFee fee) {
 		this.username = username;
@@ -40,7 +41,7 @@ public class User implements Insertable, Serializable, Removable{
 	}
 	/**
 	 * User constructor
-	 * @param username  	 
+	 * @param username the user's username
 	 * @param password  shuld to be hashed with md5 encription
 	 */
 	public User(String username, String password) {
@@ -49,19 +50,51 @@ public class User implements Insertable, Serializable, Removable{
 	}
 	/**
 	 * User constructor
-	 * @param username 
+	 * @param username the user's username
 	 */
 	public User(String username) {
 		this.username = username;
 	}
 	
+	/**
+	 * returns the username
+	 * @return username  Member's username
+	 */
 	public String getUsername() { return username; }
+	/**
+	 * Get name
+	 * @return name  get Member's name
+	 */
 	public String getName() { return name; }
+	/**
+	 * Get lastname
+	 * @return surname  member's lastname
+	 */
 	public String getSurname() { return surname; }
+	/**
+	 * Get address
+	 * @return address  member's address
+	 */
 	public String getAddress() { return address; }
+	/**
+	 * Get fiscal code
+	 * @return fiscalCode  member's fiscal code
+	 */
 	public String getFiscalCode() { return fiscalCode; }
+	/**
+	 * Get user type
+	 * @return userType  type of user
+	 */
 	public String getUserType() { return userType; }
+	/**
+	 * Get password
+	 * @return password  member's password
+	 */
 	public String getPassword() { return password; }
+	/**
+	 * Get fee
+	 * @return fee  member fee
+	 */
 	public MembershipFee getMembershipFee() { return fee; }
 
 	/**

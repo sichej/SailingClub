@@ -18,7 +18,7 @@ public class Notification implements Serializable, Removable, Insertable{
 	/**
 	 * Notification constructor
 	 * @param id  id notifcation
-	 * @param idMemer  member's id
+	 * @param idMember  member's id
 	 * @param text  notification's text
 	 * @param dateTime  notification's date
 	 */
@@ -31,7 +31,7 @@ public class Notification implements Serializable, Removable, Insertable{
 	}
 	/**
 	 * Notification constructor
-	 * @param idMemer  member's id
+	 * @param idMember  member's id
 	 * @param text  notification's text
 	 * @param dateTime  notification's date
 	 */
@@ -42,18 +42,31 @@ public class Notification implements Serializable, Removable, Insertable{
 		this.dateTime = dateTime;
 	}
 	
+	/**
+	 * Get id 
+	 * @return id  Notification id
+	 */
 	public int getId() {
 		return id;
 	}
-
+	/**
+	 * Get id member
+	 * @return idMember  member's id
+	 */
 	public String getIdMember() {
 		return idMember;
 	}
-
+	/**
+	 * Get text
+	 * @return text  notification text
+	 */
 	public String getText() {
 		return text;
 	}
-
+	/**
+	 * Get date 
+	 * @return dateTime  dateTime
+	 */
 	public LocalDateTime getDateTime() {
 		return dateTime;
 	}

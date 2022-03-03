@@ -30,19 +30,32 @@ public class CreditCard implements Insertable, Removable, Serializable{
 		this.expDate = expDate;
 		this.idMember = idMember;
 	}
-	
+	/**
+	 * Get id memeber
+	 * @return idMember  member's id
+	 */
 	public String getIdMember() {
 		return idMember;
 	}
-
+	/**
+	 * Get credit card number
+	 * @return cardNumber  card number
+	 */
 	public String getCardNumber() {
 		return cardNumber;
 	}
-
+	/**
+	 * Get cvv
+	 * @return cvv  card cvv
+	 */
 	public int getCvv() {
 		return cvv;
 	}
 
+	/**
+	 * Get expiration date
+	 * @return expDate  card expiration date
+	 */
 	public LocalDate getExpirationDate() {
 		return expDate;
 	}
@@ -75,7 +88,7 @@ public class CreditCard implements Insertable, Removable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

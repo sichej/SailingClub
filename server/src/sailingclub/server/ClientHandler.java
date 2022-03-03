@@ -27,6 +27,7 @@ public class ClientHandler implements Runnable {
 	/**
 	 * the contructor
 	 * @param socket the socket on which a client is connected
+	 * @param conf the server configuration
 	 */
 	public ClientHandler(Socket socket, ServerConfiguration conf) {
 		this.socket = socket;

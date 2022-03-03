@@ -1,5 +1,9 @@
 package sailingclub.common;
 
+/**
+ * Constains all the constants that allow a generic communication 
+ * between client and server
+ */
 public class Constants {
 	/**make an insert request*/
 	public static final int INSERT = 0; 

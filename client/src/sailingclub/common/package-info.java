@@ -1,4 +1,4 @@
 /**
- * Contains all the common element usefull on the client and on the server
+ * contains all common classes between client and server
  */
 package sailingclub.common;

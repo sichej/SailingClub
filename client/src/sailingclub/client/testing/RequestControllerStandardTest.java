@@ -28,11 +28,12 @@ public class RequestControllerStandardTest {
 	private RequestController controller;
 	private Socket socket;
 	
-	@Before
+	
 	/**
 	 * initializes the tests
 	 * @throws Exception
 	 */
+	@Before
 	public void initialize() throws Exception {
 		String ip = "localhost";
 		int port = 5555;
@@ -42,10 +43,11 @@ public class RequestControllerStandardTest {
 		controller = new RequestController(out, in);
 	}
 	
-	@Test
+	
 	/**
 	 * tests the insertion and the deletion
 	 */
+	@Test
 	public void testInsertDelete(){
 		Race race = new Race(LocalDate.now(), 55.6, "TestRace");
 		Response r = controller.makeRequest(Constants.INSERT, race);
@@ -54,20 +56,22 @@ public class RequestControllerStandardTest {
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 	
-	@Test
+	
 	/**
 	 * tests the login
 	 */
+	@Test
 	public void testLogin() {
 		User user = new User("user_for_test", Utils.stringToDigest("x"));
 		Response r = controller.makeRequest(Constants.LOGIN, user);
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 		
-	@Test
+	
 	/**
 	 * tests the boat fee payments
 	 */
+	@Test
 	public void testPayBoatStorageFee() {
 		Response r = controller.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(1));
 		Boat b = (Boat)r.getPayload();
@@ -75,20 +79,22 @@ public class RequestControllerStandardTest {
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 	
-	@Test
+	
 	/**
 	 * tests the member fee payments
 	 */
+	@Test
 	public void testPayMembershipFee() {
 		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		r = controller.makeRequest(Constants.PAY_MEMBERSHIP_FEE, new EmptyPayload());
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 	
-	@Test
+	
 	/**
 	 * tests all the gets requests
 	 */
+	@Test
 	public void testGetRequests() {
 		controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		
@@ -137,10 +143,11 @@ public class RequestControllerStandardTest {
 		assertEquals(r.getStatusCode(), Constants.SUCCESS);
 	}
 	
-	@Test
+	
 	/**
-	 * tests all the updates request
+	 * tests the user request
 	 */
+	@Test
 	public void testUpdateRequests() {
 		Response r = controller.makeRequest(Constants.LOGIN, new User("user_for_test", Utils.stringToDigest("x")));
 		User u = (User)r.getPayload();
@@ -176,10 +183,11 @@ public class RequestControllerStandardTest {
 		assertEquals(u.getName() + Integer.toString(randomNum), nu.getName());
 	}
 	
-	@After
+	
 	/**
 	 * finalize the tests execution
 	 */
+	@After
 	public void finalize() throws Exception {
 		controller.closeConnection();
 		this.socket.close();

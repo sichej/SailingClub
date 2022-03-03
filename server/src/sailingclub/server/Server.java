@@ -12,6 +12,10 @@ import java.net.Socket;
  * @author Andrea Bertogalli and Edoardo Sichelli
  */
 public class Server {
+	/**
+	 * the main method
+	 * @param args command lines arguments
+	 */
 	public static void main(String[] args){
 		ServerConfiguration conf = new ServerConfiguration("config/srv_conf.json");
 		ServerSocket server = null;

@@ -43,7 +43,6 @@ import java.util.ArrayList;
 /**
  * Is the controller for the Member gui, contains all the handlers
  * that manage all the javafx components
- * @see sailingclub.client.gui.fxml.MemberGui
  */
 public class MemberGuiController implements Initializable{
 	private final String REGISTERED_STATE = "Unsubscribe";
@@ -209,6 +208,11 @@ public class MemberGuiController implements Initializable{
 	 * method called on stage show, initialize the gui and gets the data
 	 */
 	public void onStageShow() {
+		if(this.loggedUser.getMembershipFee().getExpirationDate().isBefore(LocalDate.now())) {
+			this.btnBoatsManagment.setDisable(true);
+			this.btnRaceManagment.setDisable(true);
+			this.btnProfileManagment.fire();
+		}
 		try {
 			this.displayBoats();
 			displayNotifications();
@@ -384,6 +388,10 @@ public class MemberGuiController implements Initializable{
     		
     		Payment paymentLog = new Payment(amount, this.loggedUser.getUsername(), method,  details, LocalDate.now(), "Payment for annual fee of:\n" + this.loggedUser.getName() + " " + this.loggedUser.getSurname());
     		this.requestController.makeRequest(Constants.INSERT, paymentLog);
+    		if(this.loggedUser.getMembershipFee().getExpirationDate().isAfter(LocalDate.now())) {
+    			this.btnBoatsManagment.setDisable(false);
+    			this.btnRaceManagment.setDisable(false);
+    		}
     		this.btnProfileManagment.fire();
     	}
 	}
@@ -454,7 +462,19 @@ public class MemberGuiController implements Initializable{
 		Response r = null;
 		try {
 			if(raceState.equals(this.NOT_REGISTERED_STATE)) {	//subscription request
-				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername(),Integer.parseInt(cmb.getValue().split(" - ")[1]));
+				int bid = Integer.parseInt(cmb.getValue().split(" - ")[1]);
+				
+				Boat b =  (Boat)this.requestController.makeRequest(Constants.GET_BOAT_BY_ID, new Boat(bid)).getPayload();
+				if(b.getBoatStorageFee().getExpirationDate().isBefore(LocalDate.now())) {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Fee not payed");
+					alert.setHeaderText("You can't participate");
+					alert.setContentText("You can't participate to the race with this boat because the boat fee is expired!");
+					alert.showAndWait();
+					return;
+				}
+				
+				RaceParticipation subscription = new RaceParticipation(raceId, this.loggedUser.getUsername(),bid);
 				r =this.requestController.makeRequest(Constants.INSERT, subscription);
 				
 				double amount = race.getPrice();
@@ -635,7 +655,7 @@ public class MemberGuiController implements Initializable{
     	
     	if(this.cmBoxRacePaymentMethod.getItems().size() == 0) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("No boats alert!");
+			alert.setTitle("No Paymnet methods alert!");
 			alert.setHeaderText("You can't participate");
 			alert.setContentText("You can't participate to races because you haven't configured a payment method yet!");
 			alert.showAndWait();

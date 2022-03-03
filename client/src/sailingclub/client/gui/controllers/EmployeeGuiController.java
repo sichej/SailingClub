@@ -32,7 +32,6 @@ import sailingclub.common.structures.*;
 /**
  * Is the controller for the Employee gui, contains all the handlers
  * that manage all the javafx components
- * @see sailingclub.client.gui.fxml.EmployeeGui
  */
 public class EmployeeGuiController implements Initializable{
 	private final double BTN_NOTIFY_MAX_W = 50;
@@ -101,7 +100,6 @@ public class EmployeeGuiController implements Initializable{
 	
 	/**
 	 * the initialization method of the class
-	 * @Override
 	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		raceModels = FXCollections.observableArrayList();

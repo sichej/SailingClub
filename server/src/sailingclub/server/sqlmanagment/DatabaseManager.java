@@ -13,12 +13,17 @@ import java.util.Map;
 
 /**
  * allows to make queries to the db
- * @see sailingclub.server.sqlmanagement.SQLTranslator
+ * @see SQLTranslator
  */
 public class DatabaseManager {
 	private String user;
 	private String psw;
 	
+	/**
+	 * The constructor
+	 * @param user the user of the database
+	 * @param psw the password for the database
+	 */
 	public DatabaseManager(String user, String psw) {
 		this.user = user;
 		this.psw = psw;
@@ -43,8 +48,8 @@ public class DatabaseManager {
 	 * allows to execute an sql statement and return the the result wrapped in a list of maps
 	 * @param query the sql statement to execute
 	 * @return a list of maps that represent the result table
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws ClassNotFoundException occur if there are an unparasable object
+	 * @throws SQLException custom excepion for no request handling
 	 */
 	public List<Map<String, String>> executeSQLStatement(String query) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
