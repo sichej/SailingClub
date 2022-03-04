@@ -248,6 +248,7 @@ public class MemberGuiController implements Initializable{
 	public void onBtnViewNotificationsClick(ActionEvent event) {
 		try {
 			displayNotifications();
+			imgBtnToggleMenu.setImage(new Image("sailingclub/client/gui/images/menu_closed.png"));
 	        pnlBackdrop.setVisible(false);
 			vbMenu.setVisible(false);
 			this.btnNotification.setVisible(false);
@@ -668,8 +669,10 @@ public class MemberGuiController implements Initializable{
 			for(Boat b: boats) cmb.getItems().add(b.getName() + " - " + b.getId());
 			
 			btnAction.setId(Integer.toString(allRaces.get(i).getId()));
+			btnAction.getStyleClass().add("tbbtn");
 			
 			cmb.getSelectionModel().selectFirst();
+			cmb.getStyleClass().add("logininput");
 			btnAction.setText(this.NOT_REGISTERED_STATE);
 			final Race rAtIndex = allRaces.get(i);
 			btnAction.setOnAction(event -> onBtnRaceActionClick(rAtIndex,btnAction, cmb));

@@ -67,3 +67,8 @@
 .column-header-background, .corner{
   -fx-background-color: transparent;
 }
+
+.tbbtn{
+    -fx-background-color: #14274e;
+    -fx-text-fill:#fff;
+}

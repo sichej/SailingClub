@@ -373,6 +373,11 @@ public class EmployeeGuiController implements Initializable{
 	private void sendNotification(User user, String text) {
 		try {
 			this.requestController.makeRequest(Constants.INSERT, new Notification(user.getUsername(),text, LocalDateTime.now()));
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Notification alert!");
+			alert.setHeaderText("Notification sended!");
+			alert.setContentText("Notification sended to " + user.getUsername() + "!");
+			alert.showAndWait();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -666,13 +671,14 @@ public class EmployeeGuiController implements Initializable{
 		
 		for(int i = 0; i < allRaces.size(); i++) {
 			Button btnAction = new Button();
+			btnAction.getStyleClass().add("tbbtn");
 			btnAction.setId(Integer.toString(allRaces.get(i).getId()));
 			btnAction.setText("Remove");
 			final Race race = allRaces.get(i);
 			btnAction.setOnAction(event -> onBtnRaceActionClick(btnAction, race));
 						
 			if(allRaces.get(i).getDate().isBefore(LocalDate.now())) {  //se gara finita
-				btnAction.setText("Race ended\nRemove");
+				btnAction.setText("Ended\nRemove");
 			}
 			
 	    	r = this.requestController.makeRequest(Constants.GET_RACES_SUB, allRaces.get(i).getId().toString());
