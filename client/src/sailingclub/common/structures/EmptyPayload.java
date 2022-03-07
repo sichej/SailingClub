@@ -3,10 +3,12 @@ package sailingclub.common.structures;
 import java.io.Serializable;
 
 /**
- * EmptyPayload class
+ * This class is useful for requests and responses that don't require
+ * a specific data payload
  */
 public class EmptyPayload implements Serializable{
 	private static final long serialVersionUID = 1L;
+	/**a message delivered as payload (optional)*/
 	private String message;
 	
 	/**

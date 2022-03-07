@@ -5,12 +5,19 @@ import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
 /**
- * RaceParticipation class
+ * This class represent a record of a participation to a race
+ * of a boat owned by a user
+ * @see Race
+ * @see User
+ * @see Boat
  */
 public class RaceParticipation implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the id of the race*/
 	private int idRace;
+	/**the id of the member*/
 	private String idMember;
+	/**the id of the boat*/
 	private Integer idBoat;
 	
 	/**
@@ -35,9 +42,29 @@ public class RaceParticipation implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 	}
 
-	public int getId() { return idRace; }
-	public String getName() { return idMember; }
-	public int getIdBoat() { return idBoat; }
+	/**
+	 * the race id
+	 * @return the id of the race
+	 */
+	public int getId() { 
+		return idRace; 
+	}
+	
+	/**
+	 * returns the member, who participate with the boat
+	 * @return the member, who participate with the boat
+	 */
+	public String getMember() { 
+		return idMember; 
+	}
+	
+	/**
+	 * returns the boat which participate id
+	 * @return the boat which participate id
+	 */
+	public int getIdBoat() { 
+		return idBoat; 
+	}
 
 	/**
 	 * Get the attributes of the class
@@ -58,7 +85,7 @@ public class RaceParticipation implements Insertable, Removable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String[] with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

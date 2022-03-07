@@ -8,8 +8,11 @@ import java.io.Serializable;
  */
 public class Response implements Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the response status code*/
 	private int statusCode;
+	/**the response payload type*/
 	private Class<?> payloadType;
+	/**the response payload*/
 	private Object payload;
 	
 	/**

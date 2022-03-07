@@ -6,21 +6,27 @@ import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
 /**
- * Notification class
+ * This class represent a notification structure, the notifications
+ * are used to notify a member for payments
+ * @see User
  */
 public class Notification implements Serializable, Removable, Insertable{
 	private static final long serialVersionUID = 1L;
+	/**notification id*/
 	private int id;
+	/**the member for who the notification is*/
 	private String idMember;
+	/**notification text*/
 	private String text;
+	/**timestamp for the notification*/
 	private LocalDateTime dateTime;
 	
 	/**
 	 * Notification constructor
-	 * @param id  id notifcation
-	 * @param idMember  member's id
-	 * @param text  notification's text
-	 * @param dateTime  notification's date
+	 * @param id the id for the notifcation
+	 * @param idMember the member for who the notification is
+	 * @param text notification's text
+	 * @param dateTime notification's datetime
 	 */
 	public Notification(int id, String idMember, String text, LocalDateTime dateTime) {
 		super();
@@ -43,29 +49,32 @@ public class Notification implements Serializable, Removable, Insertable{
 	}
 	
 	/**
-	 * Get id 
-	 * @return id  Notification id
+	 * Returns the id for the notification
+	 * @return id  the id for the notification
 	 */
 	public int getId() {
 		return id;
 	}
+	
 	/**
-	 * Get id member
-	 * @return idMember  member's id
+	 * Returns the member id which the notification is sended to
+	 * @return idMember the member id which the notification is sended to
 	 */
 	public String getIdMember() {
 		return idMember;
 	}
+	
 	/**
-	 * Get text
-	 * @return text  notification text
+	 * Returns the notification text
+	 * @return text the notification text
 	 */
 	public String getText() {
 		return text;
 	}
+	
 	/**
-	 * Get date 
-	 * @return dateTime  dateTime
+	 * Returns the date time (timestamp) for the notification
+	 * @return dateTime the date time (timestamp) for the notification
 	 */
 	public LocalDateTime getDateTime() {
 		return dateTime;
@@ -90,7 +99,7 @@ public class Notification implements Serializable, Removable, Insertable{
 	}
 	
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String[] with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

@@ -31,7 +31,7 @@ public class RequestControllerStandardTest {
 	
 	/**
 	 * initializes the tests
-	 * @throws Exception
+	 * @throws Exception exception throwed in case of connection errors
 	 */
 	@Before
 	public void initialize() throws Exception {

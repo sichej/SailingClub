@@ -26,19 +26,19 @@ import sailingclub.server.sqlmanagment.SQLTranslator;
 public class SQLTranslatorStandardTest {
 	private SQLTranslator translator;
 	
-	@Before
 	/**
 	 * initialize the test suite
-	 * @throws Exception
 	 */
-	public void initialize() throws Exception {
+	@Before
+	public void initialize() {
 		this.translator = new SQLTranslator();
 	}
 	
-	@Test
+	
 	/**
 	 * tests all the sql conversion from requests
 	 */
+	@Test
 	public void testSQLConversion() {
 		Request selectReq = new Request(Constants.GET_ALL_BOATS, new EmptyPayload());
 		Request insertReq = new Request(Constants.INSERT, new BankTransfer("12345", "intesa", "usertest"));
@@ -75,11 +75,12 @@ public class SQLTranslatorStandardTest {
 		assertTrue(updateMatcher.matches());
 	}
 	
+	
+	/**
+	 * tests the response parsing from db result
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	/**
-	 * test the response conversion to object
-	 */
 	public void testResponseConversion() {
 		try {
 			String sql = this.translator.requestToSql(new Request(Constants.GET_ALL_BOATS, new EmptyPayload()));

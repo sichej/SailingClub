@@ -1,9 +1,8 @@
 package sailingclub.common;
 
 /**
- * Class with all the constant for the query 
- * @author Andrea Bertogalli e Edoardo Sichelli
- *
+ * Constains all the constants that allow a generic communication 
+ * between client and server
  */
 public class Constants {
 	/**make an insert request*/

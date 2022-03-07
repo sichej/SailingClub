@@ -6,14 +6,20 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 
 /**
- * MembershipFee class
+ * this class represent an annual fee for a member
+ * that has to pay the fee
  */
 public class MembershipFee implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**fee id*/
 	private int id;
+	/**the fee last payent date*/
 	private LocalDate paymentDate;
+	/**the fee expiration date*/
 	private LocalDate expirationDate;
+	/**the fee amount*/
 	private double price;
+	/**the member which fee refers to*/
 	private String idMember;
 	
 	/**
@@ -23,7 +29,7 @@ public class MembershipFee implements Insertable, Serializable{
 	 * @param paymentDate  date of the Membership fee payment
 	 * @param expirationDate  date of the Membership fee payment expiration
 	 * @param price  MembershipFee price
-	 * @param idMember user paying
+	 * @param idMember user which the fee is referred to 
 	 */
 	public MembershipFee(int id, LocalDate paymentDate, LocalDate expirationDate, double price, String idMember) {
 		this.id = id;
@@ -48,28 +54,38 @@ public class MembershipFee implements Insertable, Serializable{
 		this.idMember = idMember;
 	}
 	/**
-	 * Get id
-	 * @return id  MembershipFee id
+	 * returns the id of the fee
+	 * @return id  the id of the fee
 	 */
-	public int getId() { return id; }
+	public int getId() { 
+		return id; 
+	}
+	
 	/**
-	 * Get payment date 
-	 * @return paymentDate  MembershipFee payment date
+	 * Returns the date of the last payment
+	 * @return paymentDate the date of the last payment
 	 */
-	public LocalDate getPaymentDate() { return paymentDate; }
+	public LocalDate getPaymentDate() { 
+		return paymentDate; 
+	}
+	
 	/**
-	 * Get expiration date 
-	 * @return expirationDate  MembershipFee expiration date
+	 * Returns the expiration date for the fee
+	 * @return expirationDate the expiration date for the fee
 	 */
-	public LocalDate getExpirationDate() { return expirationDate; }
+	public LocalDate getExpirationDate() { 
+		return expirationDate; 
+	}
+	
 	/**
-	 * Get price
-	 * @return price  MembershipFee price
+	 * Returns the amount of the fee
+	 * @return price the amount of the fee
 	 */
 	public double getPrice() { return price; }
+	
 	/**
-	 * Get member id
-	 * @return idMember  MembershipFee owner
+	 * Returns the member username which the fee refers to
+	 * @return idMember the member username which the fee refers to
 	 */
 	public String getIdMember() { return idMember; }
 
@@ -92,7 +108,7 @@ public class MembershipFee implements Insertable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String[] with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

@@ -7,13 +7,18 @@ import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
 /**
- * CreditCard class
+ * This class is the implementation for a credit card
+ * that allows the member to make payments with credit card
  */
 public class CreditCard implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the card number (identifier)*/
 	private String cardNumber;
+	/**the card cvv*/
 	private int cvv;
+	/**the card expiration date*/
 	private LocalDate expDate;
+	/**the owner (member) of the card*/
 	private String idMember;
 	
 	/**
@@ -31,30 +36,30 @@ public class CreditCard implements Insertable, Removable, Serializable{
 		this.idMember = idMember;
 	}
 	/**
-	 * Get id memeber
-	 * @return idMember  member's id
+	 * Returns the id member owner of the credit card
+	 * @return idMember  the id member owner of the credit card
 	 */
 	public String getIdMember() {
 		return idMember;
 	}
 	/**
-	 * Get credit card number
-	 * @return cardNumber  card number
+	 * Returns the credit card number (identifier)
+	 * @return cardNumber  the credit card number (identifier)
 	 */
 	public String getCardNumber() {
 		return cardNumber;
 	}
 	/**
-	 * Get cvv
-	 * @return cvv  card cvv
+	 * returns the cvv of the card
+	 * @return cvv the cvv of the card
 	 */
 	public int getCvv() {
 		return cvv;
 	}
 
 	/**
-	 * Get expiration date
-	 * @return expDate  card expiration date
+	 * Returns the expiration date for the card
+	 * @return expDate the expiration date for the card
 	 */
 	public LocalDate getExpirationDate() {
 		return expDate;
@@ -88,7 +93,7 @@ public class CreditCard implements Insertable, Removable, Serializable{
 	}
 
 	/**
-	 * Get String with value of the class elements
+	 * Get String[] with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

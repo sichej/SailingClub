@@ -6,16 +6,26 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 
 /**
- * Payment class
+ * This class represent a record (log) for a payment made
+ * in the system by {@code User}
+ * @see CreditCard
+ * @see BankTransfer
  */
 public class Payment implements Insertable, Serializable {
 	private static final long serialVersionUID = 1L;
+	/**payment id*/
 	private int id;
+	/**payment amount*/
 	private double amount;
+	/**the payer (member)*/
 	private String memberId;
+	/**the payment method used*/
 	private String method;
+	/**the paymets method details*/
 	private String details;
+	/**timestamp for the payment*/
 	private LocalDate date;
+	/**the purpose of the payment*/
 	private String purpose;
 	
 	/**
@@ -58,17 +68,63 @@ public class Payment implements Insertable, Serializable {
 		this.purpose = purpose;
 	}
 	
-	public int getId() { return id; }
+	/**
+	 * returns the payment id
+	 * @return the payment id
+	 */
+	public int getId() { 
+		return id; 
+	}
+	
+	/**
+	 * returns the payment amount
+	 * @return the payment amount
+	 */
 	public double getAmount() { return amount; }
-	public String getMemberId() { return memberId; }
-	public String getMethod() { return method; }
-	public String getDetails() { return details; }
-	public LocalDate getDate() { return date; }
-	public String getPurpose() { return purpose; }
+	
+	/**
+	 * returns the member id of the payer
+	 * @return the member id of the payer
+	 */
+	public String getMemberId() { 
+		return memberId; 
+	}
+	
+	/**
+	 * returns the payment method used for the payment
+	 * @return the payment method used for the payment
+	 */
+	public String getMethod() { 
+		return method; 
+	}
+	
+	/**
+	 * returns the description
+	 * @return the description
+	 */
+	public String getDetails() { 
+		return details; 
+	}
+	
+	/**
+	 * returns the date-time of the payment
+	 * @return the date time of the payment
+	 */
+	public LocalDate getDate() { 
+		return date; 
+	}
+	
+	/**
+	 * returns the purpose of the payment
+	 * @return the purpose of the payment
+	 */
+	public String getPurpose() { 
+		return purpose; 
+	}
 
 	/**
 	 * Get the attributes of the class
-	 * @return String  Array String with params
+	 * @return String Array String with params
 	 */
 	@Override
 	public String[] getAttributes() {
@@ -77,7 +133,7 @@ public class Payment implements Insertable, Serializable {
 
 	/**
 	 * Get the database table name
-	 * @return String  database table name
+	 * @return String database table name
 	 */
 	@Override
 	public String getInstanceName() {
@@ -85,8 +141,8 @@ public class Payment implements Insertable, Serializable {
 	}
 
 	/**
-	 * Get printable String with value of the class elements
-	 * @return String  value of the class elements
+	 * Get String[] with value of the class elements
+	 * @return String value of the class elements
 	 */
 	@Override
 	public String[] getValues() {

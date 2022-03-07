@@ -42,7 +42,7 @@ public class Utils {
 	 * @param bi the image
 	 * @param format the image format (jpg,png,webp ...)
 	 * @return the array of byte of the image
-	 * @throws IOException
+	 * @throws IOException exception throwed in case of problems reading images
 	 */
 	public static byte[] toByteArray(BufferedImage bi, String format)
 	        throws IOException {
@@ -58,7 +58,7 @@ public class Utils {
 	 * converts byte array to an image
 	 * @param bytes the array of byte of the image
 	 * @return an image converted from an array of bytes
-	 * @throws IOException
+	 * @throws IOException exception throwed in case of problems reading images
 	 */
     public static BufferedImage toBufferedImage(byte[] bytes)
         throws IOException {

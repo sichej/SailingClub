@@ -4,12 +4,16 @@ import java.io.Serializable;
 import sailingclub.common.Insertable;
 
 /**
- * BankTransfer class
+ * Is an implementation of the structure for a bank account
+ * that allows the {@code Member} to make banks transfers
  */
 public class BankTransfer implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the iban of the bank account*/
 	private String iban;
+	/**the bank name of the bank account*/
 	private String bank;
+	/**the owner of the bank account*/
 	private String idMember;
 	
 	/**
@@ -26,20 +30,20 @@ public class BankTransfer implements Insertable, Serializable{
 	}
 	
 	/**
-	 * Get iban
-	 * @return iban
+	 * returns the iban of the bank account
+	 * @return  the iban of the bank account
 	 */
 	public String getIban() { return iban; }
 	
 	/**
-	 * Get bank 
-	 * @return bank
+	 * returns the bank of the bank account
+	 * @return bank the bank of the bank account
 	 */
 	public String getBank() { return bank; }
 	
 	/**
-	 * Get idMember
-	 * @return idMember
+	 * return the owner of the bank account
+	 * @return idMember the owner (id) of the bank account
 	 */
 	public String getIdMember() { return idMember; }
 

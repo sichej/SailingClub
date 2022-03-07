@@ -6,14 +6,20 @@ import java.time.LocalDate;
 import sailingclub.common.Insertable;
 
 /**
- * BoatStorageFee class
+ * This class represent a Boat fee for the annual storage
+ * in a boat garage
  */
 public class BoatStorageFee implements Insertable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the fee id*/
 	private int id;
+	/**the last payment date for the fee*/
 	private LocalDate paymentDate;
+	/**the expire date for the fee*/
 	private LocalDate expirationDate;
+	/**the price to pay for the fee*/
 	private double amount;
+	/**the boat id*/
 	private int idBoat;
 	
 	/**
@@ -51,28 +57,40 @@ public class BoatStorageFee implements Insertable, Serializable{
 	}
 	
 	/**
-	 * Get id
-	 * @return id  boat's id
+	 * returns the id of the fee
+	 * @return id  the id of the fee
 	 */
-	public int getId() { return id; }
+	public int getId() { 
+		return id; 
+	}
+	
 	/**
-	 * Get payment date
-	 * @return paymentDate  Date of the payment
+	 * returns the last payment date of the fee
+	 * @return paymentDate  Date of the last payment
 	 */
-	public LocalDate getPaymentDate() { return paymentDate; }
+	public LocalDate getPaymentDate() { 
+		return paymentDate; 
+	}
+	
 	/**
-	 * Get expiration date
-	 * @return expirationDate  Expiration date
+	 * returns the expiration date for the fee
+	 * @return expirationDate the expiration date for the fee
 	 */
-	public LocalDate getExpirationDate() { return expirationDate; }
+	public LocalDate getExpirationDate() { 
+		return expirationDate; 
+	}
+	
 	/**
-	 * Get amount
+	 * the fee amount to pay
 	 * @return amount  price for one year of storage
 	 */
-	public double getAmount() { return amount; }
+	public double getAmount() { 
+		return amount; 
+	}
+	
 	/**
-	 * Get id boat
-	 * @return idBoat  boat's id
+	 * returns the boat id which the fee refers to
+	 * @return idBoat the boat id which the fee refers to
 	 */
 	public int getIdBoat() { return idBoat; }
 
@@ -95,7 +113,7 @@ public class BoatStorageFee implements Insertable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
+	 * Get String[] with value of the class elements
 	 * @return String  value of the class elements
 	 */
 	@Override

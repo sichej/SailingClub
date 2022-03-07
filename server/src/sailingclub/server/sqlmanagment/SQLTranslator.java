@@ -40,8 +40,8 @@ public class SQLTranslator {
 	 * allows the translation from a client {@code Request} to a SQL statement
 	 * @param request the client {@code Request}
 	 * @return the SQL statement as string
-	 * @throws RequestToSQLException
-	 * @throws IOException
+	 * @throws RequestToSQLException exception throwed in case of parsing errors
+	 * @throws IOException exception throwed in case of problem reading images
 	 */
 	public String requestToSql(Request request) throws RequestToSQLException, IOException {
 		String query = "";
@@ -168,8 +168,8 @@ public class SQLTranslator {
 	 * allows the translation from a SQL result to a {@code Response}
 	 * @param queryResult the result of the last query execution
 	 * @return a {@code Response} that contains the result for the client
-	 * @throws SQLToResponseException
-	 * @throws IOException
+	 * @throws SQLToResponseException exception throwed in case of parsing errors
+	 * @throws IOException exception throwed in case of image reading problems
 	 */
 	public Response sqlToResponse(List<Map<String, String>> queryResult) throws SQLToResponseException, IOException {
 		Response response = null;

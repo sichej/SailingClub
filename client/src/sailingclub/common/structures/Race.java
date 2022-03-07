@@ -6,13 +6,19 @@ import sailingclub.common.Insertable;
 import sailingclub.common.Removable;
 
 /**
- * Race class
+ * Is an implementation of a race, wich is a competition
+ * available for the members of the club
+ * @see RaceParticipation
  */
 public class Race implements Insertable, Removable, Serializable{
 	private static final long serialVersionUID = 1L;
+	/**the race id*/
 	private Integer id;
+	/**the race date*/
 	private LocalDate date;
+	/**the race price*/
 	private double price;
+	/**the race name*/
 	private String name;
 	
 	/**
@@ -51,11 +57,38 @@ public class Race implements Insertable, Removable, Serializable{
 	public Race(int id) {
 		this.id = id;
 	}
-
-	public Integer getId() { return id; }
-	public LocalDate getDate() { return date; }
-	public double getPrice() { return price; }
-	public String getName() { return name; }
+	
+	/**
+	 * returns the race id
+	 * @return the race id
+	 */
+	public Integer getId() { 
+		return id; 
+	}
+	
+	/**
+	 * returns the race date
+	 * @return the race date
+	 */
+	public LocalDate getDate() { 
+		return date; 
+	}
+	
+	/**
+	 * returns the race price
+	 * @return the race price
+	 */
+	public double getPrice() { 
+		return price; 
+	}
+	
+	/**
+	 * returns the race name
+	 * @return the race name
+	 */
+	public String getName() { 
+		return name; 
+	}
 
 	/**
 	 * Get the attributes of the class
@@ -76,8 +109,8 @@ public class Race implements Insertable, Removable, Serializable{
 	}
 
 	/**
-	 * Get printable String with value of the class elements
-	 * @return String  value of the class elements
+	 * Get String[] with value of the class elements
+	 * @return String value of the class elements
 	 */
 	@Override
 	public String[] getValues() {
