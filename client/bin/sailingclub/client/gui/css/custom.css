@@ -1,0 +1,74 @@
+.menubuttons,.openbutton{
+  -fx-background-color: #ffffff00;
+}
+
+.menubuttons:hover{
+  -fx-background-color: #cccccc;
+}
+
+.logininput:focused{
+  -fx-focus-color: #14274e;
+}
+
+.scroll-bar:vertical{
+  -fx-pref-width: 16px;
+}
+
+.btnBoatsGrid{
+  -fx-background-color: #14274e;
+  -fx-content-display: top;
+  -fx-border-style: solid solid solid solid;
+  -fx-border-color: #000;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0), 5, 0.2, 0.0, 0.0);
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+}
+
+.boatbox{
+  -fx-border-color: #000;
+  -fx-border-style: hidden solid hidden hidden;
+  -fx-border-width: 1;
+}
+
+.overlaypane{
+  -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+
+.lblBoat{
+  -fx-text-fill:#fff;
+  -fx-font-size: 15pt ;
+}
+
+.paymentForm{
+  -fx-background-radius: 8px;
+  -fx-background-color: #fff;
+}
+
+.cmbPay{
+  -fx-border-color: #14274e;
+  -fx-border-radius: 5px;
+}
+
+.tbAlignement {
+  -fx-alignment: CENTER;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color:  #14274e;
+    -fx-background-insets: 0;
+}
+
+.lbladd{
+  -fx-text-fill: #fff;
+  -fx-font-weight: bold;
+  -fx-font-size: 18;
+}
+
+.column-header-background, .corner{
+  -fx-background-color: transparent;
+}
+
+.tbbtn{
+    -fx-background-color: #14274e;
+    -fx-text-fill:#fff;
+}
