@@ -20,8 +20,6 @@ import sailingclub.common.structures.EmptyPayload;
 import sailingclub.common.structures.Race;
 import sailingclub.common.structures.User;
 
-//before run this test class run the server
-
 /**
  * this class test the client
  * more specificately tests all the request that the client can make to the server
