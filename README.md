@@ -1,1 +1,2 @@
-﻿Guardare Funzionamento_Progetto.pdf
+﻿This is the final project for Software Engineering class attended in 2022 at Univeristy of Parma (UniPr), it's a client-server application to handle a sailing club. 
+A complete guide can be found in the PDF `Project_guide.pdf`.
