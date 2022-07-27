@@ -3,6 +3,9 @@ A complete italian guide can be found in the PDF `Funzionamento_progetto.pdf`.
 For all the rest of the work who doesn't speak italian, here how it works:
 
 ### Projects creations
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5f6dde9fb2848058eea67885729fe55)](https://app.codacy.com/gh/sichej/SailingClub?utm_source=github.com&utm_medium=referral&utm_content=sichej/SailingClub&utm_campaign=Badge_Grade_Settings)
+
 The easiest way is to create two new Java projects, for the Server one copy the Server folder inside the new project, same for the Client. After that remains only to include some libraries as specified in the following paragraphs.
 For both of them is necessary to include `JUnit5` because the include tests.
 
