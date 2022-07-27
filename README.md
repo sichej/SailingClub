@@ -1,4 +1,6 @@
-﻿This is the final project for Software Engineering class attended in 2022 at Univeristy of Parma (UniPr), it's a client-server application to handle a sailing club. 
+﻿[![Codacy Badge](https://app.codacy.com/project/badge/Grade/caf573262b7e4cc8b103a2197990529c)](https://www.codacy.com/gh/sichej/SailingClub/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sichej/SailingClub&amp;utm_campaign=Badge_Grade)
+
+This is the final project for Software Engineering class attended in 2022 at Univeristy of Parma (UniPr), it's a client-server application to handle a sailing club. 
 A complete italian guide can be found in the PDF `Funzionamento_progetto.pdf`.
 For all the rest of the work who doesn't speak italian, here how it works:
 
